@@ -3,8 +3,8 @@
 Source for [easybar.dev](https://easybar.dev/).
 
 This repository owns the hand-written documentation, MkDocs configuration, and final site build.
-During each build it fetches the EasyBar and widgets repositories, then generates the configuration,
-Lua API, and widget package reference pages from their current source.
+During each build it fetches the EasyBar and widgets repositories, then renders the configuration,
+Lua API, and widget package reference pages from their current source and exported metadata.
 
 ## Build locally
 
@@ -36,7 +36,7 @@ make build \
 ## Content ownership
 
 - `content/` contains hand-written documentation and site assets.
-- EasyBar generates the configuration and Lua API references from its source.
+- EasyBar exports configuration schema metadata and the Lua API generator from its source.
 - `widgets` supplies package metadata and package README content.
 - `.build/content/` is the disposable assembled documentation tree used by MkDocs.
 
