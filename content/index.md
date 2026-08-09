@@ -30,43 +30,51 @@ The default bar includes spaces, battery, Wi-Fi, and calendar widgets. Follow th
 
 ## Built for the space between native and scriptable
 
-<div class="grid cards" markdown>
+<div class="easybar-feature-grid" markdown>
 
-- :material-apple:{ .lg .middle } **Native macOS experience**
+<article class="easybar-feature-card" markdown>
 
-  ***
+### :material-apple:{ .lg .middle } Native macOS experience
 
-  SwiftUI rendering, native context menus, calendar and network integrations, and a menu bar
-  controller feel at home on macOS.
+SwiftUI rendering, native context menus, calendar and network integrations, and a menu bar
+controller feel at home on macOS.
 
-  [Explore built-ins](configuration/builtins.md)
+[Explore built-ins](configuration/builtins.md)
 
-- :material-code-braces:{ .lg .middle } **Lua when you need it**
+</article>
 
-  ***
+<article class="easybar-feature-card" markdown>
 
-  Build custom widgets with events, timers, asynchronous commands, popups, groups, and persistent
-  settings—without rebuilding the app.
+### :material-code-braces:{ .lg .middle } Lua when you need it
 
-  [Create your first widget](lua/guides/first-widget.md)
+Build custom widgets with events, timers, asynchronous commands, popups, groups, and persistent
+settings—without rebuilding the app.
 
-- :material-package-variant-closed:{ .lg .middle } **Installable packages**
+[Create your first widget](lua/guides/first-widget.md)
 
-  ***
+</article>
 
-  Discover and install independently versioned widgets and reusable Lua libraries from the
-  optional package registry.
+<article class="easybar-feature-card" markdown>
 
-  [Browse packages](packages/catalog.md)
+### :material-package-variant-closed:{ .lg .middle } Installable packages
 
-- :material-tune-variant:{ .lg .middle } **Designed to be yours**
+Discover and install independently versioned widgets and reusable Lua libraries from the
+optional package registry.
 
-  ***
+[Browse packages](packages/catalog.md)
 
-  Configure placement, groups, themes, built-ins, and behavior in TOML, then apply changes from
-  the CLI without restarting your workflow.
+</article>
 
-  [Configure EasyBar](configuration/overview.md)
+<article class="easybar-feature-card" markdown>
+
+### :material-tune-variant:{ .lg .middle } Designed to be yours
+
+Configure placement, groups, themes, built-ins, and behavior in TOML, then apply changes from
+the CLI without restarting your workflow.
+
+[Configure EasyBar](configuration/overview.md)
+
+</article>
 
 </div>
 
