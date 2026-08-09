@@ -3,7 +3,7 @@
 EasyBar keeps installable integrations separate from the app:
 
 - the [official widgets repository](https://github.com/easybar-app/widgets) owns package source, package metadata, assets, and focused tests
-- the [widget registry](https://github.com/easybar-app/widget-registry) owns searchable catalog entries
+- the [widget registry](https://github.com/easybar-app/registry) owns searchable catalog entries
 - this repository keeps small examples for learning and runtime regression coverage
 
 ## Official packages

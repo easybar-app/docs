@@ -95,6 +95,6 @@ command is optional, but it is useful for inspecting the exact package archive b
 - Do not add generated archives or checksums from `dist/`.
 
 After a package is reviewed and merged, a maintainer creates its first package release. Publication
-in the [widget registry](https://github.com/easybar-app/widget-registry) is a separate review step:
+in the [widget registry](https://github.com/easybar-app/registry) is a separate review step:
 new packages need an initial registry entry, while later releases of an existing package are
 discovered by the registry automation.
