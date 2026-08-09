@@ -41,13 +41,13 @@ ifeq ($(SKIP_FETCH),1)
 	@test -d "$(EASYBAR_ROOT)" || { echo "EasyBar source not found: $(EASYBAR_ROOT)" >&2; exit 1; }
 	@test -d "$(WIDGETS_ROOT)" || { echo "Widgets source not found: $(WIDGETS_ROOT)" >&2; exit 1; }
 else
-	@scripts/fetch-source.sh "$(EASYBAR_REPOSITORY)" "$(EASYBAR_REF)" "$(EASYBAR_ROOT)"
-	@scripts/fetch-source.sh "$(WIDGETS_REPOSITORY)" "$(WIDGETS_REF)" "$(WIDGETS_ROOT)"
+	@scripts/sources/fetch.sh "$(EASYBAR_REPOSITORY)" "$(EASYBAR_REF)" "$(EASYBAR_ROOT)"
+	@scripts/sources/fetch.sh "$(WIDGETS_REPOSITORY)" "$(WIDGETS_REF)" "$(WIDGETS_ROOT)"
 endif
 
 generate: fetch ## Assemble hand-written and generated documentation.
-	@$(PYTHON) scripts/prepare_content.py content "$(BUILD_CONTENT)"
-	@scripts/generate-easybar-docs.sh "$(PYTHON)" "$(EASYBAR_ROOT)" \
+	@$(PYTHON) scripts/generate/prepare_content.py content "$(BUILD_CONTENT)"
+	@scripts/generate/easybar_docs.sh "$(PYTHON)" "$(EASYBAR_ROOT)" \
 		"$(abspath $(BUILD_CONTENT))"
 	@$(PYTHON) scripts/generate/widget_docs.py \
 		--widgets-root "$(WIDGETS_ROOT)" \
@@ -100,7 +100,7 @@ favicon: fetch ## Generate site icons from EasyBar's application logo.
 ##@ Maintenance
 
 clean: ## Remove fetched sources and generated build artifacts.
-	@python3 scripts/clean.py "$(SOURCES_DIR)" "$(BUILD_DIR)" "$(SITE_DIR)"
+	@python3 scripts/maintenance/clean.py "$(SOURCES_DIR)" "$(BUILD_DIR)" "$(SITE_DIR)"
 
 $(PYTHON):
 	@python3 -m venv "$(VENV)"

@@ -26,7 +26,7 @@ fi
 
 config_schema="$easybar_root/config.schema.json"
 if [[ -f "$config_schema" ]]; then
-  "$python" "$script_dir/generate/config_docs.py" \
+  "$python" "$script_dir/config_docs.py" \
     --schema "$config_schema" \
     --output "$config_output"
 else
