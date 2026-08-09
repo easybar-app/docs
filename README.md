@@ -2,29 +2,29 @@
 
 Source for [easybar.dev](https://easybar.dev/).
 
-This repository owns the hand-written documentation, MkDocs configuration, and final site build.
-During each build it fetches the EasyBar and widgets repositories, then renders the configuration,
-Lua API, and widget package reference pages from their current source and exported metadata.
-
 ## Build locally
+
+Build the documentation with:
 
 ```bash
 make build
 ```
 
-The generated site is written to `.site/`. To serve it with live reload:
+The generated site is written to `.site/`.
+
+Serve it locally with live reload:
 
 ```bash
 make serve
 ```
 
-Override either source revision when validating a release or historical build:
+Override source revisions when building against specific releases:
 
 ```bash
 make build EASYBAR_REF=v0.43.0 WIDGETS_REF=main
 ```
 
-For local development across sibling checkouts without fetching from GitHub:
+Use sibling checkouts for local development:
 
 ```bash
 make build \
@@ -33,15 +33,14 @@ make build \
   WIDGETS_ROOT=../widgets
 ```
 
-## Content ownership
+## Content
 
 - `content/` contains hand-written documentation and site assets.
-- EasyBar exports configuration schema metadata and the Lua API generator from its source.
-- `widgets` supplies package metadata and package README content.
-- `.build/content/` is the disposable assembled documentation tree used by MkDocs.
+- EasyBar provides configuration and Lua API reference data.
+- `widgets` provides package metadata and documentation.
+- `.build/content/` contains the generated documentation tree used by MkDocs.
 
-Changes to EasyBar's documented API or widget packages trigger a Cloudflare Pages deploy hook, so
-the site rebuilds without copying generated pages into another repository.
+The site is rebuilt automatically when relevant EasyBar or widget content changes.
 
 ## License
 
