@@ -1,0 +1,41 @@
+name: Trigger documentation deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - "content/**"
+      - "scripts/**"
+      - "Makefile"
+      - "mkdocs.yml"
+      - "requirements.txt"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trigger-documentation-deployment
+  cancel-in-progress: true
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Require Cloudflare deploy hook
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DOCS_DEPLOY_HOOK }}
+        run: |
+          if [[ -z "${DEPLOY_HOOK}" ]]; then
+            echo "::error::Add the CLOUDFLARE_DOCS_DEPLOY_HOOK repository secret."
+            exit 1
+          fi
+
+      - name: Trigger easybar.dev rebuild
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DOCS_DEPLOY_HOOK }}
+        run: curl --fail-with-body --request POST "${DEPLOY_HOOK}"
