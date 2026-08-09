@@ -1,4 +1,4 @@
-name: Trigger documentation deployment
+name: Build and deploy documentation
 
 on:
   push:
@@ -11,14 +11,14 @@ on:
       - "Makefile"
       - "mkdocs.yml"
       - "requirements.txt"
-      - ".github/workflows/deploy.yml"
+      - ".github/workflows/docs.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: trigger-documentation-deployment
+  group: build-and-deploy-documentation
   cancel-in-progress: true
 
 jobs:
