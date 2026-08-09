@@ -54,11 +54,12 @@ The root `.stylua.toml` defines the Lua 5.5 formatting rules used by local devel
 Use the Makefile entry points rather than invoking different formatter options manually:
 
 ```bash
-make fmt       # Format Swift and Lua.
-make fmt-all   # Format Swift, Lua, and Markdown.
-make lint      # Check Swift and Lua formatting without modifying files.
-make fmt-lua   # Format only Lua.
-make lint-lua  # Check only Lua formatting.
+make fmt        # Format all supported source and configuration files.
+make fmt-swift  # Format only Swift.
+make fmt-lua    # Format only Lua.
+make fmt-md     # Format only Markdown.
+make lint       # Check Swift and Lua formatting without modifying files.
+make lint-lua   # Check only Lua formatting.
 ```
 
 ## Generated artifacts
