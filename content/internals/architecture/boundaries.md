@@ -1,63 +1,60 @@
 # Architectural Boundaries
 
-When adding features, preserve the project boundaries.
+The repository split is an ownership boundary, not three copies of the same application.
 
-## Keep UI decisions in EasyBar
+## Keep presentation in the frontend
 
-The main app should decide how data is shown.
+Frontend code decides where shared widget surfaces live:
 
-Do not move presentation-specific mapping into agents unless it is impossible to avoid.
+- `easybar` owns the custom full-width panel and bar geometry;
+- `easybar-native` owns `NSStatusItem` creation, sizing, ordering, and lifecycle.
 
-Examples:
+Do not copy config parsing, Lua supervision, built-in widget logic, popup behavior, or package
+management into a frontend. Those belong in EasyBarKit.
 
-- good: network agent returns RSSI, EasyBar maps it to bars
-- good: calendar agent returns normalized event data, EasyBar chooses the UI style
-- less ideal: agent returns pre-rendered user-facing labels that only the UI cares about
+## Keep shared UI/runtime behavior in EasyBarKit
+
+EasyBarKit decides how shared widget state becomes SwiftUI widget content and how interactions are
+routed. Examples:
+
+- good: the network agent returns RSSI, EasyBarKit maps it to Wi-Fi bars;
+- good: the calendar agent returns normalized event data, EasyBarKit builds calendar presentation
+  state;
+- good: a frontend places the resulting widget surface in a panel or `NSStatusItem`;
+- avoid: each frontend implements its own Wi-Fi, calendar, Lua, or package logic.
 
 ## Keep permission ownership in agents
 
-If a feature depends on permission-sensitive APIs, prefer to keep that API ownership in the relevant agent.
-
-That keeps the boundary clean and reduces surprises in the main app process.
+If a feature depends on permission-sensitive system APIs, keep collection or mutation in the
+relevant agent when practical. Agents return typed data; they do not choose frontend layout.
 
 ## Keep cross-process protocols typed
 
-If two processes exchange data, define the request and response models clearly.
-
-Avoid ad-hoc string protocols when typed JSON models already exist.
+If two processes exchange data, define request and response models explicitly in shared code. Avoid
+parallel ad-hoc protocols in each frontend.
 
 ## Keep the CLI thin
 
-The CLI should remain a transport layer for user commands.
-
-It should not duplicate app behavior or reimplement app state.
+The `easybar` CLI is built from EasyBarKit and communicates with a selected running frontend or
+helper agent. It should not duplicate runtime behavior.
 
 ## Keep Lua transport simple
 
-The Lua boundary should stay easy to inspect and debug:
+The Lua boundary remains inspectable:
 
-- JSON in
-- JSON out
-- stderr logs
+- JSON in;
+- JSON out;
+- stderr/log records for diagnostics.
 
-Avoid making the protocol unnecessarily magical.
+Package manifests target the EasyBarKit API contract. They do not declare compatibility with one
+frontend executable.
 
-## How to choose where new code belongs
+## How to choose an owner
 
-A practical guideline:
-
-- put code in `EasyBarShared` if it is used across executables or defines a boundary contract
-- put code in `EasyBar` if it is UI-facing or app-coordination logic
-- put code in an agent target if it owns permission-sensitive collection or mutation logic
-- put code in `EasyBarCalendarCore` if it is reusable calendar-agent internals, not app entrypoint code
-- put code in `EasyBarCalendarPresentation` if it is reusable calendar request or presentation logic that should not depend on EasyBar widget infrastructure
-- put code in `EasyBarCalendarUI` if it is reusable calendar SwiftUI or calendar-only view state that should not depend on EasyBar panels, widget trees, or app shell wiring
-- put code in `EasyBarNetworkAgentCore` if it is reusable network-agent internals, not app entrypoint code
-- put code in Lua only when the feature is meant to be scriptable or user-customizable
-
-Useful questions:
-
-- does this code need to talk directly to a sensitive system API?
-- is this logic about collecting data or presenting it?
-- is this a stable contract between processes?
-- is this meant for built-in native functionality or user scripting?
+- shared config, runtime, widget, menu, popup, package, event, or Lua behavior → `EasyBarKit`;
+- process-boundary values or protocols used by several targets → `EasyBarShared`;
+- custom-bar-only window/layout behavior → `easybar`;
+- status-item-only behavior → `easybar-native`;
+- calendar collection/mutation → `EasyBarCalendarCore` / calendar agent;
+- network collection → `EasyBarNetworkAgentCore` / network agent;
+- independently versioned Lua integration → `widgets`.

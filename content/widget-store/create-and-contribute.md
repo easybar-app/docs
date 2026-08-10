@@ -3,9 +3,9 @@
 Use a package when a widget or Lua library should be installed, versioned, tested, and updated
 independently from a user's manual `widgets_dir`.
 
-EasyBar uses the same package format whether you publish a package from your own repository or
-contribute it to the official widgets repository. The publishing workflow is different, so choose
-that path first.
+EasyBarKit defines the package format used by both EasyBar frontends. The same manifest applies
+whether you publish a package from your own repository or contribute it to the official widgets
+repository.
 
 ## Choose your path
 
@@ -38,19 +38,34 @@ A package name should be lowercase and hyphen-separated.
 For a standalone package repository, use the current layout from the widget template rather than
 copying the official monorepo directory structure unnecessarily.
 
+## Manifest contract
+
+The current package contract is **manifest version 2**. EasyBarKit does not accept manifest version
+1 and does not recognize the former EasyBar-specific minimum-version field.
+
+Every package declares the minimum EasyBarKit version it requires:
+
+```toml
+manifest_version = 2
+minimum_easybar_kit_version = "0.54.0"
+```
+
+The package manager compares that value with its EasyBarKit build version before activation. A
+package that requires a newer kit is rejected instead of being started with an unsupported API.
+
 ## Widget manifest
 
 A widget declares its entrypoint explicitly. The entrypoint is not required to be named
 `widget.lua`; it may be any validated Lua path inside the package.
 
 ```toml
-manifest_version = 1
+manifest_version = 2
 name = "my-widget"
 version = "0.1.0"
 kind = "widget"
 description = "Describe what the widget shows or controls."
 license = "Apache-2.0"
-minimum_easybar_version = "0.50.0"
+minimum_easybar_kit_version = "0.54.0"
 entrypoint = "widget.lua"
 readme = "README.md"
 categories = ["utilities"]
@@ -78,10 +93,19 @@ is intentional.
 A reusable library sets `kind = "library"`, omits `entrypoint`, and declares its public modules:
 
 ```toml
-manifest_version = 1
+manifest_version = 2
 name = "my-library"
 version = "1.0.0"
 kind = "library"
+description = "Reusable helpers for EasyBar widgets."
+license = "Apache-2.0"
+minimum_easybar_kit_version = "0.54.0"
+readme = "README.md"
+categories = ["library"]
+
+[repository]
+url = "https://github.com/easybar-app/widgets"
+path = "packages/my-library"
 
 [exports]
 my_library = "my_library.lua"
@@ -140,16 +164,15 @@ Put focused Lua tests in `packages/<name>/tests/` when contributing to the offic
 repository. The repository provides shared host implementations under `tests/support/` and also runs
 a cross-package smoke test.
 
-From the widgets repository, with EasyBar available as a sibling checkout:
+From the widgets repository, with EasyBarKit available as a sibling checkout:
 
 ```sh
 make check
-make lint-lua
 make package PACKAGE=my-widget OUTPUT_DIR=dist
 ```
 
-Use `EASYBAR_ROOT=/path/to/easybar` with `make check` when the app checkout is elsewhere. Inspecting
-the generated archive before review is optional but useful.
+Use `EASYBAR_KIT_ROOT=/path/to/easybar-kit` with `make check` when the kit checkout is elsewhere.
+Inspecting the generated archive before review is optional but useful.
 
 Standalone package repositories should use the equivalent checks and release targets supplied by
 the widget template.
@@ -158,62 +181,24 @@ the widget template.
 
 For a package you maintain in your own repository:
 
-1. start from the [EasyBar widget template](https://github.com/easybar-app/widget-template);
-2. implement and test the package using the manifest rules on this page;
-3. publish versioned releases from your repository using the template's release workflow;
-4. keep future releases compatible with the dependency constraints you declare; and
-5. submit the package to the EasyBar registry when you want it to be discoverable through the Widget Store.
+1. validate the package with the widget-template workflow;
+2. build a deterministic `<name>-<version>.tar.gz` archive;
+3. publish the archive and its SHA-256 checksum as release assets;
+4. add or update the corresponding registry entry if the package should be discoverable through the
+   Widget Store.
 
-Publishing from your own repository means you own the release tags and package lifecycle. The
-registry is discovery metadata; it does not become the source repository for the package.
+Published release archives are immutable. Publish a new semantic version for every package change.
 
 ## Contribute to the official widgets repository
 
-Use the normal GitHub fork and pull-request workflow. Contributors should not publish official
-package releases directly.
+For an official package change:
 
-1. Fork [`easybar-app/widgets`](https://github.com/easybar-app/widgets) on GitHub.
-2. Clone your fork and create a branch for the package change.
-3. Add or update the package below `packages/<name>/`.
-4. Run the repository checks locally.
-5. Commit the focused change and push the branch to your fork.
-6. Open a pull request against `easybar-app/widgets:main`.
-7. Address review feedback and keep the branch passing CI.
+1. update the package source and `package.toml` under `packages/<name>/`;
+2. increment the package version;
+3. run `make check` with a compatible EasyBarKit checkout;
+4. open a pull request;
+5. after merge, publish the package release through the repository release workflow.
 
-A typical local setup is:
-
-```sh
-git clone https://github.com/<your-user>/widgets.git
-cd widgets
-git remote add upstream https://github.com/easybar-app/widgets.git
-git switch -c feat/my-widget
-```
-
-Before opening the pull request:
-
-```sh
-make check
-make lint-lua
-```
-
-Do not create an official `*-v*` release tag as part of the contribution. After the pull request is
-reviewed and merged, an EasyBar maintainer creates the package release.
-
-For a new official package, publication in the widget registry is a separate review step. Later
-releases of an already registered package are discovered by the registry automation. Package source
-and release archives remain in the widgets repository; the registry stores metadata used for
-discovery and dependency resolution.
-
-## Pull request checklist
-
-- The manifest name matches its directory.
-- The declared entrypoint, exports, README, and assets exist.
-- Every non-test Lua file is the entrypoint or an export.
-- Dependencies use supported version constraints.
-- External tools, permissions, settings, and authentication are documented.
-- Focused tests cover parsing, state transitions, and actions where applicable.
-- `make check` passes; run `make lint-lua` when StyLua is installed.
-- Generated archives and checksums from `dist/` are not committed.
-- The contribution does not create an official package release tag.
-
-For installation behavior after publication, see [Install And Manage](manage.md).
+The registry synchronizes published release metadata and checksums. A source version may therefore
+be ahead of the registry briefly between merge and release; installs continue to use the latest
+published registry version until the new release is synchronized.

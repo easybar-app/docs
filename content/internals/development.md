@@ -1,151 +1,153 @@
 # Development
 
+The application is developed as sibling repositories rather than one monolithic Swift package.
+
+## Recommended checkout
+
+```text
+projects/
+├── easybar-kit/
+├── easybar/
+├── easybar-native/
+├── widgets/
+├── registry/
+└── docs/
+```
+
+Both frontend Swift packages resolve `../easybar-kit` by default. The widgets tests also use a
+sibling kit checkout unless `EASYBAR_KIT_ROOT` is set.
+
 ## Tools
 
-Install the local development dependencies:
+For the complete EasyBarKit and widgets checks on macOS, install the tools used by their Makefiles:
 
 ```bash
-brew install imagemagick librsvg lua stylua
+brew install lua stylua
 ```
 
-EasyBar consumes the lossless TOML parser and editor from the versioned `SwiftTOMLEdit` Swift
-package. Its prebuilt native artifact is resolved by SwiftPM, so EasyBar contributors do not need a
-Rust toolchain for normal builds or tests. Lua formatting uses the repository's `.stylua.toml` file
-and the `stylua` executable from `PATH`. Release-style bundles use `rsvg-convert` from librsvg to
-render the SVG app icons and ImageMagick to validate the rendered colors.
+Node-based Prettier and Taplo commands are pinned by the Makefiles and can run through `npx`.
+Swift dependencies are resolved by SwiftPM.
 
-## Common commands
+## Common verification
+
+Run the complete repository check in every checkout you change:
 
 ```bash
-make fmt
-make lint
-make test
-make stop
-make run-debug
+make check
 ```
 
-Other useful targets:
+The Makefiles share the same high-level vocabulary where it applies:
 
-- `make verify` checks the built bundle structure and key packaged files.
-- `make build` builds the app, agents, and CLI.
-- `make validate-config CONFIG=/path/to/config.toml` validates a config without reloading.
-- `make generate` refreshes all checked-in generated artifacts.
-- `make check-generated` verifies that generated files are current.
+- `make build` builds Swift products;
+- `make test` runs repository tests;
+- `make check` combines tests and lint/verification;
+- `make fmt` formats supported files;
+- `make lint` checks formatting;
+- `make clean` removes generated local build output.
 
-The separate [documentation repository](https://github.com/easybar-app/docs) owns the website,
-generated reference assembly, and screenshot targets.
+EasyBarKit additionally owns generated-source checks and Lua runtime tests. Widgets owns package
+validation and Lua package tests. Registry and docs use Python-based validation/build tests instead
+of Swift tests.
 
-## Screenshots
+## Run a frontend from source
 
-From the documentation repository, put full-resolution captures in `screenshots/raw`. The
-pipe-separated `screenshots/screenshots.manifest` file defines each output's crop rectangle and
-padding in pixels. Run `make screenshots` to write deterministic PNGs to `content/assets`.
-
-Keep `bar.png` as the complete overview. Crop feature screenshots around the relevant widget or
-popup and use the shared padding from the manifest. Update the crop rectangle when a raw capture's
-dimensions or popup position changes.
-
-For the EasyBar context-menu screenshot, run `make screenshot-context-menu`, hover **Native
-Widgets** to open its submenu, and take a full-screen screenshot. Save it as
-`screenshots/raw/native_widgets.png`; the manifest crop assumes a 1728-point Retina display.
-
-## Test release bundles
-
-Build ad-hoc-signed bundles and launch the agents before the app:
+With `easybar-kit` beside the frontend checkout:
 
 ```bash
-make bundle ARCH=arm64 VERSION=dev
-open -g dist/EasyBarCalendarAgent.app
-open -g dist/EasyBarNetworkAgent.app
-open dist/EasyBar.app
+cd easybar
+make run
 ```
 
-Quit any installed EasyBar app before launching `dist/EasyBar.app`; the single-instance guard exits
-the second copy.
-
-The agents are standalone apps that communicate with EasyBar over Unix sockets. Restart them with
-`easybar agent restart calendar`, `easybar agent restart network`, or
-`easybar agent restart all`.
-
-## Install the current checkout
-
-Install a release-mode development build without Homebrew:
+or:
 
 ```bash
+cd easybar-native
+make run
+```
+
+Each frontend `run` target first builds EasyBarKit's `EasyBarLuaRuntime` helper and exposes it in the
+frontend build tree so source runs use the same runtime discovery path.
+
+## Install local Swift products
+
+EasyBarKit installs its CLI/runtime/agent executables into `~/.local/bin` by default:
+
+```bash
+cd easybar-kit
 make install-local
 ```
 
-The default destinations are:
-
-```text
-~/Applications/EasyBar.app
-~/.local/bin/easybar
-~/Library/Application Support/EasyBar/Agents/EasyBarCalendarAgent.app
-~/Library/Application Support/EasyBar/Agents/EasyBarNetworkAgent.app
-~/Library/LaunchAgents/io.github.gi8lino.easybar.local.*.plist
-```
-
-The installer stops released Homebrew agent services to avoid duplicates and records their state.
-It assigns a Git-derived version such as `0.5.0-dev.218886be`; a modified checkout adds `-dirty`.
-
-Inspect and compare the version with:
+Each frontend also provides `make install-local`. It first installs the shared kit executables and
+then installs that frontend's release executable into the same `LOCAL_BIN_DIR`:
 
 ```bash
-make print-local-version
-~/.local/bin/easybar --version
+cd easybar
+make install-local
+
+cd ../easybar-native
+make install-local
 ```
 
-Repeat `make install-local` to update the installation. Destinations and architecture can be
-overridden:
+Override the executable destination with `LOCAL_BIN_DIR=/path/to/bin`.
+
+The widgets, registry, and documentation repositories intentionally have no `install-local` target:
+they do not produce a local executable product that should be installed into a bin directory.
+
+## Generated EasyBarKit artifacts
+
+EasyBarKit keeps generated theme tokens, event tokens, Lua API stubs, and config outputs checked in.
+After changing their canonical inputs, run:
 
 ```bash
-make install-local LOCAL_INSTALL_ARCH=universal
-make install-local LOCAL_APP_DIR=/Applications
-make install-local LOCAL_BIN_DIR=/usr/local/bin
+cd easybar-kit
+make generate
+make check-generated
 ```
 
-Remove it and restore the recorded Homebrew service states with:
+The documentation repository generates its reference pages from EasyBarKit and widgets during its
+own build; those pages are build artifacts rather than hand-written sources.
+
+## Widget development
+
+With `easybar-kit` and `widgets` side by side:
 
 ```bash
-make uninstall-local
+cd widgets
+make check
+make package PACKAGE=my-widget OUTPUT_DIR=dist
 ```
 
-## Generated artifacts
+Packages use manifest version 2 and target `minimum_easybar_kit_version`. There is no manifest-v1
+fallback in the current package contract.
 
-Build and install targets consume checked-in generated files without rewriting them. Run
-`make generate` after changing theme tokens, event catalog data, or Lua API stubs, then use
-`make check-generated` before committing. Documentation references are generated during the
-documentation repository's build and are not checked into EasyBar.
+## Documentation development
 
-The build version is written to the untracked `.build/easybar-build-version` input. The SwiftPM
-plugin generates `BuildInfo` in its work directory, and direct SwiftPM builds without that input
-use `dev`. Lua API versions are stamped only into the copy under `dist/`.
+The docs repository can fetch source revisions itself:
 
-## Bundled theme resources
-
-The repository root `themes/` directory is the source of truth for bundled themes. SwiftPM does not
-automatically package that directory, so use `make run` for local testing and `make bundle` for a
-release-style app. Both targets copy the themes into:
-
-```text
-EasyBar.app/Contents/Resources/Themes/
+```bash
+cd docs
+make build
+make serve
 ```
 
-The bundle checks require `default.toml`. Other app-owned resources are staged separately under
-`EasyBar.app/Contents/Resources/EasyBar/`.
+For uncommitted sibling checkouts, avoid fetching and point the build at the local trees:
 
-Plain `swift run EasyBar` does not stage bundled themes and is therefore unsuitable for testing
-them.
+```bash
+make build \
+  SKIP_FETCH=1 \
+  EASYBAR_KIT_ROOT=../easybar-kit \
+  WIDGETS_ROOT=../widgets
+```
 
-## Repository layout
+## Repository ownership
 
-- `Sources/EasyBarApp/App` contains the app shell and startup wiring.
-- `Sources/EasyBarApp/Runtime` contains reload, file-watching, and socket orchestration.
-- `Sources/EasyBarApp/Widgets` contains native and Lua widget rendering.
-- `Sources/EasyBarCalendarAgent` and `Sources/EasyBarNetworkAgent` contain the helper apps.
-- `Sources/EasyBarShared` contains shared runtime, logging, socket, and protocol code.
-- `scripts/ci`, `scripts/dev`, and `scripts/release` contain reusable workflow implementations.
-- `easybar-app/docs` contains hand-written documentation and assembles generated reference pages.
+- `easybar-kit` owns reusable runtime, widgets, config, Lua, package management, CLI, and helper
+  agents;
+- `easybar` owns only the custom full-width bar frontend;
+- `easybar-native` owns only the native status-item frontend;
+- `widgets` owns independently versioned Lua packages;
+- `registry` owns published package metadata/checksums;
+- `docs` owns easybar.dev hand-written content and generated-site assembly.
 
 Continue with [Architecture](architecture/overview.md), [Agents](agents/overview.md), or the
 [Lua runtime](lua-runtime/overview.md) for subsystem details.

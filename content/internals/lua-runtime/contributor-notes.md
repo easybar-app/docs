@@ -70,7 +70,7 @@ repeated subscriptions, runtime input overflows, and event queue overflows.
 For Lua-only debugging, the bundled runtime can be launched directly from an EasyBar checkout:
 
 ```bash
-lua Sources/EasyBarApp/Lua/runtime.lua <widget_dir>
+lua Sources/EasyBarKit/Lua/runtime.lua <widget_dir>
 ```
 
 That bypasses the normal launcher/socket lifecycle, so use it only to isolate Lua behavior. In the

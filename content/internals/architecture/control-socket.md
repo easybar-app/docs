@@ -1,6 +1,6 @@
 # Control Socket
 
-EasyBar exposes a local Unix control socket for commands sent by the CLI or other local clients.
+Each EasyBarKit frontend exposes a local Unix control socket in its runtime directory for commands sent by the CLI or other local clients.
 
 ## Purpose
 
@@ -31,8 +31,8 @@ keeps the control protocol name separate from `easybar.events.forced` while ensu
 
 The boundary exists so that:
 
-- shell scripts can refresh or reload the app safely
-- local scripts can emit EasyBar driver events
+- shell scripts can refresh or reload the selected frontend safely
+- local scripts can emit EasyBarKit driver events
 - external integrations do not need direct access to internal app objects
 
 The control socket is a command interface, not a general event stream. Inbox requests carry typed
@@ -40,7 +40,7 @@ item, source, and ID payloads; they do not execute commands supplied in notifica
 
 ## Scripting events
 
-EasyBar scripting events are commands that ask the running app to refresh state and emit one of the public Lua driver events:
+EasyBar scripting events are commands that ask the selected running frontend to refresh shared runtime state and emit one of the public Lua driver events:
 
 - `workspace_change`
 - `focus_change`
@@ -50,11 +50,11 @@ They are intended for local automation that already knows something changed and 
 
 ## AeroSpace updates
 
-For AeroSpace-backed widgets, the app connects directly to AeroSpace's native Unix socket and sends the equivalent of an `aerospace subscribe --all` request. It reacts to framed events for focus, focused workspace, focused monitor, binding mode, new-window detection, and triggered bindings. No `aerospace subscribe` CLI process is spawned.
+For AeroSpace-backed widgets, EasyBarKit connects directly to AeroSpace's native Unix socket and sends the equivalent of an `aerospace subscribe --all` request. It reacts to framed events for focus, focused workspace, focused monitor, binding mode, new-window detection, and triggered bindings. No `aerospace subscribe` CLI process is spawned.
 
 While AeroSpace-backed state is active, EasyBar schedules reconnect attempts with bounded backoff even if AeroSpace's socket is temporarily absent. Socket connect, handshake, and subscription setup share a finite startup deadline.
 
-Focus events take a low-latency path: app focus runs only the focused-window query before a trailing full snapshot, while a focused-workspace event updates the existing Spaces model from its `workspace` field before starting a full snapshot. Focused-monitor changes start a full snapshot immediately. Other event bursts share a 120 ms trailing debounce. Full snapshots cannot overwrite a newer fast focus result.
+Focus events take a low-latency path: focus handling runs only the focused-window query before a trailing full snapshot, while a focused-workspace event updates the existing Spaces model from its `workspace` field before starting a full snapshot. Focused-monitor changes start a full snapshot immediately. Other event bursts share a 120 ms trailing debounce. Full snapshots cannot overwrite a newer fast focus result.
 
 After state changes, the service invokes typed callbacks registered by the active native widgets instead of broadcasting an in-process notification.
 

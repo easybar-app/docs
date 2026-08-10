@@ -1,7 +1,11 @@
 # Internals
 
-This section is for contributors and maintainers. Normal installation, package management,
-configuration, and widget authoring should stay in the public sections of the site.
+This section is for contributors and maintainers working across the EasyBar repositories. Normal
+installation, package management, configuration, and widget authoring should stay in the public
+sections of the site.
+
+The implementation is split into `easybar-kit`, `easybar`, `easybar-native`, `widgets`, `registry`,
+and `docs`. Start with [Architecture Overview](architecture/overview.md) for the ownership boundary.
 
 Use these instead for user-facing tasks:
 

@@ -1,47 +1,43 @@
 # Process Model
 
-At a high level, EasyBar runs several processes.
+EasyBarKit supports two frontend applications. Each frontend runs its own runtime instance and
+control socket.
 
 ## Runtime processes
 
-- one `EasyBar` app process
-- zero or one `EasyBarCalendarAgent` process
-- zero or one `EasyBarNetworkAgent` process
-- one `easybar` CLI process per command invocation
-- one Lua runtime child process owned by the main app when Lua widgets are enabled
+A running frontend consists of:
 
-## Single instance guard
+- one `EasyBar` **or** `EasyBarNative` application process;
+- one Lua runtime child process when Lua widgets are enabled;
+- connections to the independently managed calendar and network agents;
+- one `easybar` CLI process per command invocation.
 
-The project uses a single-instance guard for the main app to avoid duplicate bars.
+The custom and native frontends use different default config/runtime directories, so they can be
+developed or run independently. They may share the separately installed calendar and network agents.
 
-Duplicate processes are one of the most common causes of confusing behavior in status bar apps.
+## Single-instance guard
 
-If a second instance starts, it logs a warning and exits.
+Single-instance locking is scoped to the frontend identity and its runtime directory. A second copy
+of the same frontend exits rather than creating duplicate surfaces. The two different frontends are
+not treated as the same application identity.
 
 ## Helper agents
 
 Helper agents are separate processes because they own permission-sensitive APIs:
 
-- EventKit for calendar access
-- Wi-Fi and network APIs that depend on Location Services permission
+- EventKit for calendar access;
+- Wi-Fi and network APIs that depend on Location Services permission.
 
-The agents collect and normalize data.
-EasyBar consumes that data and renders UI from it.
+The agents collect and normalize data. EasyBarKit consumes that data and renders it through whichever
+frontend is active.
 
-Releases package the app and CLI separately from each standalone agent application bundle. Homebrew installs each agent archive through its own formula and runs it as a keep-alive service. Keeping the cask and formula downloads distinct also prevents them from sharing quarantine state in Homebrew's download cache. The main app only communicates with agents over Unix sockets; it does not own their processes.
-
-When an agent acknowledges a socket restart request and exits, Homebrew Services relaunches it. Keeping the agents outside `EasyBar.app` also gives macOS stable, independent identities for Calendar and Location permissions.
+The agents communicate over Unix sockets and are independently supervised when installed as
+services. Frontends do not embed or own their service lifecycle.
 
 ## Lua runtime process
 
-Lua widgets do not run in-process inside the main app.
+Lua widgets do not execute in-process inside either frontend.
 
-EasyBar starts a separate Lua process and communicates with it over a dedicated Unix socket.
-
-Benefits:
-
-- crash isolation
-- easier reloads
-- full runtime reset on restart
-- simpler mental model for widget execution
-- clearer logging and transport behavior
+EasyBarKit starts a separate Lua runtime process and communicates with it over a dedicated Unix
+socket. This provides crash isolation, full runtime reset on restart, and a clear JSON transport
+boundary.

@@ -110,7 +110,6 @@ Common network fields include:
 - `network.dns_servers`
 - `network.route_reachable`
 - `network.route_unavailable_with_local_address`
-- `network.internet_reachable` (compatibility alias for route reachability)
 - `network.captive_portal` (unavailable until a real portal probe supplies a result)
 
 `network.route_reachable` is a SystemConfiguration route fact. It does not claim that
@@ -165,7 +164,7 @@ Selectors are expanded by the shared protocol layer before values are fetched.
 
 ## Snapshot usage
 
-The main EasyBar app subscribes to a stable snapshot field set for the native Wi-Fi widget.
+EasyBarKit subscribes to a stable snapshot field set for the built-in Wi-Fi widget.
 
 That snapshot contains:
 
@@ -175,7 +174,7 @@ That snapshot contains:
 - primary IPv4 and IPv6 addresses
 - primary tunnel state
 
-The agent still returns a flat field map. EasyBar converts that field map into the typed snapshot consumed by the native widget.
+The agent still returns a flat field map. EasyBarKit converts that field map into the typed snapshot consumed by the built-in widget.
 
 ## Behavior notes
 
@@ -190,9 +189,9 @@ The agent still returns a flat field map. EasyBar converts that field map into t
 - CoreWLAN enums are converted through protocol-owned raw-value tables rather than human-readable runtime descriptions.
 - The agent does not map UI labels.
 - The agent does not format values for presentation.
-- EasyBar decides how fields are rendered.
+- EasyBarKit decides how fields become shared widget presentation state.
 
-EasyBar converts agent values into:
+EasyBarKit converts agent values into:
 
 - native widget state
 - Lua event payloads

@@ -2,7 +2,7 @@
 
 The `EasyBarCtl` target builds the `easybar` executable.
 
-It is a thin client for the app and agent control sockets, plus a read-only viewer for shared process logs.
+It is a thin client for frontend and agent control sockets, plus a read-only viewer for shared process logs.
 
 ## Responsibilities
 
@@ -26,7 +26,7 @@ This keeps automation simple and avoids forcing users to speak the socket protoc
 - the help description
 - command-specific options and positional arguments
 - the parser behavior for the command
-- an `IPC.Command` mapping when the operation uses the main control socket
+- an `IPC.Command` mapping when the operation uses a frontend control socket
 
 The same catalog drives command resolution and help output, preventing the parser and usage text from drifting apart.
 
@@ -53,8 +53,8 @@ easybar inbox list --unread
 
 The CLI should stay small.
 
-Most commands use the main EasyBar control socket. Agent restart and version commands contact the
+Most commands use the control socket selected by the active EasyBar config/runtime path. Agent restart and version commands contact the
 calendar or network socket directly through the shared agent protocol. Version queries therefore
-report the processes that are actually running. `easybar logs` reads retained history from the configured log directory. With `--follow`, it then connects to the EasyBar socket and the selected enabled agent sockets; it does not poll files for new records.
+report the processes that are actually running. `easybar logs` reads retained history from the configured log directory. With `--follow`, it then connects to the selected frontend socket and the selected enabled agent sockets; it does not poll files for new records.
 
 The CLI is a transport client, not a second source of application logic.

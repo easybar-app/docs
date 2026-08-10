@@ -24,7 +24,7 @@ picked up by the development server without copying them through another build d
 Override source revisions when building against specific releases:
 
 ```bash
-make build EASYBAR_REF=v0.43.0 WIDGETS_REF=main
+make build EASYBAR_KIT_REF=v1.0.0 WIDGETS_REF=main
 ```
 
 Use sibling checkouts for local development:
@@ -32,14 +32,14 @@ Use sibling checkouts for local development:
 ```bash
 make build \
   SKIP_FETCH=1 \
-  EASYBAR_ROOT=../easybar \
+  EASYBAR_KIT_ROOT=../easybar-kit \
   WIDGETS_ROOT=../widgets
 ```
 
 ## Content
 
 - `content/` contains hand-written documentation and site assets.
-- EasyBar provides `config.schema.json` and `scripts/generate/lua_docs.py` for generated references.
+- EasyBarKit provides `config.schema.json` and `scripts/generate/lua_docs.py` for generated references.
 - `widgets` provides package metadata and README content used to generate the Widget Store catalog.
 - Generated reference and catalog pages are written into ignored paths below `content/` before
   MkDocs builds or serves the site.
@@ -56,10 +56,9 @@ content/widget-store/packages/
 They are build artifacts, not hand-written source. `make clean` removes them together with fetched
 source checkouts and the built site.
 
-The documentation build requires the current EasyBar reference inputs. It does not fall back to
-reference pages copied from another EasyBar documentation layout.
+The documentation build requires the current EasyBarKit reference inputs.
 
-The site is rebuilt automatically when relevant EasyBar or widget content changes.
+The site is rebuilt automatically when relevant EasyBarKit or widget content changes.
 
 ## License
 

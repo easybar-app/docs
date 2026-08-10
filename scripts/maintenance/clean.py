@@ -17,7 +17,7 @@ def main() -> int:
     root = Path.cwd().resolve()
     targets = (
         root / ".sources",
-        root / ".build",  # Legacy assembled-content directory from the previous MkDocs layout.
+        root / ".build",
         root / ".site",
         root / "content/configuration/reference.md",
         root / "content/lua/reference",

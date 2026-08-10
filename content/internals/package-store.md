@@ -6,6 +6,15 @@ It is for contributors changing package installation, activation, dependency han
 User-facing install and update commands belong in [Install And Manage](../widget-store/manage.md).
 Package authoring belongs in [Create & Contribute](../widget-store/create-and-contribute.md).
 
+## Package contract
+
+The store accepts package manifest version 2 and expresses its runtime requirement with
+`minimum_easybar_kit_version`. The parser accepts only the current manifest contract. The clean split begins with EasyBarKit `0.54.0`; official manifest-v2 package releases target that baseline or newer.
+
+The registry may retain metadata for older immutable release archives as historical records, but a
+current install candidate must satisfy the EasyBarKit manifest contract before it can be committed or
+activated.
+
 ## Store layout
 
 All managed packages use one data directory:

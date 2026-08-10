@@ -27,7 +27,7 @@ class Package:
     kind: str
     description: str
     license: str
-    minimum_easybar_version: str
+    minimum_easybar_kit_version: str
     categories: tuple[str, ...]
     dependencies: dict[str, str]
     exports: dict[str, str]
@@ -119,6 +119,9 @@ def load_package(package_dir: Path) -> Package:
     with manifest_path.open("rb") as manifest_file:
         manifest = tomllib.load(manifest_file)
 
+    if manifest.get("manifest_version") != 2:
+        raise ValueError(f"{manifest_path}: manifest_version must be 2")
+
     name = required_string(manifest, "name", manifest_path)
     if name != package_dir.name:
         raise ValueError(
@@ -147,8 +150,8 @@ def load_package(package_dir: Path) -> Package:
         kind=required_string(manifest, "kind", manifest_path),
         description=required_string(manifest, "description", manifest_path),
         license=required_string(manifest, "license", manifest_path),
-        minimum_easybar_version=required_string(
-            manifest, "minimum_easybar_version", manifest_path
+        minimum_easybar_kit_version=required_string(
+            manifest, "minimum_easybar_kit_version", manifest_path
         ),
         categories=string_sequence(manifest.get("categories"), manifest_path, "categories"),
         dependencies=string_mapping(
@@ -278,7 +281,7 @@ def render_package(package: Package, package_names: set[str]) -> str:
             f"| Name | `{package.name}` |",
             f"| Version | `{package.version}` |",
             f"| Kind | `{package.kind}` |",
-            f"| Minimum EasyBar | `{package.minimum_easybar_version}` |",
+            f"| Minimum EasyBarKit | `{package.minimum_easybar_kit_version}` |",
             f"| License | `{package.license}` |",
             f"| Categories | {categories} |",
             f"| Dependencies | {dependency_links(package, package_names)} |",

@@ -6,7 +6,7 @@ the public API and guides.
 
 ## Process boundary
 
-EasyBar does not embed Lua in the main UI process. It starts a separate Lua child and communicates
+EasyBarKit does not embed Lua in either frontend process. It starts a separate Lua child and communicates
 with it over a dedicated Unix socket. stderr remains reserved for structured runtime logs.
 
 The separation provides:

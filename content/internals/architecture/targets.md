@@ -1,53 +1,55 @@
 # Targets
 
-EasyBar is split into a few focused targets.
+Swift targets are split between `easybar-kit` and the two frontend repositories.
 
-## Target list
+## EasyBarKit targets
 
-- `EasyBarShared`
-  Shared models, config loading, socket paths, IPC types, logging utilities, environment keys, and common runtime helpers.
-- `EasyBarApp`
-  The main macOS status bar application.
-- `EasyBarCtl`
-  The `easybar` command-line client.
-- `EasyBarCalendarAgent`
-  Helper app entrypoint for the calendar agent.
-- `EasyBarCalendarCore`
-  Shared reusable calendar-agent logic used by `EasyBarCalendarAgent` and intended for future standalone calendar clients.
-- `CEasyBarEventKitCompat`
-  Exception-safe Objective-C bridge used by `EasyBarCalendarCore` to access EventKit's non-public event travel-time value.
-- `EasyBarCalendarPresentation`
-  Shared reusable calendar request and presentation helpers used by `EasyBar` and intended for future standalone calendar clients.
-- `EasyBarCalendarUI`
-  Shared reusable calendar SwiftUI components and composer state used by `EasyBar` and intended for future standalone calendar clients.
-- `EasyBarNetworkAgent`
-  Helper app that owns Wi-Fi and network observation.
-- `EasyBarNetworkAgentCore`
-  Shared reusable network-agent logic used by `EasyBarNetworkAgent` and also by the standalone `wifi-snitch` project.
+`easybar-kit` exports the shared runtime and helper products:
 
-## Directory and target intent
+| Target                        | Responsibility                                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `EasyBarKit`                  | Application runtime, presentation model, built-in/Lua widget rendering, popups, events, themes, inbox, and orchestration. |
+| `EasyBarShared`               | Cross-process models, paths, logging, IPC contracts, and common utilities.                                                |
+| `EasyBarConfigSchema`         | Shared configuration schema metadata.                                                                                     |
+| `EasyBarCalendarConfig`       | Calendar configuration parsing and editing helpers.                                                                       |
+| `EasyBarCalendarCore`         | Permission-sensitive EventKit collection and mutation logic used by the calendar agent.                                   |
+| `CEasyBarEventKitBridge`      | Objective-C exception boundary for EventKit travel-time access.                                                           |
+| `EasyBarCalendarPresentation` | Reusable calendar request and presentation helpers.                                                                       |
+| `EasyBarCalendarUI`           | Reusable calendar SwiftUI components and composer state.                                                                  |
+| `EasyBarNetworkAgentCore`     | Reusable network-agent logic.                                                                                             |
+| `EasyBarCtl`                  | `easybar` command-line client and package-management commands.                                                            |
+| `EasyBarLuaRuntime`           | Out-of-process Lua runtime host.                                                                                          |
+| `EasyBarCalendarAgent`        | Calendar-agent executable entrypoint.                                                                                     |
+| `EasyBarNetworkAgent`         | Network-agent executable entrypoint.                                                                                      |
+| `EasyBarGenerateConfig`       | Configuration reference/default generator.                                                                                |
+| `EasyBarGenerateBuildInfo`    | Build-info generator used by the SwiftPM plugin.                                                                          |
 
-A useful way to think about the targets is:
+The corresponding source directories live under `easybar-kit/Sources/`.
 
-- `Sources/EasyBarShared`
-  process-boundary types and shared utilities
-- `Sources/EasyBarApp`
-  app lifecycle, UI, event coordination, native widgets, Lua supervision
-- `Sources/EasyBarCtl`
-  command-line control client
-- `Sources/EasyBarCalendarAgent`
-  calendar-agent executable entrypoint and app lifecycle
-- `Sources/EasyBarCalendarCore`
-  reusable calendar-agent internals
-- `Sources/CEasyBarEventKitCompat`
-  Objective-C exception boundary for EventKit travel-time access
-- `Sources/EasyBarCalendarPresentation`
-  reusable calendar request or presentation logic
-- `Sources/EasyBarCalendarUI`
-  reusable calendar SwiftUI or calendar-only view state
-- `Sources/EasyBarNetworkAgent`
-  network-agent executable entrypoint and app lifecycle
-- `Sources/EasyBarNetworkAgentCore`
-  reusable network-agent internals
+## Custom-bar frontend
 
-That structure reflects runtime responsibilities, not only package-manager convenience.
+The `easybar` repository contains one executable target:
+
+- `EasyBarApp` — app entrypoint, `BarPanel`, window controller, bar hosting view, frame layout, and
+  left/center/right surface layout.
+
+It imports `EasyBarKit` and `EasyBarShared`; it does not own a second runtime implementation.
+
+## Native frontend
+
+The `easybar-native` repository contains one executable target:
+
+- `EasyBarNativeApp` — app entrypoint and `NSStatusItem` presentation controller.
+
+It imports the same shared kit and renders the same top-level widget surfaces as native menu-bar
+items.
+
+## Target rule
+
+Put code in the narrowest owner:
+
+- shared runtime or widget behavior → `easybar-kit`;
+- custom full-width bar behavior → `easybar`;
+- native status-item behavior → `easybar-native`;
+- permission-sensitive calendar/network collection → the corresponding agent/core target;
+- public Lua integrations → `widgets` when they should be independently versioned.

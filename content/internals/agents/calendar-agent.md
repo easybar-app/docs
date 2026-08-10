@@ -99,14 +99,14 @@ failures.
 
 - the month client derives its preload radius from the shared 366-day request limit instead of
   using a hard-coded radius
-- EasyBar assigns request identifiers to subscriptions and ignores delayed direct responses that
+- EasyBarKit assigns request identifiers to subscriptions and ignores delayed direct responses that
   belong to an older request; unsolicited broadcast snapshots intentionally omit an identifier
 - no access returns an empty snapshot
 - birthdays are separated and use the same calendar filters as regular events
 - occurrence ids are deterministic even when EventKit omits an event identifier
 - relative and absolute alarms are normalized into visible lead times
 - sections are optional, day-bucketed once, and clamp multi-day display times to each section day
-- EasyBar treats `invalid_request` as permanent for the exact rejected subscription: it logs the
+- EasyBarKit treats `invalid_request` as permanent for the exact rejected subscription: it logs the
   rejection once, suspends reconnects, and retains the last valid snapshot
 - when the subscription request or socket configuration changes, EasyBar clears the permanent
   block and reconnects immediately
@@ -116,7 +116,7 @@ failures.
 EventKit does not expose a public, typed API for reading or writing an event's native travel-time
 value. EasyBar therefore accesses the runtime `travelTime` property through
 `EventKitTravelTimeAdapter`, with the dynamic Objective-C work isolated in
-`CEasyBarEventKitCompat`.
+`CEasyBarEventKitBridge`.
 
 The Objective-C boundary is intentional:
 
@@ -138,4 +138,4 @@ public typed API that covers both reading and writing the native value.
 
 The calendar agent collects calendar data and performs calendar mutations.
 
-EasyBar decides how calendar data is rendered.
+EasyBarKit builds calendar presentation state; the active frontend decides where it is hosted.

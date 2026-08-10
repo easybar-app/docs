@@ -1,13 +1,13 @@
 SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 
-EASYBAR_REPOSITORY ?= https://github.com/easybar-app/easybar.git
+EASYBAR_KIT_REPOSITORY ?= https://github.com/easybar-app/easybar-kit.git
 WIDGETS_REPOSITORY ?= https://github.com/easybar-app/widgets.git
-EASYBAR_REF ?= main
+EASYBAR_KIT_REF ?= main
 WIDGETS_REF ?= main
 
 SOURCES_DIR := .sources
-EASYBAR_ROOT ?= $(SOURCES_DIR)/easybar
+EASYBAR_KIT_ROOT ?= $(SOURCES_DIR)/easybar-kit
 WIDGETS_ROOT ?= $(SOURCES_DIR)/widgets
 SITE_DIR := .site
 
@@ -17,13 +17,13 @@ DEPENDENCIES_STAMP := $(VENV)/.requirements-installed
 PRETTIER ?= npx --yes prettier@3.9.6
 IMAGE_CONVERT ?= magick
 SVG_CONVERT ?= rsvg-convert
+FAVICON_SOURCE ?=
 CLICLICK ?= cliclick
 SCREENSHOT_CONTEXT_MENU_POINT ?= 1344,16
 ICON_SIZES := 16x16 32x32 48x48 64x64
 PRETTIER_MD_SOURCES := README.md "content/**/*.md"
 PRETTIER_YAML_SOURCES := ".github/**/*.{yml,yaml}" mkdocs.yml
 PRETTIER_JSON_SOURCES := ".github/**/*.json"
-PRETTIER_SOURCES := $(PRETTIER_MD_SOURCES) $(PRETTIER_YAML_SOURCES) $(PRETTIER_JSON_SOURCES)
 GENERATED_MD_SOURCES := \
 	content/configuration/reference.md \
 	"content/lua/reference/**/*.md" \
@@ -32,32 +32,41 @@ GENERATED_MD_SOURCES := \
 
 .DEFAULT_GOAL := help
 
-.PHONY: help fetch generate build serve fmt fmt-md fmt-yaml fmt-json check screenshot-context-menu screenshots check-screenshots favicon clean
+.PHONY: help build test check fetch generate serve \
+        fmt fmt-md fmt-yaml fmt-json \
+        lint lint-md lint-yaml lint-json \
+        screenshot-context-menu screenshots check-screenshots favicon clean
 
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z\_0-9-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) }' $(MAKEFILE_LIST)
 
+##@ Build and test
+
+build: $(DEPENDENCIES_STAMP) generate ## Build the production site into .site/.
+	@$(PYTHON) -m mkdocs build --strict -f mkdocs.yml
+
+test: build ## Build the complete documentation site.
+
+check: test lint ## Run the complete repository verification suite.
+
 ##@ Documentation
 
-fetch: ## Fetch the EasyBar and widgets revisions used by the site.
+fetch: ## Fetch the EasyBarKit and widgets revisions used by the site.
 ifeq ($(SKIP_FETCH),1)
-	@test -d "$(EASYBAR_ROOT)" || { echo "EasyBar source not found: $(EASYBAR_ROOT)" >&2; exit 1; }
+	@test -d "$(EASYBAR_KIT_ROOT)" || { echo "EasyBarKit source not found: $(EASYBAR_KIT_ROOT)" >&2; exit 1; }
 	@test -d "$(WIDGETS_ROOT)" || { echo "Widgets source not found: $(WIDGETS_ROOT)" >&2; exit 1; }
 else
-	@scripts/sources/fetch.sh "$(EASYBAR_REPOSITORY)" "$(EASYBAR_REF)" "$(EASYBAR_ROOT)"
+	@scripts/sources/fetch.sh "$(EASYBAR_KIT_REPOSITORY)" "$(EASYBAR_KIT_REF)" "$(EASYBAR_KIT_ROOT)"
 	@scripts/sources/fetch.sh "$(WIDGETS_REPOSITORY)" "$(WIDGETS_REF)" "$(WIDGETS_ROOT)"
 endif
 
 generate: fetch ## Generate reference and Widget Store pages directly in content/.
-	@scripts/generate/easybar_docs.sh "$(PYTHON)" "$(EASYBAR_ROOT)" \
+	@scripts/generate/kit_docs.sh "$(PYTHON)" "$(EASYBAR_KIT_ROOT)" \
 		"$(abspath content)"
 	@$(PYTHON) scripts/generate/widget_docs.py \
 		--widgets-root "$(WIDGETS_ROOT)" \
 		--output "$(abspath content/widget-store)"
 	@$(PRETTIER) --write $(GENERATED_MD_SOURCES)
-
-build: $(DEPENDENCIES_STAMP) generate ## Build the production site into .site/.
-	@$(PYTHON) -m mkdocs build --strict -f mkdocs.yml
 
 serve: $(DEPENDENCIES_STAMP) generate ## Serve content/ with live reload.
 	@$(PYTHON) -m mkdocs serve -f mkdocs.yml
@@ -75,8 +84,16 @@ fmt-yaml: ## Format YAML files with Prettier.
 fmt-json: ## Format JSON configuration files with Prettier.
 	@$(PRETTIER) --write $(PRETTIER_JSON_SOURCES)
 
-check: build ## Verify formatting and build the complete site.
-	@$(PRETTIER) --check $(PRETTIER_SOURCES)
+lint: lint-md lint-yaml lint-json ## Check formatting without changing files.
+
+lint-md: ## Check Markdown formatting with Prettier.
+	@$(PRETTIER) --check $(PRETTIER_MD_SOURCES)
+
+lint-yaml: ## Check YAML formatting with Prettier.
+	@$(PRETTIER) --check $(PRETTIER_YAML_SOURCES)
+
+lint-json: ## Check JSON formatting with Prettier.
+	@$(PRETTIER) --check $(PRETTIER_JSON_SOURCES)
 
 ##@ Assets
 
@@ -95,9 +112,13 @@ check-screenshots: ## Verify generated screenshots match their raw captures.
 	@scripts/assets/screenshots.sh "$(IMAGE_CONVERT)" screenshots/screenshots.manifest \
 		screenshots/raw content/assets --check
 
-favicon: fetch ## Generate site icons from EasyBar's application logo.
+favicon: ## Generate site icons from an explicitly supplied frontend logo SVG.
+	@test -n "$(FAVICON_SOURCE)" || { \
+		echo 'Set FAVICON_SOURCE=/path/to/frontend-logo.svg.' >&2; \
+		exit 1; \
+	}
 	@scripts/assets/favicons.sh "$(SVG_CONVERT)" \
-		"$(EASYBAR_ROOT)/packaging/easybar-icon.svg" content/assets/icons $(ICON_SIZES)
+		"$(FAVICON_SOURCE)" content/assets/icons $(ICON_SIZES)
 
 ##@ Maintenance
 

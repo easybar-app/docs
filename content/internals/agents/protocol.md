@@ -11,7 +11,7 @@ By default, agent sockets are derived from `[app].runtime_dir`:
 
 The default runtime directory is `~/.local/state/easybar/runtime`. `EASYBAR_RUNTIME_DIR` can override it for all EasyBar processes.
 
-EasyBar connects to those sockets directly.
+EasyBarKit agent clients connect to those sockets directly.
 
 Other local clients can also connect when they speak the same protocol.
 
@@ -96,8 +96,8 @@ Calendar requests may include an optional `requestID`. The calendar agent echoes
 every direct response produced by the request, including `subscribed`, `snapshot`, success, and
 `error` messages. Broadcast snapshots caused by EventKit changes are unsolicited and omit it.
 
-EasyBar uses the identifier to reject delayed errors or snapshots from an older subscription. The
-client retains a FIFO fallback for older agents that do not yet echo request identifiers.
+EasyBarKit uses the identifier to reject delayed errors or snapshots from an older subscription. The
+Responses without the matching request identifier are rejected as uncorrelated.
 
 ## Typical behavior
 
@@ -116,11 +116,11 @@ client retains a FIFO fallback for older agents that do not yet echo request ide
 
 ## Reconnect behavior
 
-Transport failures such as an unavailable socket or an unexpected disconnect are transient. EasyBar
+Transport failures such as an unavailable socket or an unexpected disconnect are transient. EasyBarKit
 reconnects long-lived subscriptions with bounded backoff.
 
 A structured calendar `invalid_request` response is different: the connection worked, but retrying
-the same subscription cannot succeed. EasyBar therefore:
+the same subscription cannot succeed. EasyBarKit therefore:
 
 1. logs the rejection once;
 2. suspends reconnects for that exact request;
@@ -150,7 +150,7 @@ The full restart sequence is:
 2. The agent sends `restarting` so the client knows the request was accepted.
 3. The agent exits through its normal AppKit shutdown path.
 4. The service supervisor starts a fresh agent process.
-5. EasyBar reconnects when the agent socket becomes available again.
+5. EasyBarKit reconnects when the agent socket becomes available again.
 
 Homebrew Services runs the separately installed agents through `launchd` with `keep_alive`, so an acknowledged exit leads to a fresh process. A manually launched standalone agent has no supervisor and therefore stays stopped after it exits.
 
@@ -158,9 +158,9 @@ Restart is available only while the agent socket is responsive. If the agent has
 
 The CLI exposes this operation as `easybar agent restart calendar`, `easybar agent restart network`, and `easybar agent restart all`. The combined command attempts both agents before reporting a partial failure with a nonzero exit status.
 
-## EasyBar command behavior
+## Frontend command behavior
 
-EasyBar keeps long-lived subscriptions open to the agents for normal runtime updates.
+EasyBarKit keeps long-lived subscriptions open to the agents for normal runtime updates.
 
 A manual refresh:
 

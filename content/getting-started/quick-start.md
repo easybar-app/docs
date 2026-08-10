@@ -52,7 +52,7 @@ EasyBar reads custom config from:
 ~/.config/easybar/config.toml
 ```
 
-The repository includes `config.minimal.toml` as a small starter override. From a cloned checkout:
+The EasyBarKit repository includes `config.minimal.toml` as a small starter override. From a cloned checkout:
 
 ```bash
 mkdir -p ~/.config/easybar

@@ -18,12 +18,12 @@ For a first setup, start with [Quick Start](../getting-started/quick-start.md).
 
 ## Start from an example
 
-The EasyBar repository ships two useful starting points:
+The EasyBarKit repository ships two useful starting points:
 
 - `config.minimal.toml` is a small customization example. It keeps the default built-ins, groups battery and Wi-Fi, and enables Wi-Fi details.
 - `config.defaults.toml` contains the complete current defaults and supported sections. The generated [Configuration Reference](reference.md) mirrors it when you need exact keys and values.
 
-From a cloned EasyBar repository, copy the minimal example with:
+From a cloned EasyBarKit repository, copy the minimal example with:
 
 ```bash
 mkdir -p ~/.config/easybar
