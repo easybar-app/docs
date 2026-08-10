@@ -1,4 +1,4 @@
-"""Generate the EasyBar widget package catalog from the widgets repository."""
+"""Generate the EasyBar Widget Store catalog from the widgets repository."""
 
 from __future__ import annotations
 
@@ -175,7 +175,7 @@ def render_index(packages: list[Package]) -> str:
     lines = [
         GENERATED_HEADER.rstrip(),
         "",
-        "# Widget Package Catalog",
+        "# Widget Store Catalog",
         "",
         "Official EasyBar widgets and Lua libraries are independently versioned in the",
         "[widgets repository](https://github.com/easybar-app/widgets). Search this site to find a",
@@ -220,10 +220,10 @@ def render_index(packages: list[Package]) -> str:
             "</div>",
             "",
             "The registry is optional. You can also install a package from a local directory or",
-            "archive; see [Widget Packages](../runtime/widget-packages.md).",
+            "archive; see [Install And Manage](manage.md).",
             "",
             "To add an official package, follow",
-            "[Contributing an EasyBar Widget](../lua/guides/contributing-widget.md).",
+            "[Create And Publish](creating-packages.md).",
             "",
         ]
     )
@@ -337,7 +337,9 @@ def generate(widgets_root: Path, output: Path) -> list[Path]:
     output.mkdir(parents=True, exist_ok=True)
     expected_names = {"catalog.md", *[f"{package.name}.md" for package in packages]}
     for existing in output.glob("*.md"):
-        if existing.name not in expected_names:
+        if existing.name in expected_names:
+            continue
+        if existing.read_text(encoding="utf-8").startswith(GENERATED_HEADER):
             existing.unlink()
 
     written = []
@@ -374,7 +376,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = build_parser().parse_args()
     written = generate(args.widgets_root.resolve(), args.output.resolve())
-    print(f"Generated {len(written)} widget catalog pages in {args.output}")
+    print(f"Generated {len(written)} Widget Store catalog pages in {args.output}")
     return 0
 
 

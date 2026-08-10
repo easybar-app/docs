@@ -1,136 +1,120 @@
 # Contributor Notes
 
-Use this page when changing the Lua runtime or public Lua API.
+Use this page when changing the Lua runtime or public Lua API. Public authoring behavior belongs in
+[Lua Widgets](../../lua/overview.md); package-manager behavior belongs in
+[Package Store Internals](../package-store.md).
 
 ## Where to change what
 
-### Widget API
+### Public widget API
 
 - `api.lua`
 - `easybar_api.base.lua`
 - `easybar_api.events.lua`
 - `easybar_api.lua`
-- `content/lua/*` in the `easybar-app/docs` repository
+- the matching `content/lua/` guide or reference in `easybar-app/docs`
 
-`easybar_api.base.lua` is the hand-edited source stub.
-`easybar_api.events.lua` is generated from the event catalog.
-`easybar_api.lua` is the combined generated artifact that EasyBar installs for LuaLS/editor support.
+`easybar_api.base.lua` is hand-edited. Event declarations and the combined editor stub include
+generated content.
 
-### Driver events
+### Driver events and payloads
 
 - `event_tokens.lua`
-- `easybar_api.events.lua`
-- `easybar_api.lua`
-- Swift event sources
-
-### Event payloads
-
+- `events.lua`
 - `EventHub.swift`
 - `EventTypes.swift`
-- `events.lua`
+- Swift event sources
 
-### Rendering
+### Loading and rendering
 
-- `render.lua`
-- `WidgetNodeState.swift`
+- `api.lua` for discovery
+- `loader.lua` for per-source execution
+- `registry.lua` for Lua-side node state
+- `render.lua` for derived trees
+- `WidgetNodeState.swift` and `WidgetStore.swift` for Swift-side application
 
-### Process and runtime
+### Process and transport
 
 - `RuntimeCoordinator.swift`
 - `WidgetEngine.swift`
+- `LuaRuntime.swift`
 - `LuaProcessController.swift`
 - `LuaTransport.swift`
+- `LuaLogBridge.swift`
 
-## Formatting
+## Runtime invariants
 
-Install StyLua before running the repository formatting checks:
+Keep these boundaries intact unless the architecture is intentionally changing:
+
+- manual widget discovery is recursive below `widgets_dir` except `shared/`;
+- managed widget discovery is explicit and top-level below the package activation root;
+- managed activation links point directly to manifest-declared entrypoints;
+- package exports and manual reusable modules load through `shared/` search paths;
+- committed package directories are never recursively scanned by Lua;
+- reload is a full Lua process reset;
+- runtime protocol messages use the Lua socket;
+- Lua logs use stderr;
+- widget environments fall back to `_G` and are not a sandbox.
+
+## Debugging the runtime
+
+Start with the normal host logs:
 
 ```bash
-brew install stylua
+easybar logs --runtime lua --level trace --follow
 ```
 
-The root `.stylua.toml` defines the Lua 5.5 formatting rules used by local development and CI.
+Useful symptoms include missing `ready` or `subscriptions` messages, entrypoint load errors,
+repeated subscriptions, runtime input overflows, and event queue overflows.
 
-Use the Makefile entry points rather than invoking different formatter options manually:
+For Lua-only debugging, the bundled runtime can be launched directly from an EasyBar checkout:
 
 ```bash
-make fmt        # Format all supported source and configuration files.
-make fmt-swift  # Format only Swift.
-make fmt-lua    # Format only Lua.
-make fmt-md     # Format only Markdown.
-make lint       # Check Swift and Lua formatting without modifying files.
-make lint-lua   # Check only Lua formatting.
+lua Sources/EasyBarApp/Lua/runtime.lua <widget_dir>
 ```
 
-## Generated artifacts
+That bypasses the normal launcher/socket lifecycle, so use it only to isolate Lua behavior. In the
+full app path, Swift listens on the configured Lua socket, `EasyBarLuaRuntime` connects it, and then
+execs the Lua interpreter.
 
-Regenerate every checked-in generated artifact through the Makefile:
+When debugging loading, compare the two roots separately:
+
+- managed entrypoints under `~/.local/share/easybar/packages/active/`;
+- manual files under the configured `widgets_dir`.
+
+Do not debug package activation by recursively running files from `store/`; that is intentionally not
+how the runtime loads managed packages.
+
+## Formatting and generated artifacts
+
+Use the EasyBar Makefile entry points:
 
 ```bash
+make fmt
+make lint
 make generate
-```
-
-This runs the focused generators wired through the Makefile:
-
-- `scripts/generate/theme_tokens.py` for theme-token Swift and Lua artifacts
-- `scripts/generate/event_catalog.py` for event-token Lua artifacts and the combined LuaLS stub
-- `EasyBarGenerateConfig` for `config.defaults.toml`
-
-Use this before committing changes that affect generated Swift, Lua, or TOML artifacts.
-
-Verify that generated artifacts are current before opening a pull request:
-
-```bash
 make check-generated
 ```
 
-`make test` intentionally does not regenerate checked-in artifacts. Run `make generate` or
-`make check-generated` explicitly when changing generated Swift or Lua outputs.
+`make generate` refreshes the checked-in theme, event, Lua stub, and generated config artifacts wired
+through the app repository. `make test` does not regenerate them.
 
-## Generated docs
+## Generated documentation
 
-Build the assembled site from the separate documentation repository:
+Build the assembled site from the separate docs repository:
 
 ```bash
 make build
 ```
 
-The documentation build fetches EasyBar and widgets, runs `scripts/generate/lua_docs.py`,
-`EasyBarGenerateConfig config-docs`, and the widget catalog generator, then builds MkDocs from a
-disposable content tree. Generated pages are never committed or synchronized between repositories.
-
-## Helper scripts
-
-Reusable automation scripts live under `scripts/` and are grouped by purpose:
-
-- `scripts/build/` contains build helpers used by the Makefile, such as universal product builds, resource copying, plist stamping, and bundle verification.
-- `scripts/ci/` contains CI helpers such as dependency setup and long-running Swift test logging.
-- `scripts/dev/` contains local-development wrappers such as the shared run and stop flows.
-- `scripts/release/` contains release helpers such as signing, notarization, Homebrew cask rendering, release verification, and tap commits.
-
-Keep stable developer commands in the Makefile and delegate large reusable shell blocks into these
-scripts. This keeps commands like `make run-debug`, `make generate`, and `make package` stable while
-avoiding duplicated or hard-to-review shell logic.
-
-## Notes
-
-- the managed activation directory and manual widget directory contain executable Lua
-- Swift passes `widgets_dir` and the internal managed activation path; `api.lua` owns recursive manual discovery and explicit managed activation discovery
-- top-level managed activation symlinks load their declared package entrypoints; manual Lua files at any depth outside `shared/` are loaded as widgets
-- reusable manual modules and package exports use `shared/`; there is no secondary module directory
-- managed widget activation uses `active/<name>` symlinks that point directly to each committed version's declared entrypoint file; package directories are never recursively discovered
-- declared package exports are activated below `active/shared/` with symlinks directly to their files in the owning committed version
-- reload is a full reset
-- protocol:
-  - Lua socket JSON in/out via `EasyBarLuaRuntime`
-  - stderr logs
+The documentation build fetches EasyBar and widgets, generates the configuration and Lua reference,
+generates the Widget Store catalog, and then builds MkDocs from `.build/content`. Generated pages
+are not committed to the documentation repository.
 
 ## If you change the Lua API
 
-When changing the Lua API:
-
-1. update runtime code
-2. update stubs
-3. run `make generate` and `make check-generated` in EasyBar
-4. update hand-written guides and examples in `easybar-app/docs`
-5. run `make build` in the documentation repository
+1. Update runtime code.
+2. Update the hand-edited stubs or event catalog inputs.
+3. Run `make generate` and `make check-generated` in EasyBar.
+4. Update the relevant public Lua guide in `easybar-app/docs`.
+5. Run `make build` in the documentation repository.

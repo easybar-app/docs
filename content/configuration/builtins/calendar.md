@@ -106,4 +106,4 @@ unrelated settings are preserved.
 
 See the [Configuration Reference](../reference.md) for month, upcoming, selection, composer,
 appointment, and filter keys. See [Agents](../agents.md) for calendar-agent configuration and
-[Recovery](../../runtime/recovery.md) for permission troubleshooting.
+[Troubleshooting](../../runtime/troubleshooting.md#calendar-is-empty) for permission troubleshooting.

@@ -1,8 +1,8 @@
 # Examples
 
-This page explains a few complete Lua widget patterns. For official packages, dependencies, and local examples, use [Widget Packages And Examples](bundled-widgets.md).
+This page explains complete Lua widget patterns. If you want to install a ready-made integration instead of studying its implementation, browse the [Widget Store](../../widget-store/overview.md).
 
-If you are just starting out, read [First Widget](first-widget.md) before using these as templates.
+If you are just starting out, read [First Widget](first-widget.md) before using these as templates. The app repository also keeps small self-contained examples under `examples/`; from a source checkout, `make install-widgets` can install those development examples into your manual widget directory.
 
 ## Toggle widget
 
@@ -182,9 +182,9 @@ remain trusted local code.
 
 ## Related pages
 
-- [Widget Packages And Examples](bundled-widgets.md)
+- [Widget Store](../../widget-store/overview.md)
 - [Subscribe To Events](subscribe-to-events.md)
-- [Style Popups And Groups](style-popups-and-groups.md)
+- [Grouping](grouping.md)
 - [Popups](popups.md)
 - [Native Context Menus](context-menus.md)
 - [API Summary](../api-summary.md)

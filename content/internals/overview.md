@@ -1,52 +1,41 @@
 # Internals
 
-This section is for contributors and maintainers.
+This section is for contributors and maintainers. Normal installation, package management,
+configuration, and widget authoring should stay in the public sections of the site.
 
-If you are installing or configuring EasyBar, use [Quick Start](../getting-started/quick-start.md), [Configuration](../configuration/overview.md), and [Lua Widgets](../lua/overview.md) first. You should not need internals pages for a normal user setup.
+Use these instead for user-facing tasks:
 
-## What belongs here
+- [Getting Started](../getting-started/quick-start.md) for installation and first setup;
+- [Widget Store](../widget-store/overview.md) for package discovery and management;
+- [Configuration](../configuration/overview.md) for `config.toml`;
+- [Lua Widgets](../lua/overview.md) for the public scripting API;
+- [Runtime](../runtime/control.md) for CLI control, logs, metrics, and recovery.
 
-Internals pages explain implementation details and project boundaries:
+## What belongs in internals
 
-- target layout and source ownership
-- process model and helper agents
-- control socket and agent protocols
-- runtime event flow
-- Lua runtime lifecycle, loading, registry, rendering, and debugging
-- generated artifacts and contributor workflows
+Internals explain implementation ownership rather than user workflows:
+
+- Swift targets and process boundaries;
+- helper-agent protocols;
+- control-socket and event flow;
+- package-store transactions and activation;
+- Lua process lifecycle, loading, transport, backpressure, and rendering;
+- generated artifacts and contributor workflows.
 
 ## Contributor path
 
-Use this reading order when changing EasyBar itself:
+A practical reading order is:
 
 1. [Development](development.md)
 2. [Architecture Overview](architecture/overview.md)
-3. [Targets](architecture/targets.md)
-4. [Process Model](architecture/process-model.md)
-5. [Architectural Boundaries](architecture/boundaries.md)
-6. [Agent Protocol](agents/protocol.md)
-7. [Lua Runtime Overview](lua-runtime/overview.md)
-8. [Contributor Notes](lua-runtime/contributor-notes.md)
+3. [Process Model](architecture/process-model.md)
+4. [Architectural Boundaries](architecture/boundaries.md)
+5. the subsystem you are changing:
+   - [Package Store](package-store.md)
+   - [Agent Protocol](agents/protocol.md)
+   - [Lua Runtime](lua-runtime/overview.md)
 
-## User docs vs internals
-
-Keep user-facing docs focused on outcomes:
-
-- install EasyBar
-- configure built-ins
-- choose a theme
-- write a Lua widget
-- troubleshoot runtime issues
-
-Keep implementation-focused content here:
-
-- Swift target responsibilities
-- agent ownership and socket protocol details
-- EventKit, CoreWLAN, and process boundaries
-- Lua runtime transport and registry internals
-- generated files and maintainer commands
-
-This split keeps the first-run documentation short while still preserving the deeper architecture notes for contributors.
+Use [Targets](architecture/targets.md) when you need exact source ownership.
 
 ## Architecture
 
@@ -59,22 +48,21 @@ This split keeps the first-run documentation short while still preserving the de
 - [Event Flow](architecture/event-flow.md)
 - [Boundaries](architecture/boundaries.md)
 
+## Package store
+
+- [Package Store Internals](package-store.md)
+
 ## Agents
 
 - [Agents Overview](agents/overview.md)
 - [Agent Protocol](agents/protocol.md)
 - [Calendar Agent](agents/calendar-agent.md)
 - [Network Agent](agents/network-agent.md)
-- [Debugging Agents](agents/debugging.md)
 
 ## Lua runtime
 
 - [Lua Runtime Overview](lua-runtime/overview.md)
 - [Lifecycle](lua-runtime/lifecycle.md)
 - [Widget Loading](lua-runtime/widget-loading.md)
-- [Registry](lua-runtime/registry.md)
 - [Events](lua-runtime/events.md)
-- [Rendering](lua-runtime/rendering.md)
-- [Logging](lua-runtime/logging.md)
-- [Debugging](lua-runtime/debugging.md)
 - [Contributor Notes](lua-runtime/contributor-notes.md)

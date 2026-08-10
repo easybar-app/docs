@@ -4,9 +4,9 @@ This page defines the terms used across the EasyBar Lua docs.
 
 ## Widget
 
-A widget is one Lua file loaded by EasyBar from your widgets directory.
+A widget is one Lua entrypoint executed by EasyBar. It may be a manually managed `.lua` file below your configured `widgets_dir` or the declared entrypoint of an installed Widget Store package.
 
-That file can create one node or many nodes. It can also keep local state, run commands, subscribe to events, and update its own nodes over time.
+The entrypoint can create one node or many nodes. It can also keep local state, run commands, subscribe to events, and update its own nodes over time.
 
 ## Module
 
@@ -93,13 +93,13 @@ An agent is a helper process used for permission-sensitive or platform-specific 
 
 Agents are configured in `config.toml` and feed data back into EasyBar events and native widgets.
 
-See [Agents](../configuration/agents.md) and [Internals / Agents](../internals/agents/overview.md).
+See [Agents](../configuration/agents.md).
 
 ## Runtime
 
 The runtime is the host machinery that loads widget files, creates nodes, dispatches events, and applies updates between the Lua side and the native app.
 
-See [Runtime Control](../runtime/control.md) and [Lua Runtime Overview](../internals/lua-runtime/overview.md).
+See [Runtime Control](../runtime/control.md).
 
 ## Mental model
 

@@ -38,7 +38,7 @@ Example `.luarc.json`:
   "workspace": {
     "library": [
       "~/.local/share/easybar/easybar_api.lua",
-      "~/.local/share/easybar/packages/active"
+      "~/.local/share/easybar/packages/active/shared"
     ]
   },
   "diagnostics": {
@@ -51,10 +51,7 @@ If your editor still only knows about the `easybar` global but not nested proper
 
 ## User modules
 
-The `runtime.path` entries let LuaLS resolve modules from the open manual-widget workspace. Adding
-the managed package activation directory to `workspace.library` also exposes installed modules such
-as `retry`, without treating package files as part of `widgets_dir`. The activation directory is
-created after the first package installation. See [Reusable Modules](modules.md) for directory
+The `runtime.path` entries let LuaLS resolve modules from the open manual-widget workspace. Adding the managed `active/shared` export directory to `workspace.library` also exposes installed modules such as `retry`, without treating package entrypoints as part of the manual widget workspace. The directory is created after the first package with exports is installed. See [Reusable Modules](modules.md) for directory
 layout, `require(...)` behavior, and module lifetime.
 
 Keep reusable-module annotations beside the module implementation. For example, the official

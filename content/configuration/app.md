@@ -39,7 +39,7 @@ widgets_dir = "~/.config/easybar/widgets"
 
 EasyBar recursively loads every regular file below this directory with a `.lua` extension, except files below `shared/`. Extension matching is case-insensitive. Discovery does not depend on a category name or a filename such as `widget.lua`. Put reusable modules below `shared/` so they load only through `require(...)`.
 
-Packages installed with `easybar widgets install` are kept separately below `~/.local/share/easybar/packages` and loaded automatically through the managed `active/` symlinks. Changing `widgets_dir` affects only your manual widgets; it does not relocate, migrate, or activate installed packages.
+Packages installed from the [Widget Store](../widget-store/overview.md) are managed separately from this directory. Changing `widgets_dir` affects only manual widgets; it does not move or reconfigure installed packages.
 
 If you are creating your first custom widget, continue with [First Widget](../lua/guides/first-widget.md). For shared helper code, see [Reusable Modules](../lua/guides/modules.md).
 
@@ -87,7 +87,7 @@ lua_socket_path = "/custom/runtime/lua-runtime.sock"
 
 When omitted, EasyBar uses `lua-runtime.sock` inside `runtime_dir`.
 
-See [Runtime Control](../runtime/control.md) and [Lua Runtime Overview](../internals/lua-runtime/overview.md).
+See [Runtime Control](../runtime/control.md).
 
 ## `watch_config`
 
@@ -137,9 +137,10 @@ The hidden developer menu section can be shown without holding `Shift` with:
 develop = true
 ```
 
-By default, the developer section is hidden unless you hold `Shift` and right-click the bar.
-
-See [Developer Menu](developer-menu.md).
+By default, the developer section is hidden unless you hold `Shift` and right-click the bar. Its
+current user-facing control is **Log Level**; selecting a level persists `[logging].level` while
+`EASYBAR_LOG_LEVEL` remains a temporary process-level override. See [Logging](logging.md) for the
+level and persistence behavior.
 
 ## `lua_commands`
 

@@ -51,7 +51,7 @@ generate: fetch ## Assemble hand-written and generated documentation.
 		"$(abspath $(BUILD_CONTENT))"
 	@$(PYTHON) scripts/generate/widget_docs.py \
 		--widgets-root "$(WIDGETS_ROOT)" \
-		--output "$(BUILD_CONTENT)/packages"
+		--output "$(BUILD_CONTENT)/widget-store"
 	@$(PRETTIER) --write "$(BUILD_CONTENT)/**/*.md"
 
 build: $(DEPENDENCIES_STAMP) generate ## Build the production site into .site/.

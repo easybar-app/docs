@@ -11,7 +11,7 @@ Lua widgets are the right tool when you want:
 - event-driven behavior tied to app changes, mouse input, timers, or helper-agent updates
 - small personal workflows specific to your setup
 
-If you have not decided whether Lua is the right tool yet, read [Built-ins Vs Lua](../getting-started/builtins-vs-lua.md).
+If you have not decided whether to configure a built-in, install an existing package, or write Lua, read [Built-ins, Widget Store, Or Lua](../getting-started/builtins-vs-lua.md). Ready-made integrations belong in the [Widget Store](../widget-store/overview.md); this section is about authoring Lua behavior.
 
 Lua widgets are trusted local scripts. EasyBar gives each widget file its own API scope, but it does not sandbox arbitrary widget code.
 
@@ -55,7 +55,7 @@ The Lua runtime is for custom widgets and user-specific behavior. Built-in platf
 - [Grouping](guides/grouping.md) and [Popups](guides/popups.md) for richer layouts.
 - [Editor Support](guides/editor-support.md) for LuaLS setup.
 - [Examples](guides/examples.md) for complete patterns.
-- [Widget Packages And Examples](guides/bundled-widgets.md) for official integrations, dependencies, and local examples.
+- [Widget Store](../widget-store/overview.md) when you want a ready-made integration instead of writing one.
 
 ## Exact API reference
 

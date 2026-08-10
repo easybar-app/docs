@@ -112,4 +112,4 @@ Common user data remains under:
 ~/.local/state/easybar
 ```
 
-See [Configuration Path](configuration-path.md) and [Logging](../configuration/logging.md) before deleting these directories.
+See [Configuration](../configuration/overview.md) and [Logging](../configuration/logging.md) before deleting these directories.

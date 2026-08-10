@@ -107,4 +107,4 @@ See [Properties](reference/properties.md).
 
 1. [First Widget](guides/first-widget.md)
 2. [Subscribe To Events](guides/subscribe-to-events.md)
-3. [Style Popups And Groups](guides/style-popups-and-groups.md)
+3. [Grouping](guides/grouping.md) and [Popups](guides/popups.md)

@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Start with the symptom below. EasyBar keeps the main app, Lua runtime, and permission-sensitive agents separate, so identifying the affected process usually narrows the problem quickly.
+Start with the symptom below. EasyBar keeps the main app, Lua runtime, package store, and permission-sensitive agents separate, so identifying the affected layer usually narrows the problem quickly.
 
 ## Collect basic status
 
@@ -13,11 +13,11 @@ brew services list | grep easybar
 easybar refresh
 ```
 
-`easybar refresh` confirms that the CLI can reach the main control socket. Use `easybar metrics` for one process and connection snapshot.
+`easybar refresh` confirms that the CLI can reach the main control socket. Use `easybar metrics` for a runtime and connection snapshot, and `easybar agent version all` to compare the running helper versions.
 
 ## Find the logs
 
-Enable file logging if necessary:
+Enable retained debug logs if necessary:
 
 ```toml
 [logging]
@@ -26,7 +26,7 @@ level = "debug"
 directory = "~/.local/state/easybar"
 ```
 
-The default filenames are:
+The default process logs are:
 
 ```text
 ~/.local/state/easybar/easybar.out
@@ -34,77 +34,15 @@ The default filenames are:
 ~/.local/state/easybar/network-agent.out
 ```
 
-The Homebrew widgets additionally write `brew-widget.log` in the configured logging directory. Temporarily use `trace` only when debug output is insufficient. See [Logging](../configuration/logging.md).
+Use `easybar logs --follow` when you need live records. See [Logs](logs.md) and [Logging Configuration](../configuration/logging.md).
 
 ## Bar does not appear
 
 1. Confirm `/Applications/EasyBar.app` exists.
 2. Start it with `open -a EasyBar`.
 3. Check `easybar.out` for config, lock, screen, font, and Lua startup errors.
-4. Confirm another build is not holding the single-instance lock.
-5. If Gatekeeper blocks launch, follow [macOS Quarantine](../getting-started/macos-quarantine.md).
-
-## Built-in widget is empty
-
-Check whether the widget is enabled and whether its source process is available:
-
-- spaces and layout state require AeroSpace 0.21.0 or newer
-- calendar data requires the calendar agent and Calendar permission
-- Wi-Fi details require the network agent and Location Services permission
-
-Restart the relevant agent after changing a permission:
-
-```bash
-easybar agent restart calendar
-easybar agent restart network
-```
-
-Use [Recovery](recovery.md) for source-specific checks and [Agent Debugging](../internals/agents/debugging.md) for raw socket and service diagnostics.
-
-## Lua widget fails to load
-
-Loader errors identify the widget filename and failing API call in `easybar.out`. Check:
-
-- a manual widget is inside the configured `widgets_dir`, or an installed package is active below `~/.local/share/easybar/packages/active`
-- reusable manual modules exist under `<widgets_dir>/shared`; installed package exports live under `~/.local/share/easybar/packages/active/shared`
-- file-backed assets were copied with the widget
-- properties that schedule work, such as `interval`, include their required callback
-- required commands are present in `[app.env].PATH`
-
-Validate config separately from Lua source:
-
-```bash
-easybar config validate
-```
-
-After fixing the widget, restart only the Lua runtime:
-
-```bash
-easybar runtime restart
-```
-
-See [Widget Packages And Examples](../lua/guides/bundled-widgets.md), [Commands](../lua/guides/commands.md), and [Lua Logging](../lua/guides/logging.md).
-
-## Widget stops updating or a command is stuck
-
-First request a normal refresh:
-
-```bash
-easybar refresh
-```
-
-If only Lua is stale, use `easybar runtime restart`. Asynchronous commands must have bounded timeouts and should expose cancellation for long-running user actions. For the Homebrew examples, inspect `brew-widget.log` before restarting so the last operation remains diagnosable.
-
-## Popup or context menu does not open
-
-Hover popups and native context menus use different interactions:
-
-- hovering the widget anchor presents its popup
-- right-clicking the anchor presents the widget's native context menu when configured
-- right-clicking empty bar space presents EasyBar's bar context menu
-- right-clicking popup content targets the popup, not its anchor
-
-If a hover popup covers the anchor, move back to the actual bar icon before right-clicking. See [Popups](../lua/guides/popups.md) and [Native Context Menus](../lua/guides/context-menus.md).
+4. Confirm another EasyBar build is not holding the single-instance lock.
+5. If Gatekeeper blocks a manual install, follow [macOS Quarantine](../getting-started/macos-quarantine.md).
 
 ## Config changes do not apply
 
@@ -114,51 +52,155 @@ When `watch_config = false`, reload manually:
 easybar config reload
 ```
 
-An invalid reload is rejected and the previous valid configuration remains active. Validate the file and inspect the reported key or section:
+A rejected reload leaves the last valid configuration active. Validate the file and inspect the reported key or section:
 
 ```bash
 easybar config validate --config ~/.config/easybar/config.toml
 ```
 
+## Calendar is empty
+
+Calendar data requires the calendar agent and macOS Calendar permission. Check the service, grant access, then restart the agent after a permission change:
+
+```bash
+brew services list | grep easybar-calendar-agent
+easybar agent restart calendar
+```
+
+Also check calendar include/exclude filters when only some calendars are missing. For socket probes, raw responses, and unresponsive-service recovery, use [Agent Diagnostics](agents.md).
+
+## Wi-Fi or network data is empty
+
+Wi-Fi and network data require the network agent. Wi-Fi identity fields additionally require Location Services permission.
+
+After changing Location permission:
+
+```bash
+easybar agent restart network
+```
+
+If only selected fields are missing, verify the configured Wi-Fi fields and compare them with the raw agent response in [Agent Diagnostics](agents.md).
+
+## AeroSpace widgets do not update
+
+EasyBar requires AeroSpace 0.21.0 or newer:
+
+```bash
+aerospace --version
+```
+
+The CLI and running AeroSpace.app server should both meet that requirement. After an AeroSpace update, restart AeroSpace.app if their versions differ.
+
+With EasyBar logging at `debug`, useful messages include:
+
+```text
+aerospace subscription started
+aerospace subscription event received
+aerospace subscription disconnected
+aerospace subscription reconnect scheduled
+```
+
+EasyBar reconnects automatically when AeroSpace becomes available again. Trigger an immediate state refresh with:
+
+```bash
+easybar refresh
+```
+
+A local automation that already knows workspace state changed can emit a scripting event through [Runtime Control](control.md#scripting-events).
+
+## Lua widget fails to load
+
+Loader errors identify the widget source and failing API call in `easybar.out`. Check that:
+
+- a manual widget is below the configured `widgets_dir`, or the installed package is active in the managed package store;
+- reusable manual modules are below `<widgets_dir>/shared` and installed package modules are declared exports;
+- file-backed assets are included with the widget or package;
+- interval properties include the required callback;
+- external commands are available through `[app.env].PATH`.
+
+Validate config separately from Lua source:
+
+```bash
+easybar config validate
+```
+
+After fixing widget code, restart only Lua:
+
+```bash
+easybar runtime restart
+```
+
+For package installation problems, see [Install And Manage](../widget-store/manage.md). For authoring issues, see [Commands](../lua/guides/commands.md), [Reusable Modules](../lua/guides/modules.md), and [Lua Logging](../lua/guides/logging.md).
+
+## Widget stops updating or a command is stuck
+
+First request a normal refresh:
+
+```bash
+easybar refresh
+```
+
+If only Lua is stale, use `easybar runtime restart`. Asynchronous commands should have bounded timeouts, and long-running user actions should expose cancellation when practical. Inspect widget-specific logs before restarting when the failed operation itself is important to diagnose.
+
+## Popup or context menu does not open
+
+Hover popups and native context menus use different interactions:
+
+- hovering the widget anchor presents its popup;
+- right-clicking the anchor presents the widget's native context menu when configured;
+- right-clicking empty bar space presents EasyBar's application menu;
+- right-clicking popup content targets the popup, not its anchor.
+
+If a hover popup covers the anchor, move back to the actual bar icon before right-clicking. See [Popups](../lua/guides/popups.md) and [Native Context Menus](../lua/guides/context-menus.md).
+
 ## Homebrew install or upgrade fails
 
-Run the failing Homebrew operation directly in a terminal to distinguish package-manager output from widget presentation:
+Run the failing Homebrew operation directly in a terminal to distinguish package-manager output from EasyBar presentation:
 
 ```bash
 brew update
 brew upgrade --cask easybar-app/tap/easybar
 ```
 
-Homebrew installations handle quarantine for the app, CLI, and agent applications. Manual release-archive installs do not. If Homebrew reports a cache extraction or quarantine error, preserve the complete error and check [macOS Quarantine](../getting-started/macos-quarantine.md) before changing extended attributes manually.
+Homebrew installations handle quarantine for the app, CLI, and agent applications. Manual release-archive installs do not. Preserve the complete Homebrew error before changing extended attributes.
 
 ## Another instance is already running
 
-EasyBar uses a single-instance guard. Stop the installed app before running a development build:
+EasyBar uses a single-instance guard. Stop the installed app before launching a development build:
 
 ```bash
 pkill -x EasyBar
+```
+
+The separately managed agent services do not count as duplicate EasyBar instances.
+
+## Full reset
+
+Use a full app reset only after the narrower actions above fail:
+
+```bash
+pkill -x EasyBar || true
 open -a EasyBar
 ```
 
-The agent services are separate and do not count as duplicate EasyBar instances.
+Do not kill responsive helper agents just to reset the bar. Restart them individually with `easybar agent restart ...`, or use the Homebrew service commands from [Agent Diagnostics](agents.md) when their sockets are unavailable.
 
 ## Escalation checklist
 
 When reporting a problem, include:
 
-- EasyBar version from `easybar --version`
-- macOS and AeroSpace versions when relevant
-- installation method: Homebrew or manual archive
-- the affected widget or process
-- the smallest relevant log excerpt
-- whether `easybar refresh` and `easybar config validate` succeed
+- EasyBar version from `easybar --version`;
+- macOS and AeroSpace versions when relevant;
+- installation method;
+- the affected widget or process;
+- the smallest relevant log excerpt;
+- whether `easybar refresh` and `easybar config validate` succeed.
 
 Do not include access tokens, private URLs, calendar content, or other secrets from widget command output.
 
 ## Related pages
 
-- [Recovery](recovery.md)
+- [Runtime Control](control.md)
+- [Agent Diagnostics](agents.md)
 - [CLI Reference](cli.md)
-- [Agent Debugging](../internals/agents/debugging.md)
 - [macOS Quarantine](../getting-started/macos-quarantine.md)
-- [Configuration Logging](../configuration/logging.md)

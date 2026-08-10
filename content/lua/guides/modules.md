@@ -1,12 +1,8 @@
 # Reusable Modules
 
-EasyBar loads two widget roots. It recursively executes manual `.lua` files below `widgets_dir`,
-except reusable modules below `shared/`. It also executes activated package entrypoints below
-`~/.local/share/easybar/packages/active`; declared package exports below that root's `shared/`
-directory load only through `require(...)`. Extension matching is case-insensitive.
+EasyBar has two sources of widget code. Manual `.lua` files below `widgets_dir` are discovered recursively except reusable modules below `shared/`. Installed packages expose only their manifest-declared widget entrypoints and exports; package directories are not recursive module roots.
 
-Both widget roots and their `shared/` directories are added to Lua's module search path before their
-files load, so code can use standard `require(...)` calls without changing `package.path`.
+Manual module paths and the managed `active/shared` export namespace are added to Lua's standard module search path, so widget code can use normal `require(...)` calls without changing `package.path`.
 
 ## Recommended layout
 
@@ -268,24 +264,18 @@ Dots map to subdirectories. A generic `require("text")` normally resolves to
 files outside `shared/` are also discovered as widgets, prefer `shared/<namespace>/...` for reusable
 manual modules.
 
-Installed packages use the same root and `shared/` search patterns below:
+Installed packages contribute only their manifest-declared exports to Lua module lookup. Package
+directories themselves are not added to `package.path`. Manual module paths are configured afterward
+and therefore take precedence, while managed exports remain available as a fallback.
 
-```text
-~/.local/share/easybar/packages/active/
-```
-
-Package-managed widgets load before manual widgets. Their manifest-declared exports appear below the
-managed `shared/` directory and remain available as a fallback when manual module paths are added.
 Successful `require(...)` calls are cached process-wide, so use distinct export names when two
-packages must not share an implementation.
-
-Installable package Lua files are explicit: every non-test Lua file must be the widget entrypoint or
-a declared export. Use namespaced export names such as `my_widget.policy` when a helper belongs to
-one package rather than exposing a generic module name.
+packages must not share an implementation. Namespaced exports such as `my_widget.policy` are a good
+fit for package-specific helpers. Package creation and export rules live in
+[Create And Publish](../../widget-store/creating-packages.md).
 
 ## Errors
 
-Every discovered `.lua` file is executed. A syntax error or top-level failure is reported for that file, its transactional changes are rolled back, and the remaining files continue loading.
+Every selected widget source is executed independently: a managed package contributes its declared entrypoint, while manual discovery selects eligible `.lua` files below `widgets_dir`. A syntax error or top-level failure is reported for that source, its transactional changes are rolled back, and the remaining widget sources continue loading.
 
 A missing or failing `require(...)` call fails the consuming file in the same way. Files below
 `shared/` are not executed directly, so a broken support module is reported when a widget requires

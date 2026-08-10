@@ -1,28 +1,29 @@
-# Built-ins Vs Lua
+# Built-ins, Widget Store, Or Lua
 
-EasyBar supports two ways to build your bar:
+EasyBar gives you three practical ways to add functionality:
 
-- native built-ins configured in `config.toml`
-- custom Lua widgets loaded from your widgets directory
+- native built-ins configured in `config.toml`;
+- installable packages from the [Widget Store](../widget-store/overview.md);
+- custom Lua widgets you write yourself.
 
-Start with built-ins. Add Lua when a widget needs behavior that is specific to your machine, your tools, or your workflow.
+Start with the least custom option that solves the problem. That usually means a built-in first, a
+store package second, and new Lua code only when the behavior is specific to your workflow.
 
 ## Use built-ins when
 
 Built-ins are the best default for common macOS and system-integrated data:
 
-- spaces and AeroSpace state
-- battery
-- Wi-Fi and network fields
-- calendar and appointments
-- time and date
-- volume
-- front app state
-- CPU status
+- spaces and AeroSpace state;
+- battery;
+- Wi-Fi and network fields;
+- calendar and appointments;
+- time and date;
+- volume;
+- front app state;
+- CPU status.
 
-Built-ins keep platform-sensitive behavior in Swift, use the app's native rendering model, and usually need less maintenance than scripts.
-
-Configure them in `config.toml`:
+Built-ins keep platform-sensitive behavior in Swift, use the native rendering model, and usually need
+less maintenance than scripts.
 
 ```toml
 [builtins.battery]
@@ -35,42 +36,48 @@ enabled = true
 enabled = true
 ```
 
-Use [Built-ins](../configuration/builtins.md) for supported widgets and [Native Groups](../configuration/native-groups.md) for shared visual containers.
+Use [Built-ins](../configuration/builtins.md) for supported widgets and
+[Native Groups](../configuration/native-groups.md) for shared visual containers.
 
-## Use Lua when
+## Use the Widget Store when
 
-Lua widgets are the right fit for custom behavior:
+Use the store when the integration already exists as a maintained package but is not a native
+built-in. Store packages are useful for service integrations, command-backed status, native-inbox
+publishers, and reusable Lua libraries.
 
-- custom text or icon formatting
-- shell-command integration
-- local scripts or project status
-- mouse, hover, scroll, or slider interactions
-- custom popup content
-- small personal workflows without touching Swift code
+```bash
+easybar widgets search
+easybar widgets install PACKAGE_NAME
+easybar config reload
+```
 
-Lua is the extension layer. It is for user-specific behavior, not for replacing native platform integrations that already exist as built-ins.
+Browse the [Widget Store Catalog](../widget-store/catalog.md) or read
+[Install And Manage](../widget-store/manage.md).
+
+A store widget still runs as trusted Lua code. The difference is ownership: the package is versioned
+and updated through EasyBar's package manager instead of being maintained in your manual widget
+directory.
+
+## Write Lua when
+
+Write a manual Lua widget when the behavior is genuinely specific to your machine or workflow:
+
+- custom text, icons, or composed layouts;
+- local scripts or project status;
+- custom mouse, hover, scroll, or slider interactions;
+- bespoke popup content;
+- integrations that do not belong in a reusable package yet.
 
 Start with [First Widget](../lua/guides/first-widget.md).
 
-## A practical decision rule
+## Decision rule
 
-Ask this first:
+Use this order:
 
-> Does EasyBar already provide this as a native built-in?
+1. **Does EasyBar already provide a built-in?** Configure it.
+2. **Does the Widget Store already provide the integration?** Install it.
+3. **Is the behavior personal or new?** Write Lua.
+4. **Did the Lua widget become reusable?** Package it with [Create And Publish](../widget-store/creating-packages.md).
 
-If yes, configure the built-in first.
-
-If no, or if the built-in cannot express your desired behavior, use Lua.
-
-## Common split
-
-A strong setup often uses both:
-
-- built-ins for platform-aware widgets and stable system integrations
-- Lua for custom display logic, local scripts, and project-specific widgets
-
-Examples:
-
-- Use the native `spaces` built-in for workspace state, then add a Lua widget for VPN state.
-- Use the native `calendar` built-in for appointments, then add Lua for a custom project deadline widget.
-- Use native groups for battery and Wi-Fi, then use Lua groups for interactive custom widgets.
+A strong setup can use all three: native widgets for platform integrations, store packages for
+reusable service integrations, and manual Lua for the last mile of personal behavior.

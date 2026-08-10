@@ -120,6 +120,5 @@ easybar.add(easybar.kind.item, "vpn_popup_label", {
 
 ## Related pages
 
-- [Style Popups And Groups](style-popups-and-groups.md)
 - [Properties](../reference/properties.md)
 - [Events](../reference/events.md)

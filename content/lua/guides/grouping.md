@@ -85,6 +85,5 @@ Subscribe on the group handle only when the whole grouped widget should behave l
 
 ## Related pages
 
-- [Style Popups And Groups](style-popups-and-groups.md)
 - [Popups](popups.md)
 - [Properties](../reference/properties.md)

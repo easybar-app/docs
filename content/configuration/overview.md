@@ -1,35 +1,37 @@
-# Configuration Overview
+# Configuration
 
-EasyBar starts with built-in defaults even when no custom config file exists. The default bar enables spaces, battery, Wi-Fi, and calendar.
+EasyBar starts with built-in defaults even when no custom config file exists. The default bar enables spaces, battery, Wi-Fi, and calendar. Create a config only when you want to change those defaults.
 
-Lua-owned values live in the free-form `[widgets.<name>]` namespace. See [Widget Settings](widget-settings.md) for the config format and storage API.
-
-When present, EasyBar reads runtime config from:
+The normal config path is:
 
 ```text
 ~/.config/easybar/config.toml
 ```
 
-You can override that path with:
+Override it for one process with:
 
 ```bash
 EASYBAR_CONFIG_PATH=/path/to/config.toml
 ```
 
-For a first setup, start with [Quick Start](../getting-started/quick-start.md). Create `config.toml` only when you want to customize the defaults.
+For a first setup, start with [Quick Start](../getting-started/quick-start.md).
 
-## Example files
+## Start from an example
 
-The repository ships two config examples:
+The EasyBar repository ships two useful starting points:
 
-- `config.defaults.toml`
-  Full reference file with current defaults, inline comments, and all supported sections.
-- `config.minimal.toml`
-  Small optional starter override that groups common built-ins and enables Wi-Fi details.
+- `config.minimal.toml` is a small customization example. It keeps the default built-ins, groups battery and Wi-Fi, and enables Wi-Fi details.
+- `config.defaults.toml` contains the complete current defaults and supported sections. The generated [Configuration Reference](reference.md) mirrors it when you need exact keys and values.
 
-Use `config.minimal.toml` when you want a compact customization starting point. Use `config.defaults.toml` when you need to discover every supported key.
+From a cloned EasyBar repository, copy the minimal example with:
 
-The generated [Configuration Reference](reference.md) mirrors `config.defaults.toml`. It is useful for exact defaults, but the hand-written pages are better for concepts and examples.
+```bash
+mkdir -p ~/.config/easybar
+cp config.minimal.toml ~/.config/easybar/config.toml
+easybar config reload
+```
+
+You can also start with an empty file and add only the settings you want to override.
 
 ## What belongs in config
 
@@ -40,46 +42,31 @@ Use `config.toml` for stable user-facing behavior:
 - selected theme and theme overrides
 - logging settings
 - helper-agent sockets and behavior
-- bar height and bar colors
-- native built-in widgets
-- native built-in groups
+- bar height and colors
+- native built-in widgets and groups
+- Lua-owned values below `[widgets.<name>]`
 
-Use Lua only when you need custom logic that config cannot express. The decision guide is [Built-ins Vs Lua](../getting-started/builtins-vs-lua.md).
+Use Lua only when you need custom logic that config cannot express. See [Built-ins, Widget Store, Or Lua](../getting-started/builtins-vs-lua.md).
 
 ## Important sections
 
-- `[app]`
-  App-level paths, the shared runtime directory, and runtime behavior.
-- `[app.env]`
-  Environment variables visible to Lua widgets and widget shell commands.
-- `[app.lua_commands]`
-  Default command limits for Lua command execution.
-- `[theme]`
-  Selected theme name and custom theme directory.
-- `[theme.colors]`
-  Optional theme color token overrides.
-- `[logging]`
-  Shared logging config for EasyBar and helper agents.
-- `[agents.calendar]`
-  Calendar helper agent settings.
-- `[agents.network]`
-  Network helper agent settings.
-- `[bar]`
-  Bar height, padding, and top-edge behavior.
-- `[bar.colors]`
-  Bar background and border colors.
-- `[builtins.*]`
-  Native built-in widget configuration.
-- `[builtins.groups.*]`
-  Native widget groups.
+| Section               | Purpose                                                                |
+| --------------------- | ---------------------------------------------------------------------- |
+| `[app]`               | App paths, runtime directory, reload behavior, and Lua command limits. |
+| `[app.env]`           | Environment variables visible to Lua widgets and their commands.       |
+| `[theme]`             | Selected theme and custom theme directory.                             |
+| `[theme.colors]`      | Optional semantic color overrides.                                     |
+| `[logging]`           | Shared logging settings for EasyBar and helper agents.                 |
+| `[agents.calendar]`   | Calendar helper-agent settings.                                        |
+| `[agents.network]`    | Network helper-agent settings.                                         |
+| `[bar]`               | Bar layout and appearance.                                             |
+| `[builtins.*]`        | Native widget configuration.                                           |
+| `[builtins.groups.*]` | Native widget groups.                                                  |
+| `[widgets.<name>]`    | Free-form settings owned by Lua widgets.                               |
 
-## Theme and override model
+## Themes and overrides
 
-Themes provide shared visual defaults.
-
-Explicit config values still win.
-
-The practical order is:
+Themes provide shared visual defaults while explicit config values still win:
 
 ```text
 built-in app defaults
@@ -88,8 +75,6 @@ built-in app defaults
 → explicit [bar] and [builtins.*] values
 → Lua widget props
 ```
-
-That means a theme can set the default palette, while a specific widget can still use exact colors.
 
 Example:
 
@@ -105,23 +90,19 @@ accent = "#8aadf4"
 background = "#090909"
 ```
 
-See [Themes](themes.md).
+Custom theme files live below the configured `themes_dir`; see [Themes](themes.md) for lookup rules and the theme file format.
 
 ## Where to go next
 
-| Goal                                | Page                                    |
-| ----------------------------------- | --------------------------------------- |
-| Copy a starter config               | [Example Configs](example-configs.md)   |
-| Configure app paths                 | [App Settings](app.md)                  |
-| Configure shell command environment | [Environment](environment.md)           |
-| Choose colors                       | [Themes](themes.md)                     |
-| Configure native widgets            | [Built-ins](builtins.md)                |
-| Configure spaces behavior           | [Spaces](builtins/spaces.md)            |
-| Configure the shared inbox          | [Inbox](builtins/inbox.md)              |
-| Configure Wi-Fi details             | [Wi-Fi](builtins/wifi.md)               |
-| Configure calendar behavior         | [Calendar](builtins/calendar.md)        |
-| Group native widgets                | [Native Groups](native-groups.md)       |
-| Configure helper agents             | [Agents](agents.md)                     |
-| Debug logging                       | [Logging](logging.md)                   |
-| Check exact defaults                | [Configuration Reference](reference.md) |
-| Control the running app             | [CLI Reference](../runtime/cli.md)      |
+| Goal                                     | Page                                                |
+| ---------------------------------------- | --------------------------------------------------- |
+| Configure app paths and runtime behavior | [App Settings](app.md)                              |
+| Configure command environment            | [Environment](environment.md)                       |
+| Choose or customize colors               | [Themes](themes.md)                                 |
+| Configure native widgets                 | [Built-ins](builtins.md)                            |
+| Group native widgets                     | [Native Groups](native-groups.md)                   |
+| Configure Lua-owned settings             | [Widget Settings for Lua](../lua/guides/storage.md) |
+| Configure helper agents                  | [Agents](agents.md)                                 |
+| Configure logging                        | [Logging](logging.md)                               |
+| Check every exact key and default        | [Configuration Reference](reference.md)             |
+| Control the running app                  | [Runtime Control](../runtime/control.md)            |

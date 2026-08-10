@@ -30,4 +30,4 @@ Disable the widget explicitly instead of configuring it with no visible content:
 enabled = false
 ```
 
-EasyBar requires AeroSpace 0.21.0 or newer. See [AeroSpace Integration](../../getting-started/aerospace.md) and [Recovery](../../runtime/recovery.md) for connection troubleshooting.
+EasyBar requires AeroSpace 0.21.0 or newer. See [AeroSpace Integration](../../getting-started/aerospace.md) and [Troubleshooting](../../runtime/troubleshooting.md#aerospace-widgets-do-not-update) for connection troubleshooting.

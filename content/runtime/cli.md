@@ -48,7 +48,7 @@ easybar refresh
 
 The command also emits `easybar.events.forced` to subscribed Lua widgets so they can refresh immediately.
 
-Use this when the loaded configuration is already correct and only the displayed or agent-backed state needs to be updated. See [Runtime Control](control.md#refresh) for the difference between refresh, reload, and restart operations.
+Use this when the loaded configuration is already correct and only the displayed or agent-backed state needs to be updated. See [Runtime Control](control.md#choose-the-right-action) for the difference between refresh, reload, and restart operations.
 
 ## `easybar logs`
 
@@ -68,8 +68,7 @@ subcommand, option, and persistence rule.
 ## `easybar widgets`
 
 Search a registry, install or update packages, list installed or outdated releases, and uninstall
-managed packages. See [Widget Packages](widget-packages.md) for package sources, integrity checks,
-dependencies, and manifest examples.
+managed packages. See [Install And Manage](../widget-store/manage.md) for package sources, integrity checks, dependencies, updates, and removal.
 
 ## `easybar config`
 
@@ -83,7 +82,7 @@ Read `config.toml` from disk and rebuild EasyBar using the updated configuration
 easybar config reload
 ```
 
-A rejected reload leaves the last valid configuration active. Use this command after changing the active config when automatic config watching is disabled or when an explicit reload is needed. See [Runtime Control](control.md#reload-config).
+A rejected reload leaves the last valid configuration active. Use this command after changing the active config when automatic config watching is disabled or when an explicit reload is needed. See [Runtime Control](control.md#choose-the-right-action).
 
 ### `easybar config validate`
 
@@ -119,7 +118,7 @@ Restart only the Lua widget runtime using the currently loaded EasyBar configura
 easybar runtime restart
 ```
 
-The command stops the current Lua process, starts a fresh one, reloads Lua widget files, and resets Lua-side widget state. It does not reread `config.toml` from disk. See [Runtime Control](control.md#restart-lua-runtime).
+The command stops the current Lua process, starts a fresh one, reloads Lua widget files, and resets Lua-side widget state. It does not reread `config.toml` from disk. See [Runtime Control](control.md#choose-the-right-action).
 
 ## `easybar agent`
 

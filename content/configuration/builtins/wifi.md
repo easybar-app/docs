@@ -59,4 +59,4 @@ provides Refresh and Open Network Settings actions.
 Configuration changes are written to `config.toml` immediately. Comments, whitespace, and
 unrelated settings are preserved. Checked menu items show the persisted values.
 
-See [Agents](../agents.md) and [Recovery](../../runtime/recovery.md) for further checks.
+See [Agents](../agents.md) and [Troubleshooting](../../runtime/troubleshooting.md#wi-fi-or-network-data-is-empty) for further checks.
