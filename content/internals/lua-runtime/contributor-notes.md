@@ -108,8 +108,8 @@ make build
 ```
 
 The documentation build fetches EasyBar and widgets, generates the configuration and Lua reference,
-generates the Widget Store catalog, and then builds MkDocs from `.build/content`. Generated pages
-are not committed to the documentation repository.
+generates the Widget Store catalog into ignored paths below `content/`, and then builds MkDocs
+directly from that content tree. Generated pages are not committed to the documentation repository.
 
 ## If you change the Lua API
 

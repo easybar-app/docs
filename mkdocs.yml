@@ -6,7 +6,7 @@ repo_url: https://github.com/easybar-app/docs
 repo_name: easybar-app/docs
 edit_uri: edit/main/content/
 
-docs_dir: .build/content
+docs_dir: content
 site_dir: .site
 
 theme:
@@ -35,38 +35,37 @@ nav:
   - Getting Started:
       - Quick Start: getting-started/quick-start.md
       - Installation: getting-started/installation.md
-      - Built-ins, Store, Or Lua: getting-started/builtins-vs-lua.md
-      - AeroSpace Integration: getting-started/aerospace.md
-      - macOS Quarantine: getting-started/macos-quarantine.md
+      - Choose Built-ins, Store, Or Lua: getting-started/choosing-widgets.md
 
   - Widget Store:
       - Overview: widget-store/overview.md
       - Catalog: widget-store/catalog.md
       - Install And Manage: widget-store/manage.md
-      - Create & Contribute: widget-store/creating-packages.md
+      - Create & Contribute: widget-store/create-and-contribute.md
 
   - Configuration:
       - Overview: configuration/overview.md
-      - Reference: configuration/reference.md
       - App Settings: configuration/app.md
       - Environment: configuration/environment.md
       - Themes: configuration/themes.md
-      - Built-ins: configuration/builtins.md
-      - Spaces: configuration/builtins/spaces.md
-      - Inbox: configuration/builtins/inbox.md
-      - Privacy Spacer: configuration/builtins/privacy-spacer.md
-      - Wi-Fi: configuration/builtins/wifi.md
-      - Calendar: configuration/builtins/calendar.md
-      - Native Groups: configuration/native-groups.md
+      - Built-ins:
+          - Overview: configuration/builtins.md
+          - Spaces: configuration/builtins/spaces.md
+          - Calendar: configuration/builtins/calendar.md
+          - Wi-Fi: configuration/builtins/wifi.md
+          - Inbox: configuration/builtins/inbox.md
+          - Privacy Spacer: configuration/builtins/privacy-spacer.md
+          - Native Groups: configuration/native-groups.md
       - Agents: configuration/agents.md
       - Logging: configuration/logging.md
+      - Reference: configuration/reference.md
 
   - Lua Widgets:
       - Overview: lua/overview.md
-      - API Summary: lua/api-summary.md
-      - Conventions: lua/conventions.md
+      - Quick Reference: lua/quick-reference.md
       - Guides:
           - First Widget: lua/guides/first-widget.md
+          - Conventions & Best Practices: lua/guides/best-practices.md
           - Reusable Modules: lua/guides/modules.md
           - Subscribe To Events: lua/guides/subscribe-to-events.md
           - Commands: lua/guides/commands.md
@@ -79,7 +78,6 @@ nav:
           - Logging: lua/guides/logging.md
           - Editor Support: lua/guides/editor-support.md
           - Examples: lua/guides/examples.md
-          - Style Guidelines: lua/guides/style-guidelines.md
       - Reference:
           - Overview: lua/reference/index.md
           - Functions: lua/reference/functions.md
@@ -89,12 +87,13 @@ nav:
 
   - Runtime:
       - Control: runtime/control.md
-      - CLI Reference: runtime/cli.md
-      - Logs: runtime/logs.md
-      - Metrics: runtime/metrics.md
-      - Inbox CLI: runtime/inbox.md
+      - CLI:
+          - Reference: runtime/cli.md
+          - Logs: runtime/logs.md
+          - Metrics: runtime/metrics.md
+          - Inbox: runtime/inbox.md
       - Troubleshooting: runtime/troubleshooting.md
-      - Agent Diagnostics: runtime/agents.md
+      - Agent Diagnostics: runtime/agent-diagnostics.md
 
   - Internals:
       - Overview: internals/overview.md

@@ -105,7 +105,7 @@ With `--no-registry`, every dependency must already be installed. Without that o
 installed compatible dependencies first and asks the selected registry for missing or incompatible
 ones.
 
-For package layout and manifest fields, see [Create & Contribute](creating-packages.md).
+For package layout and manifest fields, see [Create & Contribute](create-and-contribute.md).
 
 ## Install an archive directly
 

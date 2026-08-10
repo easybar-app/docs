@@ -1,7 +1,14 @@
+.DS_Store
+__pycache__/
+*.pyc
+
+.venv/
+.sources/
 .build/
 .site/
-.sources/
-.venv/
 
-__pycache__/
-.DS_Store
+# Generated documentation
+content/configuration/reference.md
+content/lua/reference/
+content/widget-store/catalog.md
+content/widget-store/packages/

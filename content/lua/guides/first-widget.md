@@ -74,4 +74,4 @@ Once the basic widget works, you can add:
 - Read [Reusable Modules](modules.md) when several widgets need the same helper functions.
 - Read [Subscribe To Events](subscribe-to-events.md) to make the widget interactive.
 - Read [Grouping](grouping.md) and [Popups](popups.md) to shape more complex widgets.
-- Keep [API Summary](../api-summary.md) open as a quick reference.
+- Keep [Lua Quick Reference](../quick-reference.md) open as a quick reference.

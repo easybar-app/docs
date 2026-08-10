@@ -9,8 +9,6 @@ WIDGETS_REF ?= main
 SOURCES_DIR := .sources
 EASYBAR_ROOT ?= $(SOURCES_DIR)/easybar
 WIDGETS_ROOT ?= $(SOURCES_DIR)/widgets
-BUILD_DIR := .build
-BUILD_CONTENT := $(BUILD_DIR)/content
 SITE_DIR := .site
 
 VENV := .venv
@@ -26,6 +24,11 @@ PRETTIER_MD_SOURCES := README.md "content/**/*.md"
 PRETTIER_YAML_SOURCES := ".github/**/*.{yml,yaml}" mkdocs.yml
 PRETTIER_JSON_SOURCES := ".github/**/*.json"
 PRETTIER_SOURCES := $(PRETTIER_MD_SOURCES) $(PRETTIER_YAML_SOURCES) $(PRETTIER_JSON_SOURCES)
+GENERATED_MD_SOURCES := \
+	content/configuration/reference.md \
+	"content/lua/reference/**/*.md" \
+	content/widget-store/catalog.md \
+	"content/widget-store/packages/**/*.md"
 
 .DEFAULT_GOAL := help
 
@@ -45,19 +48,18 @@ else
 	@scripts/sources/fetch.sh "$(WIDGETS_REPOSITORY)" "$(WIDGETS_REF)" "$(WIDGETS_ROOT)"
 endif
 
-generate: fetch ## Assemble hand-written and generated documentation.
-	@$(PYTHON) scripts/generate/prepare_content.py content "$(BUILD_CONTENT)"
+generate: fetch ## Generate reference and Widget Store pages directly in content/.
 	@scripts/generate/easybar_docs.sh "$(PYTHON)" "$(EASYBAR_ROOT)" \
-		"$(abspath $(BUILD_CONTENT))"
+		"$(abspath content)"
 	@$(PYTHON) scripts/generate/widget_docs.py \
 		--widgets-root "$(WIDGETS_ROOT)" \
-		--output "$(BUILD_CONTENT)/widget-store"
-	@$(PRETTIER) --write "$(BUILD_CONTENT)/**/*.md"
+		--output "$(abspath content/widget-store)"
+	@$(PRETTIER) --write $(GENERATED_MD_SOURCES)
 
 build: $(DEPENDENCIES_STAMP) generate ## Build the production site into .site/.
 	@$(PYTHON) -m mkdocs build --strict -f mkdocs.yml
 
-serve: $(DEPENDENCIES_STAMP) generate ## Serve the assembled site with live reload.
+serve: $(DEPENDENCIES_STAMP) generate ## Serve content/ with live reload.
 	@$(PYTHON) -m mkdocs serve -f mkdocs.yml
 
 ##@ Formatting
@@ -99,8 +101,8 @@ favicon: fetch ## Generate site icons from EasyBar's application logo.
 
 ##@ Maintenance
 
-clean: ## Remove fetched sources and generated build artifacts.
-	@python3 scripts/maintenance/clean.py "$(SOURCES_DIR)" "$(BUILD_DIR)" "$(SITE_DIR)"
+clean: ## Remove fetched sources and generated documentation artifacts.
+	@python3 scripts/maintenance/clean.py
 
 $(PYTHON):
 	@python3 -m venv "$(VENV)"

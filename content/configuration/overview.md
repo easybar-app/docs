@@ -46,7 +46,7 @@ Use `config.toml` for stable user-facing behavior:
 - native built-in widgets and groups
 - Lua-owned values below `[widgets.<name>]`
 
-Use Lua only when you need custom logic that config cannot express. See [Built-ins, Widget Store, Or Lua](../getting-started/builtins-vs-lua.md).
+Use Lua only when you need custom logic that config cannot express. See [Built-ins, Widget Store, Or Lua](../getting-started/choosing-widgets.md).
 
 ## Important sections
 

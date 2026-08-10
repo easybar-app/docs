@@ -1,6 +1,6 @@
-# API Summary
+# Lua Quick Reference
 
-This page is a compact map of the EasyBar Lua API for day-to-day widget work.
+This page is a compact day-to-day map of the EasyBar Lua API.
 
 Use the full reference when you need exact property tables or event payload types.
 
@@ -106,5 +106,6 @@ See [Properties](reference/properties.md).
 ## Suggested reading path
 
 1. [First Widget](guides/first-widget.md)
-2. [Subscribe To Events](guides/subscribe-to-events.md)
-3. [Grouping](guides/grouping.md) and [Popups](guides/popups.md)
+2. [Conventions & Best Practices](guides/best-practices.md)
+3. [Subscribe To Events](guides/subscribe-to-events.md)
+4. [Grouping](guides/grouping.md) and [Popups](guides/popups.md)

@@ -187,4 +187,4 @@ remain trusted local code.
 - [Grouping](grouping.md)
 - [Popups](popups.md)
 - [Native Context Menus](context-menus.md)
-- [API Summary](../api-summary.md)
+- [Lua Quick Reference](../quick-reference.md)

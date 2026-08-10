@@ -4,7 +4,7 @@ EasyBar supports native built-in widgets in `config.toml`.
 
 Built-ins are configured under `[builtins.*]`.
 
-If you are deciding whether to use a built-in or write a Lua widget, start with [Built-ins Vs Lua](../getting-started/builtins-vs-lua.md).
+If you are deciding whether to use a built-in or write a Lua widget, start with [Choose Built-ins, Widget Store, Or Lua](../getting-started/choosing-widgets.md).
 
 Example:
 

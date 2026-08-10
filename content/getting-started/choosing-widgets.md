@@ -1,4 +1,4 @@
-# Built-ins, Widget Store, Or Lua
+# Choose Built-ins, Widget Store, Or Lua
 
 EasyBar gives you three practical ways to add functionality:
 
@@ -77,7 +77,7 @@ Use this order:
 1. **Does EasyBar already provide a built-in?** Configure it.
 2. **Does the Widget Store already provide the integration?** Install it.
 3. **Is the behavior personal or new?** Write Lua.
-4. **Did the Lua widget become reusable?** Package it with [Create & Contribute](../widget-store/creating-packages.md).
+4. **Did the Lua widget become reusable?** Package it with [Create & Contribute](../widget-store/create-and-contribute.md).
 
 A strong setup can use all three: native widgets for platform integrations, store packages for
 reusable service integrations, and manual Lua for the last mile of personal behavior.

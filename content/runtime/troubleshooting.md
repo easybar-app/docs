@@ -42,7 +42,7 @@ Use `easybar logs --follow` when you need live records. See [Logs](logs.md) and 
 2. Start it with `open -a EasyBar`.
 3. Check `easybar.out` for config, lock, screen, font, and Lua startup errors.
 4. Confirm another EasyBar build is not holding the single-instance lock.
-5. If Gatekeeper blocks a manual install, follow [macOS Quarantine](../getting-started/macos-quarantine.md).
+5. If Gatekeeper blocks a manual install, follow [macOS Quarantine](../getting-started/installation.md#macos-quarantine).
 
 ## Config changes do not apply
 
@@ -67,7 +67,7 @@ brew services list | grep easybar-calendar-agent
 easybar agent restart calendar
 ```
 
-Also check calendar include/exclude filters when only some calendars are missing. For socket probes, raw responses, and unresponsive-service recovery, use [Agent Diagnostics](agents.md).
+Also check calendar include/exclude filters when only some calendars are missing. For socket probes, raw responses, and unresponsive-service recovery, use [Agent Diagnostics](agent-diagnostics.md).
 
 ## Wi-Fi or network data is empty
 
@@ -79,7 +79,7 @@ After changing Location permission:
 easybar agent restart network
 ```
 
-If only selected fields are missing, verify the configured Wi-Fi fields and compare them with the raw agent response in [Agent Diagnostics](agents.md).
+If only selected fields are missing, verify the configured Wi-Fi fields and compare them with the raw agent response in [Agent Diagnostics](agent-diagnostics.md).
 
 ## AeroSpace widgets do not update
 
@@ -183,7 +183,7 @@ pkill -x EasyBar || true
 open -a EasyBar
 ```
 
-Do not kill responsive helper agents just to reset the bar. Restart them individually with `easybar agent restart ...`, or use the Homebrew service commands from [Agent Diagnostics](agents.md) when their sockets are unavailable.
+Do not kill responsive helper agents just to reset the bar. Restart them individually with `easybar agent restart ...`, or use the Homebrew service commands from [Agent Diagnostics](agent-diagnostics.md) when their sockets are unavailable.
 
 ## Escalation checklist
 
@@ -201,6 +201,6 @@ Do not include access tokens, private URLs, calendar content, or other secrets f
 ## Related pages
 
 - [Runtime Control](control.md)
-- [Agent Diagnostics](agents.md)
+- [Agent Diagnostics](agent-diagnostics.md)
 - [CLI Reference](cli.md)
-- [macOS Quarantine](../getting-started/macos-quarantine.md)
+- [macOS Quarantine](../getting-started/installation.md#macos-quarantine)

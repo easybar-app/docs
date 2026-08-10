@@ -4,19 +4,30 @@ from __future__ import annotations
 
 from pathlib import Path
 import shutil
-import sys
+
+
+def remove(path: Path) -> None:
+    if path.is_dir() and not path.is_symlink():
+        shutil.rmtree(path)
+    elif path.exists() or path.is_symlink():
+        path.unlink()
 
 
 def main() -> int:
     root = Path.cwd().resolve()
-    allowed = {root / ".sources", root / ".build", root / ".site"}
+    targets = (
+        root / ".sources",
+        root / ".build",  # Legacy assembled-content directory from the previous MkDocs layout.
+        root / ".site",
+        root / "content/configuration/reference.md",
+        root / "content/lua/reference",
+        root / "content/widget-store/catalog.md",
+        root / "content/widget-store/packages",
+    )
 
-    for argument in sys.argv[1:]:
-        target = Path(argument).resolve()
-        if target not in allowed:
-            raise SystemExit(f"Refusing to remove unexpected path: {target}")
-        if target.exists():
-            shutil.rmtree(target)
+    for target in targets:
+        remove(target)
+
     return 0
 
 

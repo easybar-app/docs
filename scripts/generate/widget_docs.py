@@ -202,13 +202,13 @@ def render_index(packages: list[Package]) -> str:
             [
                 '<article class="easybar-package-card" markdown>',
                 "",
-                f"**[`{package.name}`]({package.name}.md)**",
+                f"**[`{package.name}`](packages/{package.name}.md)**",
                 "",
                 labels,
                 "",
                 package.description,
                 "",
-                f"[Package details]({package.name}.md) · [Source]({package.source_url})",
+                f"[Package details](packages/{package.name}.md) · [Source]({package.source_url})",
                 "",
                 "</article>",
                 "",
@@ -223,7 +223,7 @@ def render_index(packages: list[Package]) -> str:
             "archive; see [Install And Manage](manage.md).",
             "",
             "To add an official package, follow",
-            "[Create And Publish](creating-packages.md).",
+            "[Create & Contribute](create-and-contribute.md).",
             "",
         ]
     )
@@ -335,9 +335,12 @@ def generate(widgets_root: Path, output: Path) -> list[Path]:
         raise ValueError("package names must be unique")
 
     output.mkdir(parents=True, exist_ok=True)
-    expected_names = {"catalog.md", *[f"{package.name}.md" for package in packages]}
-    for existing in output.glob("*.md"):
-        if existing.name in expected_names:
+    packages_output = output / "packages"
+    packages_output.mkdir(parents=True, exist_ok=True)
+
+    expected_package_names = {f"{package.name}.md" for package in packages}
+    for existing in packages_output.glob("*.md"):
+        if existing.name in expected_package_names:
             continue
         if existing.read_text(encoding="utf-8").startswith(GENERATED_HEADER):
             existing.unlink()
@@ -349,7 +352,7 @@ def generate(widgets_root: Path, output: Path) -> list[Path]:
 
     package_names = set(names)
     for package in packages:
-        package_path = output / f"{package.name}.md"
+        package_path = packages_output / f"{package.name}.md"
         package_path.write_text(render_package(package, package_names), encoding="utf-8")
         written.append(package_path)
 

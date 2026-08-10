@@ -42,5 +42,5 @@ These commands route through EasyBar's normal event system so subscribed Lua wid
 
 - [CLI Reference](cli.md)
 - [Troubleshooting](troubleshooting.md)
-- [Agent Diagnostics](agents.md)
+- [Agent Diagnostics](agent-diagnostics.md)
 - [Control Socket](../internals/architecture/control-socket.md)

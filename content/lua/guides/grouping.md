@@ -2,7 +2,7 @@
 
 Use `group` when multiple child nodes should share one visual container.
 
-For terminology such as node, handle, and popup owner, see [Conventions](../conventions.md).
+For terminology such as node, handle, and popup owner, see [Conventions](best-practices.md).
 
 A group is useful when you want:
 

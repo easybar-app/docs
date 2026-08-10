@@ -271,7 +271,7 @@ and therefore take precedence, while managed exports remain available as a fallb
 Successful `require(...)` calls are cached process-wide, so use distinct export names when two
 packages must not share an implementation. Namespaced exports such as `my_widget.policy` are a good
 fit for package-specific helpers. Package creation and export rules live in
-[Create & Contribute](../../widget-store/creating-packages.md).
+[Create & Contribute](../../widget-store/create-and-contribute.md).
 
 ## Errors
 

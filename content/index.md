@@ -83,8 +83,8 @@ the CLI without restarting your workflow.
 | Use              | Best for                                                                          | Start here                                      |
 | ---------------- | --------------------------------------------------------------------------------- | ----------------------------------------------- |
 | Native built-ins | Spaces, battery, Wi-Fi, calendar, time, date, volume, and front-app state         | [Built-ins](configuration/builtins.md)          |
+| Widget Store     | Ready-made integrations and reusable Lua libraries                                | [Widget Store Catalog](widget-store/catalog.md) |
 | Lua widgets      | Custom display logic, commands, interactions, popups, and project-specific status | [Lua Widgets](lua/overview.md)                  |
-| Widget packages  | Ready-made integrations and reusable Lua libraries                                | [Widget Store Catalog](widget-store/catalog.md) |
 | CLI              | Reloads, diagnostics, inbox publishing, package management, and automation        | [CLI Reference](runtime/cli.md)                 |
 
 ## See EasyBar in action
