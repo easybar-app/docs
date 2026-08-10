@@ -20,9 +20,10 @@ upgrade, or explicitly replace a package from any supported source with:
 easybar widgets install PACKAGE_NAME --force
 ```
 
-A forced install moves the current managed package state aside before replacing it. EasyBar removes
-that backup only after the new package is installed successfully; if downloading, resolving, or
-installing fails, it restores the previous state.
+Every install is prepared inside that package's versioned store before it becomes active. A forced
+install uses the same staged path and can therefore reinstall the currently installed version as
+well as replace it with another version. See [Atomic installs and updates](#atomic-installs-and-updates)
+for the exact filesystem behavior.
 
 Use another registry index when needed:
 
@@ -85,10 +86,18 @@ easybar widgets update --all
 easybar config reload
 ```
 
+A named update changes nothing when the selected registry does not contain a newer version. When a
+newer version exists, EasyBar downloads and validates it into a staged store directory, commits the
+new version, then atomically switches the package's active symlink. The previous successfully
+installed versions remain in the store until retention pruning runs.
+
 Pass `--registry` to any of these commands to use another remote or local registry. Updates only
 apply to packages whose recorded installation source matches a release in that registry. Locally
 created packages and packages installed from unrelated archives are never replaced by `update
 --all`.
+
+`update --all` processes outdated packages one at a time. A package that commits successfully stays
+updated even if a later package update fails.
 
 ## Install a self-created package
 
@@ -155,7 +164,7 @@ easybar widgets install \
 
 The archive must place `package.toml` at its root. Symbolic links, absolute paths, and parent-directory traversal are rejected.
 
-## Install location
+## Managed package layout
 
 All packages install into EasyBar's managed data directory, whether they come from the official registry, another registry, a local directory, or an archive:
 
@@ -164,19 +173,79 @@ All packages install into EasyBar's managed data directory, whether they come fr
 ├── installed.json
 ├── store/
 │   └── <name>/
-│       └── <version>/
+│       ├── <active-version>/
+│       │   ├── .easybar/
+│       │   │   └── source/
+│       │   ├── package.toml
+│       │   └── ...activated widget projection...
+│       ├── <previous-version>/
+│       └── <older-previous-version>/
 └── active/
-    ├── <widget-name>/
+    ├── <widget-name> -> ../store/<widget-name>/<active-version>
     └── shared/
+        └── <module>.lua -> .../store/<package>/<active-version>/.easybar/source/<file>.lua
 ```
 
-`store/` keeps the complete versioned package source. `active/` contains only activated widget files and declared library exports. EasyBar loads this managed activation directory in addition to the manual `[app].widgets_dir`.
+`store/<name>/<version>/` is the committed version. For widgets, its visible root contains the
+entrypoint, non-Lua assets, package metadata, and other files safe for runtime discovery. The complete
+package source is retained below `.easybar/source/` and is not scanned as widget code.
 
-The configured `widgets_dir` is reserved for Lua files you manage yourself. Package installation never writes new files there. If EasyBar finds the previous package layout below `<widgets_dir>/.easybar` during an install, it migrates those package-owned files into the managed data directory and leaves unrelated manual widgets untouched.
+`active/<widget-name>` is a relative symbolic link to the committed widget version. Declared package
+exports are relative symbolic links below `active/shared/` that point into the committed version's
+`.easybar/source/` tree. EasyBar loads this activation tree in addition to the manual
+`[app].widgets_dir`.
+
+The configured `widgets_dir` is only for Lua files you manage yourself. Package installation does
+not write to it or migrate package data from it. Only the current managed package layout is
+supported.
+
+## Atomic installs and updates
+
+Before a package version is committed, EasyBar prepares it as:
+
+```text
+store/<name>/<version>.staging-<id>/
+```
+
+The staged directory contains the complete source snapshot and the runtime-safe activation
+projection. Only after preparation succeeds does EasyBar rename it to the committed version path.
+
+For a new version, the existing versions remain untouched while the new version is prepared and
+committed. EasyBar then replaces the `active/<name>` symlink with a newly staged symlink that points
+to the committed version.
+
+A same-version `--force` install temporarily moves the existing committed version to:
+
+```text
+store/<name>/<version>.backup-<id>/
+```
+
+The staged replacement is then renamed to `<version>`, its activation links are switched, and
+`installed.json` is written atomically. After the complete install succeeds, the temporary backup
+is removed. If any committed filesystem change or database write fails, EasyBar rolls back the
+package-local replacements and restores the previous paths.
+
+Filesystem replacements are package-local. When one install also materializes dependencies, EasyBar
+coordinates those per-package transactions and rolls them back together if the final package database
+write fails. It does not copy or back up the complete managed package directory for an update.
+
+## Version retention
+
+After a successful install or update, EasyBar keeps at most three committed semantic versions for
+each package:
+
+- the currently active version
+- the two most recently successfully activated previous versions
+
+Older committed versions are removed after the new version and package database have committed.
+Temporary `.staging-<id>` and `.backup-<id>` paths are transaction artifacts, not retained versions.
+
+Reinstalling the same version with `--force` replaces that version in place. Its temporary backup is
+kept only until the replacement commits successfully.
 
 ## Uninstall a package
 
-Remove a package and its managed active files with:
+Remove a package and all of its managed versions and active links with:
 
 ```bash
 easybar widgets uninstall PACKAGE_NAME

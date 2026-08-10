@@ -33,14 +33,7 @@ Example `.luarc.json`:
   "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
   "runtime": {
     "version": "Lua 5.5",
-    "path": [
-      "?.lua",
-      "?/init.lua",
-      "shared/?.lua",
-      "shared/?/init.lua",
-      "lib/?.lua",
-      "lib/?/init.lua"
-    ]
+    "path": ["?.lua", "?/init.lua", "shared/?.lua", "shared/?/init.lua"]
   },
   "workspace": {
     "library": [

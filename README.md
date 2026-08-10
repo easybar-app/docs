@@ -36,9 +36,12 @@ make build \
 ## Content
 
 - `content/` contains hand-written documentation and site assets.
-- EasyBar provides configuration and Lua API reference data.
+- EasyBar provides `config.schema.json` and `scripts/generate/lua_docs.py` for generated references.
 - `widgets` provides package metadata and documentation.
 - `.build/content/` contains the generated documentation tree used by MkDocs.
+
+The documentation build requires the current EasyBar reference inputs. It does not fall back to
+reference pages copied from another EasyBar documentation layout.
 
 The site is rebuilt automatically when relevant EasyBar or widget content changes.
 

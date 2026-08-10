@@ -37,9 +37,9 @@ The directory where EasyBar loads manually managed Lua widget files from.
 widgets_dir = "~/.config/easybar/widgets"
 ```
 
-EasyBar recursively loads every regular file below this directory with a `.lua` extension. Extension matching is case-insensitive. Discovery does not depend on a category name or a filename such as `widget.lua`. Lua files used as reusable modules are also executed during startup, so keep module top levels side-effect-free and start runtime behavior only from explicit functions.
+EasyBar recursively loads every regular file below this directory with a `.lua` extension, except files below `shared/`. Extension matching is case-insensitive. Discovery does not depend on a category name or a filename such as `widget.lua`. Put reusable modules below `shared/` so they load only through `require(...)`.
 
-Packages installed with `easybar widgets install` are kept separately below `~/.local/share/easybar/packages` and loaded automatically. Changing `widgets_dir` affects only your manual widgets; it does not relocate installed packages.
+Packages installed with `easybar widgets install` are kept separately below `~/.local/share/easybar/packages` and loaded automatically through the managed `active/` symlinks. Changing `widgets_dir` affects only your manual widgets; it does not relocate, migrate, or activate installed packages.
 
 If you are creating your first custom widget, continue with [First Widget](../lua/guides/first-widget.md). For shared helper code, see [Reusable Modules](../lua/guides/modules.md).
 

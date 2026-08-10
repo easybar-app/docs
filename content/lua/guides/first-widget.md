@@ -52,8 +52,8 @@ The `clock` variable stores the handle returned by EasyBar, which lets the callb
 
 EasyBar recursively loads every `.lua` file below the configured widgets directory. The app
 repository keeps its single-file examples flat below `examples/`; only the multi-file inbox demo
-uses a subdirectory. No category or filename is required by the loader. Generic helpers can live
-below `shared/`, while `lib/` remains on the module search path for compatibility.
+uses a subdirectory. No category or filename is required by the loader. Put reusable helpers
+below `shared/` so they load only through `require(...)` instead of being discovered as widgets.
 
 That directory is configured with `[app].widgets_dir` in `config.toml`.
 

@@ -116,8 +116,9 @@ avoiding duplicated or hard-to-review shell logic.
 
 - the managed activation directory and manual widget directory contain executable Lua
 - Swift passes `widgets_dir` and the internal managed activation path; recursive file discovery belongs to `api.lua`
-- activated package entrypoints and compatible manual files at any depth are loaded as widgets
-- service-local modules live beside their consuming files; package exports and manual generic modules use their respective `shared/` directories, while the manual `lib/` directory remains a legacy fallback
+- activated package entrypoints and manual Lua files at any depth outside `shared/` are loaded as widgets
+- reusable manual modules and package exports use `shared/`; there is no secondary module directory
+- managed widget activation follows symlinks into versioned store entries, while `.easybar/source/` remains outside runtime discovery
 - reload is a full reset
 - protocol:
   - Lua socket JSON in/out via `EasyBarLuaRuntime`

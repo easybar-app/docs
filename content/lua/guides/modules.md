@@ -1,8 +1,12 @@
 # Reusable Modules
 
-EasyBar loads two widget roots. It recursively executes manual `.lua` files below `widgets_dir`, except reusable modules below `shared/` or legacy `lib/`. It also executes activated package entrypoints below `~/.local/share/easybar/packages/active`; package exports below that root's `shared/` directory load only through `require(...)`. Extension matching is case-insensitive.
+EasyBar loads two widget roots. It recursively executes manual `.lua` files below `widgets_dir`,
+except reusable modules below `shared/`. It also executes activated package entrypoints below
+`~/.local/share/easybar/packages/active`; declared package exports below that root's `shared/`
+directory load only through `require(...)`. Extension matching is case-insensitive.
 
-Both widget roots and their `shared/` directories are added to Lua's module search path before their files load, so code can continue to use standard `require(...)` calls without changing `package.path`. The manual root also supports the legacy `lib/` fallback.
+Both widget roots and their `shared/` directories are added to Lua's module search path before their
+files load, so code can use standard `require(...)` calls without changing `package.path`.
 
 ## Recommended layout
 
@@ -15,23 +19,30 @@ Both widget roots and their `shared/` directories are added to Lua's module sear
 │   └── README.md
 ├── brew/
 │   ├── widget.lua
-│   ├── policy.lua
 │   └── README.md
 ├── shared/
 │   ├── inbox.lua
 │   ├── retry.lua
 │   ├── text.lua
+│   ├── brew/
+│   │   └── policy.lua
 │   └── status/
 │       └── init.lua
-├── lib/
-│   └── legacy.lua
 └── assets/
     └── github.svg
 ```
 
-Lua files below `shared/` and `lib/` load only through `require(...)`. Keep their top level declarative: create local functions or tables and return the public value. Do not start timers, commands, subscriptions, or inbox publishing until an explicit function is called by the consuming widget.
+Lua files below `shared/` load only through `require(...)`. Every `.lua` file elsewhere below
+`widgets_dir` is eligible for direct widget discovery, so put reusable support code under `shared/`
+when it must not execute as a widget entrypoint.
 
-Keep small examples in the matching category. Use a service directory when an integration gains configuration, helper modules, documentation, tests, or assets. The filename inside that directory is your choice.
+Keep module top levels declarative: create local functions or tables and return the public value. Do
+not start timers, commands, subscriptions, or inbox publishing until an explicit function is called
+by the consuming widget.
+
+Keep small examples in the matching category. Use a service directory when an integration gains
+configuration, documentation, tests, or assets. Use a service namespace below `shared/` when that
+integration needs reusable Lua modules.
 
 Do not install multiple presentation variants for the same service unless duplicate polling is intentional.
 
@@ -213,7 +224,8 @@ cache.
 
 ## EasyBar API access
 
-Every discovered file receives a widget-scoped `easybar` value during direct startup execution. The same file does not receive that injected value when Lua loads it later through standard `require(...)`.
+Every discovered file receives a widget-scoped `easybar` value during direct startup execution. A
+module loaded later through `require(...)` does not receive that injected value automatically.
 
 Keep reusable modules independent from `easybar` at top level. When a helper needs host-specific data, pass the value explicitly:
 
@@ -249,27 +261,32 @@ For manually managed widgets, EasyBar searches modules in this order:
 <widgets_dir>/?/init.lua
 <widgets_dir>/shared/?.lua
 <widgets_dir>/shared/?/init.lua
-<widgets_dir>/lib/?.lua
-<widgets_dir>/lib/?/init.lua
 ```
 
-Dots map to subdirectories. For example, `require("brew.policy")` resolves first to
-`<widgets_dir>/brew/policy.lua`. A generic `require("text")` normally resolves to
-`<widgets_dir>/shared/text.lua` when no top-level `text.lua` or `text/init.lua` exists.
+Dots map to subdirectories. A generic `require("text")` normally resolves to
+`<widgets_dir>/shared/text.lua` when no top-level `text.lua` or `text/init.lua` exists. Because Lua
+files outside `shared/` are also discovered as widgets, prefer `shared/<namespace>/...` for reusable
+manual modules.
 
-Installed packages use the same root and `shared/` patterns below:
+Installed packages use the same root and `shared/` search patterns below:
 
 ```text
 ~/.local/share/easybar/packages/active/
 ```
 
-Package-managed widgets load before manual widgets, so their declared exports resolve from the managed activation tree. During manual widget startup, manual module paths take precedence and managed exports remain available as a fallback. Successful `require(...)` calls are cached process-wide, so use distinct module names when two packages must not share an implementation.
+Package-managed widgets load before manual widgets. Their manifest-declared exports appear below the
+managed `shared/` directory and remain available as a fallback when manual module paths are added.
+Successful `require(...)` calls are cached process-wide, so use distinct export names when two
+packages must not share an implementation.
 
-Use the widget name as the first component for private package modules. Keep generic module names in
-`shared/`, and avoid names likely to collide with third-party Lua packages.
+Installable package Lua files are explicit: every non-test Lua file must be the widget entrypoint or
+a declared export. Use namespaced export names such as `my_widget.policy` when a helper belongs to
+one package rather than exposing a generic module name.
 
 ## Errors
 
 Every discovered `.lua` file is executed. A syntax error or top-level failure is reported for that file, its transactional changes are rolled back, and the remaining files continue loading.
 
-A missing or failing `require(...)` call fails the consuming file in the same way. Files below `shared/` and `lib/` are not executed directly, so a broken support module is reported when a widget requires it.
+A missing or failing `require(...)` call fails the consuming file in the same way. Files below
+`shared/` are not executed directly, so a broken support module is reported when a widget requires
+it.

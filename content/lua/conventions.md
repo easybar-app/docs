@@ -10,7 +10,7 @@ That file can create one node or many nodes. It can also keep local state, run c
 
 ## Module
 
-A module is reusable Lua code stored beside a packaged widget entrypoint, below `shared/`, or in the legacy `lib/` fallback and loaded with standard `require(...)` calls. Modules are not started as widgets.
+A module is reusable Lua code loaded with standard `require(...)` calls. Put reusable manual modules below `shared/`; installable packages expose reusable Lua only through declared exports, which EasyBar activates below the managed `shared/` directory. Modules below `shared/` are not started as widgets.
 
 See [Reusable Modules](guides/modules.md).
 
