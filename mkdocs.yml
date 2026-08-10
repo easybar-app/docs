@@ -43,7 +43,7 @@ nav:
       - Overview: widget-store/overview.md
       - Catalog: widget-store/catalog.md
       - Install And Manage: widget-store/manage.md
-      - Create And Publish: widget-store/creating-packages.md
+      - Create & Contribute: widget-store/creating-packages.md
 
   - Configuration:
       - Overview: configuration/overview.md

@@ -4,7 +4,7 @@ This page documents the implementation boundary behind the public [Widget Store]
 It is for contributors changing package installation, activation, dependency handling, or Lua startup.
 
 User-facing install and update commands belong in [Install And Manage](../widget-store/manage.md).
-Package authoring belongs in [Create And Publish](../widget-store/creating-packages.md).
+Package authoring belongs in [Create & Contribute](../widget-store/creating-packages.md).
 
 ## Store layout
 

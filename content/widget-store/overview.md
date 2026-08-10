@@ -69,7 +69,7 @@ easybar config reload
 | ------------------------------------------------- | -------------------------------------------------------- |
 | Browse official packages                          | [Catalog](catalog.md)                                    |
 | Install, update, or remove packages               | [Install And Manage](manage.md)                          |
-| Create a widget or library package                | [Create And Publish](creating-packages.md)               |
+| Create, publish, or contribute a package          | [Create & Contribute](creating-packages.md)              |
 | Write a manual Lua widget                         | [Lua Widgets](../lua/overview.md)                        |
 | Understand the on-disk store and activation model | [Package Store Internals](../internals/package-store.md) |
 

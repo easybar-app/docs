@@ -1,15 +1,24 @@
-# Create And Publish Packages
+# Create & Contribute Packages
 
 Use a package when a widget or Lua library should be installed, versioned, tested, and updated
 independently from a user's manual `widgets_dir`.
 
-For a new standalone project, start from the
-[EasyBar widget template](https://github.com/easybar-app/widget-template). Contributions to the
-[official widgets repository](https://github.com/easybar-app/widgets) use the same package model.
+EasyBar uses the same package format whether you publish a package from your own repository or
+contribute it to the official widgets repository. The publishing workflow is different, so choose
+that path first.
+
+## Choose your path
+
+| Goal                                          | Workflow                                                                                                                                                                                                                              |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Publish and maintain your own package         | Start from the [EasyBar widget template](https://github.com/easybar-app/widget-template), publish releases from your repository, and optionally submit the package to the registry.                                                   |
+| Contribute to the official package collection | Fork the [official widgets repository](https://github.com/easybar-app/widgets), make the package change on a branch, and open a pull request against `easybar-app/widgets:main`. Maintainers publish the package release after merge. |
+
+The package manifest and validation rules below apply to both paths.
 
 ## Package layout
 
-A typical widget package contains:
+In the official widgets repository, a typical widget package contains:
 
 ```text
 packages/<name>/
@@ -25,6 +34,9 @@ Only include directories the package needs. Tests live under `tests/` and are ex
 archives by the official widgets release tooling.
 
 A package name should be lowercase and hyphen-separated.
+
+For a standalone package repository, use the current layout from the widget template rather than
+copying the official monorepo directory structure unnecessarily.
 
 ## Widget manifest
 
@@ -124,8 +136,9 @@ Do not include credentials or machine-specific secrets.
 
 ## Tests
 
-Put focused Lua tests in `packages/<name>/tests/`. The official widgets repository provides shared
-host implementations under `tests/support/` and also runs a cross-package smoke test.
+Put focused Lua tests in `packages/<name>/tests/` when contributing to the official widgets
+repository. The repository provides shared host implementations under `tests/support/` and also runs
+a cross-package smoke test.
 
 From the widgets repository, with EasyBar available as a sibling checkout:
 
@@ -138,21 +151,60 @@ make package PACKAGE=my-widget OUTPUT_DIR=dist
 Use `EASYBAR_ROOT=/path/to/easybar` with `make check` when the app checkout is elsewhere. Inspecting
 the generated archive before review is optional but useful.
 
-## Publish an official package
+Standalone package repositories should use the equivalent checks and release targets supplied by
+the widget template.
 
-For the official widgets repository:
+## Publish your own package
 
-1. add or update the package under `packages/<name>/`;
-2. run the package validation and tests;
-3. merge the reviewed change;
-4. create the package release;
-5. add a new registry entry when the package is new.
+For a package you maintain in your own repository:
 
-Later releases of an existing registered package are discovered by the registry automation. Package
-source and release archives remain in the widgets repository; the registry stores metadata used for
+1. start from the [EasyBar widget template](https://github.com/easybar-app/widget-template);
+2. implement and test the package using the manifest rules on this page;
+3. publish versioned releases from your repository using the template's release workflow;
+4. keep future releases compatible with the dependency constraints you declare; and
+5. submit the package to the EasyBar registry when you want it to be discoverable through the Widget Store.
+
+Publishing from your own repository means you own the release tags and package lifecycle. The
+registry is discovery metadata; it does not become the source repository for the package.
+
+## Contribute to the official widgets repository
+
+Use the normal GitHub fork and pull-request workflow. Contributors should not publish official
+package releases directly.
+
+1. Fork [`easybar-app/widgets`](https://github.com/easybar-app/widgets) on GitHub.
+2. Clone your fork and create a branch for the package change.
+3. Add or update the package below `packages/<name>/`.
+4. Run the repository checks locally.
+5. Commit the focused change and push the branch to your fork.
+6. Open a pull request against `easybar-app/widgets:main`.
+7. Address review feedback and keep the branch passing CI.
+
+A typical local setup is:
+
+```sh
+git clone https://github.com/<your-user>/widgets.git
+cd widgets
+git remote add upstream https://github.com/easybar-app/widgets.git
+git switch -c feat/my-widget
+```
+
+Before opening the pull request:
+
+```sh
+make check
+make lint-lua
+```
+
+Do not create an official `*-v*` release tag as part of the contribution. After the pull request is
+reviewed and merged, an EasyBar maintainer creates the package release.
+
+For a new official package, publication in the widget registry is a separate review step. Later
+releases of an already registered package are discovered by the registry automation. Package source
+and release archives remain in the widgets repository; the registry stores metadata used for
 discovery and dependency resolution.
 
-## Review checklist
+## Pull request checklist
 
 - The manifest name matches its directory.
 - The declared entrypoint, exports, README, and assets exist.
@@ -162,5 +214,6 @@ discovery and dependency resolution.
 - Focused tests cover parsing, state transitions, and actions where applicable.
 - `make check` passes; run `make lint-lua` when StyLua is installed.
 - Generated archives and checksums from `dist/` are not committed.
+- The contribution does not create an official package release tag.
 
 For installation behavior after publication, see [Install And Manage](manage.md).
