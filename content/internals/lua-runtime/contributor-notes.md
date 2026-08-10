@@ -118,7 +118,8 @@ avoiding duplicated or hard-to-review shell logic.
 - Swift passes `widgets_dir` and the internal managed activation path; recursive file discovery belongs to `api.lua`
 - activated package entrypoints and manual Lua files at any depth outside `shared/` are loaded as widgets
 - reusable manual modules and package exports use `shared/`; there is no secondary module directory
-- managed widget activation follows symlinks into versioned store entries, while `.easybar/source/` remains outside runtime discovery
+- managed widget activation follows `active/<name>` symlinks into each version's generated `runtime/` directory; complete package contents remain in `source/` and are never part of widget discovery
+- declared package exports are activated below `active/shared/` with symlinks into the owning version's `source/` directory
 - reload is a full reset
 - protocol:
   - Lua socket JSON in/out via `EasyBarLuaRuntime`
