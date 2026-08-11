@@ -44,11 +44,9 @@ See [Functions](../reference/functions.md).
 
 ## Built-in
 
-A built-in is a native widget configured in `config.toml` under `[builtins.*]`.
+A built-in is a host-owned Swift surface. The full EasyBar product exposes its native widgets through `[builtins.*]`; EasyBar Native intentionally exposes only the host-owned Inbox surface. Built-ins are not Lua widgets.
 
-Built-ins are not Lua widgets, even when they resemble the same kind of visual element.
-
-See [Choose Built-ins, Widget Store, Or Lua](../../getting-started/choosing-widgets.md).
+See [Choose Built-ins, Widget Store, Or Lua](../../products/easybar/choosing-widgets.md) and [EasyBar Native](../../products/easybar-native/index.md).
 
 ## Group
 
@@ -89,24 +87,20 @@ Events are exposed through `easybar.events.*`. Event names and payloads are docu
 
 ## Agent
 
-An agent is a helper process used for permission-sensitive or platform-specific data collection, such as calendar or network state.
+An EasyBar agent is a helper process used by the full EasyBar product for permission-sensitive calendar or network collection. EasyBar Native does not require those agents.
 
-Agents are configured in `config.toml` and feed data back into EasyBar events and native widgets.
-
-See [Agents](../../configuration/agents.md).
+See [Helper Agents](../../platform/helper-agents.md).
 
 ## Runtime
 
-The runtime is the host machinery that loads widget files, creates nodes, dispatches events, and applies updates between the Lua side and the native app.
-
-See [Runtime Control](../../runtime/control.md).
+The runtime is the EasyBarKit machinery that loads widget files, creates nodes, dispatches events, and applies updates between Lua and the selected frontend. Use `easybar` for EasyBar runtime control or `easybar-native` for EasyBar Native; see [Command-line tools](../../cli/index.md).
 
 ## Mental model
 
 The shortest accurate mental model is:
 
 1. a widget file creates nodes
-2. EasyBar returns handles
+2. EasyBarKit returns handles
 3. your code stores those handles
 4. events and timers trigger updates
 5. `set(...)` mutates current node state
@@ -195,8 +189,4 @@ brew install stylua
 stylua ~/.config/easybar/widgets
 ```
 
-Check formatting without changing files:
-
-```bash
-stylua --check ~/.config/easybar/widgets
-```
+For EasyBar Native, use `~/.config/easybar-native/widgets` instead. Check formatting without changing files with `stylua --check <widgets_dir>`.

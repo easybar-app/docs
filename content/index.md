@@ -1,54 +1,55 @@
 <div class="easybar-hero" markdown>
 
-<p class="easybar-hero__eyebrow">Native where it matters. Scriptable where you want it.</p>
+<p class="easybar-hero__eyebrow">One Lua widget platform. Two macOS frontends.</p>
 
-# A macOS status bar that fits your workflow
+# Build the menu bar that fits your workflow
 
-EasyBar combines polished SwiftUI widgets with a Lua runtime, installable packages, and a practical
-CLI. Start with useful defaults, then shape every part of the bar around how you work.
+EasyBar is a small family of macOS tools built around one shared EasyBarKit runtime. Use **EasyBar**
+for a customizable full-width bar, or **EasyBar Native** to host Lua widgets as independent macOS
+status items. Both use the same Lua widget and package contracts, while keeping their user data and
+command-line tools separate.
 
-[Get started](getting-started/quick-start.md){ .md-button .md-button--primary }
+[Choose a product](products/index.md){ .md-button .md-button--primary }
 [Browse widget packages](widget-store/catalog.md){ .md-button }
-[View on GitHub](https://github.com/easybar-app/easybar){ .md-button }
+[Lua widget guides](lua/overview.md){ .md-button }
 
 [![EasyBar running across the macOS menu bar](assets/bar.png)](assets/bar.png)
 
 </div>
 
-## Running in a minute
-
-EasyBar works without a custom configuration. Install it with Homebrew and open the app:
-
-```bash
-brew tap easybar-app/tap
-brew install --cask easybar-app/tap/easybar
-open -a EasyBar
-```
-
-The default bar includes spaces, battery, Wi-Fi, and calendar widgets. Follow the
-[Quick Start](getting-started/quick-start.md) when you are ready to customize it.
-
-## Built for the space between native and scriptable
+## Choose your frontend
 
 <div class="easybar-feature-grid" markdown>
 
 <article class="easybar-feature-card" markdown>
 
-### :material-apple:{ .lg .middle } Native macOS experience
+### :material-view-dashboard-outline:{ .lg .middle } EasyBar
 
-SwiftUI rendering, native context menus, calendar and network integrations, and a menu bar
-controller feel at home on macOS.
+The full-width customizable frontend. It provides native built-ins, groups, themes, calendar and
+network integrations, the `easybar` CLI, and Lua widgets in one managed bar.
 
-[Explore built-ins](configuration/builtins.md)
+[Explore EasyBar](products/easybar/index.md)
 
 </article>
 
 <article class="easybar-feature-card" markdown>
 
-### :material-code-braces:{ .lg .middle } Lua when you need it
+### :material-apple:{ .lg .middle } EasyBar Native
 
-Build custom widgets with events, timers, asynchronous commands, popups, groups, and persistent
-settings—without rebuilding the app.
+The lightweight native status-area frontend. Lua widget roots become independent `NSStatusItem`s.
+It has its own config, runtime, package store, logs, and `easybar-native` CLI, and it does not depend
+on EasyBar's calendar or network agents.
+
+[Explore EasyBar Native](products/easybar-native/index.md)
+
+</article>
+
+<article class="easybar-feature-card" markdown>
+
+### :material-code-braces:{ .lg .middle } Shared Lua widgets
+
+Write one Lua widget against the EasyBarKit API and use it with either frontend when the widget does
+not depend on a frontend-specific capability.
 
 [Create your first widget](lua/guides/first-widget.md)
 
@@ -56,77 +57,35 @@ settings—without rebuilding the app.
 
 <article class="easybar-feature-card" markdown>
 
-### :material-package-variant-closed:{ .lg .middle } Installable packages
+### :material-package-variant-closed:{ .lg .middle } Independent packages
 
-Discover and install independently versioned widgets and reusable Lua libraries from the
-optional package registry.
+Official widgets and libraries are versioned independently. Each frontend installs packages into its
+own managed store, so experimenting in EasyBar Native does not change EasyBar's active packages.
 
-[Browse packages](widget-store/catalog.md)
-
-</article>
-
-<article class="easybar-feature-card" markdown>
-
-### :material-tune-variant:{ .lg .middle } Designed to be yours
-
-Configure placement, groups, themes, built-ins, and behavior in TOML, then apply changes from
-the CLI without restarting your workflow.
-
-[Configure EasyBar](configuration/overview.md)
+[Browse the Widget Store](widget-store/overview.md)
 
 </article>
 
 </div>
 
-## Choose the right extension point
+## The project family
 
-| Use              | Best for                                                                          | Start here                                      |
-| ---------------- | --------------------------------------------------------------------------------- | ----------------------------------------------- |
-| Native built-ins | Spaces, battery, Wi-Fi, calendar, time, date, volume, and front-app state         | [Built-ins](configuration/builtins.md)          |
-| Widget Store     | Ready-made integrations and reusable Lua libraries                                | [Widget Store Catalog](widget-store/catalog.md) |
-| Lua widgets      | Custom display logic, commands, interactions, popups, and project-specific status | [Lua Widgets](lua/overview.md)                  |
-| CLI              | Reloads, diagnostics, inbox publishing, package management, and automation        | [CLI Reference](runtime/cli.md)                 |
+| Tool           | Purpose                                                                          | User-facing command                                   |
+| -------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| EasyBar        | Custom full-width bar with native built-ins and Lua widgets                      | `easybar`                                             |
+| EasyBar Native | Native `NSStatusItem` host for Lua widgets and Inbox                             | `easybar-native`                                      |
+| EasyBarKit     | Shared Swift/Lua runtime, rendering, package manager, IPC, and reusable services | library/runtime products                              |
+| Calendar agent | EasyBar's EventKit helper service                                                | managed by `easybar agent ...`                        |
+| Network agent  | EasyBar's Wi-Fi/network helper service                                           | managed by `easybar agent ...`                        |
+| Widget Store   | Independently versioned Lua widgets and libraries                                | `easybar widgets ...` or `easybar-native widgets ...` |
 
-## See EasyBar in action
+The two frontends share implementation, not installation state. See [Platform](platform/index.md) for
+the repository and ownership model.
 
-<div class="easybar-showcase" markdown>
+## Where to go next
 
-<figure markdown>
-[![Calendar month popup](assets/month.png){ .screenshot-compact .screenshot-month }](assets/month.png)
-<figcaption>Calendar month view with event indicators</figcaption>
-</figure>
-
-<figure markdown>
-[![Upcoming calendar events](assets/upcoming.png){ .screenshot-compact .screenshot-upcoming }](assets/upcoming.png)
-<figcaption>A compact agenda for upcoming events</figcaption>
-</figure>
-
-<figure markdown>
-[![EasyBar native inbox](assets/inbox.png){ .screenshot-compact .screenshot-inbox }](assets/inbox.png)
-<figcaption>One actionable inbox for multiple sources</figcaption>
-</figure>
-
-<figure markdown>
-[![EasyBar Wi-Fi details](assets/wifi.png){ .screenshot-compact .screenshot-wifi }](assets/wifi.png)
-<figcaption>Native network details at a glance</figcaption>
-</figure>
-
-</div>
-
-## Go further
-
-- Integrate AeroSpace workspaces and focused-app state with [Spaces](configuration/builtins/spaces.md).
-- Create a cohesive layout with [Native Groups](configuration/native-groups.md) and [Themes](configuration/themes.md).
-- Publish actionable notifications through the shared [Inbox](configuration/builtins/inbox.md).
-- Diagnose startup, permissions, and runtime issues with [Troubleshooting](runtime/troubleshooting.md).
-- Understand the process model and extension boundaries in [Internals](internals/overview.md).
-
-<div class="easybar-home-cta" markdown>
-
-### Make the bar work the way you do
-
-Install EasyBar, keep the useful defaults, and customize only what makes your workflow better.
-
-[Start with EasyBar](getting-started/quick-start.md){ .md-button .md-button--primary }
-
-</div>
+- Start the complete custom bar with [EasyBar Quick Start](products/easybar/quick-start.md).
+- Install the isolated status-item frontend from [EasyBar Native](products/easybar-native/index.md).
+- Compare the two command-line tools in [Command Line](cli/index.md).
+- Learn the shared extension model in [Lua Widgets](lua/overview.md).
+- Understand the implementation boundary in [EasyBarKit](platform/easybar-kit.md) and [Internals](internals/overview.md).

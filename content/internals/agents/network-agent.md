@@ -191,7 +191,7 @@ The agent still returns a flat field map. EasyBarKit converts that field map int
 - The agent does not format values for presentation.
 - EasyBarKit decides how fields become shared widget presentation state.
 
-EasyBarKit converts agent values into:
+The full EasyBar runtime uses EasyBarKit to convert agent values into:
 
 - native widget state
 - Lua event payloads

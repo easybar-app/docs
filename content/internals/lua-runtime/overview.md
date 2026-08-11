@@ -1,6 +1,6 @@
 # Lua Runtime Overview
 
-This section documents how EasyBar runs Lua widgets internally. It is for contributors changing the
+This section documents how EasyBarKit runs Lua widgets for either frontend. It is for contributors changing the
 runtime implementation, not for normal widget authoring. Use [Lua Widgets](../../lua/overview.md) for
 the public API and guides.
 
@@ -110,7 +110,7 @@ for these APIs belongs in [Commands](../../lua/guides/commands.md) and
 ## Backpressure
 
 Lua event delivery keeps bounded action and coalescing queues. Must-deliver actions are never
-silently evicted. If the action queue reaches its hard limit, EasyBar records the overflow, suspends
+silently evicted. If the action queue reaches its hard limit, the host records the overflow, suspends
 the failed session, and restarts Lua through normal supervision.
 
 The host also bounds complete Lua protocol lines waiting for actor-side processing. A full input

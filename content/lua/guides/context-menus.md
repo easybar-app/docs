@@ -59,8 +59,7 @@ github:unset("context_menu")
 
 When a node has a context menu, its right-click opens that menu and does not also emit the normal
 right-button `mouse.clicked` event. Without a context menu, existing right-click subscriptions
-continue to work unchanged. Right-clicking empty bar space continues to open EasyBar's application
-menu.
+continue to work unchanged. In the full EasyBar frontend, right-clicking empty custom-bar space continues to open the application menu. EasyBar Native has no equivalent empty custom-bar surface.
 
 Invalid entries are omitted without rejecting the widget tree. Menus support up to eight nested
 levels and 256 total entries per node.

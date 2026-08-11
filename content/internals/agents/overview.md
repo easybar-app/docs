@@ -1,72 +1,45 @@
 # Agents Overview
 
-EasyBarKit provides two helper processes:
+EasyBarKit provides two permission-sensitive helper products used by the full EasyBar frontend:
 
-- `EasyBarCalendarAgent`
-- `EasyBarNetworkAgent`
+- `EasyBarCalendarAgent`;
+- `EasyBarNetworkAgent`.
 
-Both run out of process, listen on local Unix sockets, and exchange newline-delimited JSON with
-clients. Either EasyBar frontend can consume the same agent protocols; the network protocol is also
-reused by standalone clients such as `wifi-snitch`.
+They run out of process, listen on local Unix sockets, and exchange typed newline-delimited JSON with
+clients.
 
 ## Why agents exist
 
-The agents keep permission-sensitive system APIs out of frontend processes.
+The agents keep permission-sensitive system APIs outside the main EasyBar frontend process:
 
-EasyBarKit stays focused on:
+- Calendar agent: EventKit permission, observation, snapshots, and mutations;
+- Network agent: Location-sensitive Wi-Fi observation and network field collection.
 
-- shared widget/runtime coordination;
-- consuming agent data and building presentation state;
-- rendering that state through the active frontend surface.
+EasyBarKit maps the typed data into EasyBar native built-in state and subscribed Lua events.
 
-The agents stay focused on:
+## EasyBar ownership
 
-- permission ownership;
-- system observation and mutations;
-- normalized data collection;
-- socket delivery.
-
-The boundary is deliberate: agents collect data, EasyBarKit decides how shared widget state is
-presented, and a frontend decides where that widget surface is hosted.
-
-For example, the network agent returns RSSI while EasyBarKit maps RSSI into Wi-Fi bars.
-
-## Runtime config
-
-The separately managed agents use the shared EasyBar agent configuration. By default this is:
+The normal service configuration is the EasyBar profile:
 
 ```text
 ~/.config/easybar/config.toml
 ~/.local/state/easybar/runtime/
 ```
 
-Relevant config:
+Homebrew installs and supervises these agents for EasyBar. The `easybar` CLI exposes agent restart and
+version commands.
 
-```toml
-[app]
-runtime_dir = "~/.local/state/easybar/runtime"
+## EasyBar Native boundary
 
-[logging]
-enabled = false
-level = "info"
-directory = "~/.local/state/easybar"
+EasyBar Native does not install, configure, start, stop, or require these helper services. It keeps
+its own config and runtime directories and uses Lua widgets plus the host-owned Inbox surface.
 
-[agents.calendar]
-enabled = true
+The agent protocols and core libraries may still be reused by independent software. Reuse does not
+make that software a dependency of EasyBar Native.
 
-[agents.network]
-enabled = true
-refresh_interval_seconds = 60
-allow_unauthorized_non_sensitive_fields = false
-```
+## Related pages
 
-Socket paths are derived from `app.runtime_dir` unless their individual `socket_path` values are
-set. The custom EasyBar frontend uses these defaults directly. EasyBar Native keeps its own app/Lua
-runtime directory but points its agent clients at the shared agent sockets by default.
-
-## Service lifecycle
-
-Homebrew installs the agents independently of a frontend process and supervises them as services.
-Frontends connect over Unix sockets; they do not own the service process lifecycle. If an enabled
-agent exits after an acknowledged restart or an unexpected failure, its service supervisor is
-responsible for relaunching it.
+- [Agent Protocol](protocol.md)
+- [Calendar Agent](calendar-agent.md)
+- [Network Agent](network-agent.md)
+- [EasyBar Agent Configuration](../../products/easybar/configuration/agents.md)

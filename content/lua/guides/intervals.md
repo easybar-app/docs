@@ -2,7 +2,7 @@
 
 Use `interval` with `on_interval` when a widget needs to poll.
 
-EasyBar schedules intervals per widget. If a widget sets `interval = 1800`,
+EasyBarKit schedules intervals per widget. If a widget sets `interval = 1800`,
 the backend starts that widget's timer when the widget registers its interval
 handler and fires `on_interval` 1800 seconds later, then every 1800 seconds
 after that. It does not wait for the next wall-clock boundary.
@@ -86,13 +86,15 @@ Use intervals for polling:
 - API checks
 - periodic time-based updates
 
-Use event subscriptions for real events:
+Use event subscriptions for real events available from the target frontend:
 
-- `network_change`
-- `wifi_change`
 - `volume_change`
 - `system_woke`
 - mouse events
+- `network_change` and `wifi_change` when the full EasyBar agent-backed source is available
+
+EasyBar Native does not provide the EasyBar Network agent, so a Native-targeted widget should not
+use `network_change` or `wifi_change` as its only refresh trigger.
 
 ## One-shot delays
 
@@ -120,7 +122,7 @@ persisted across reloads.
 
 ## Network work after wake
 
-`system_woke` is emitted promptly after macOS reports wake. EasyBar does not delay the event globally
+`system_woke` is emitted promptly after macOS reports wake. EasyBarKit does not delay the event globally
 because non-network widgets may need to react immediately. A widget that depends on Wi-Fi, VPN
 routes, or DNS should schedule its own short delay and then use bounded retries for transient network
 failures.

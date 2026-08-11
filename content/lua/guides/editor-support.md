@@ -1,32 +1,17 @@
 # Editor Support
 
-EasyBar installs a bundled LuaLS stub into:
+Each frontend installs the same generated EasyBarKit LuaLS stub into its own data directory:
 
-```text
-~/.local/share/easybar/easybar_api.lua
-```
+| Frontend       | Stub                                            | Managed modules                                        |
+| -------------- | ----------------------------------------------- | ------------------------------------------------------ |
+| EasyBar        | `~/.local/share/easybar/easybar_api.lua`        | `~/.local/share/easybar/packages/active/shared`        |
+| EasyBar Native | `~/.local/share/easybar-native/easybar_api.lua` | `~/.local/share/easybar-native/packages/active/shared` |
 
-That installed file is the combined public stub.
+Use the paths for the frontend whose widgets you are editing.
 
-## LuaLS workspace setup
+## EasyBar workspace
 
-If your editor uses LuaLS, add a `.luarc.json` in the workspace where you edit widgets.
-
-That gives you:
-
-- no `unknown global 'easybar'` warning
-- hover documentation
-- autocomplete for the `easybar` API
-- named command callbacks, command status values, async tokens, and timer handles
-- diagnostics and autocomplete for supported node properties such as `background.border_width`, `popup.drawing`, `interval`, and `on_interval`
-
-Suggested setup:
-
-1. start EasyBar once so it installs `~/.local/share/easybar/easybar_api.lua`
-2. add `~/.config/easybar/widgets/.luarc.json`
-3. open `~/.config/easybar/widgets` or `~/.config` as your editor workspace
-
-Example `.luarc.json`:
+For `~/.config/easybar/widgets/.luarc.json`:
 
 ```json
 {
@@ -47,13 +32,35 @@ Example `.luarc.json`:
 }
 ```
 
-If your editor still only knows about the `easybar` global but not nested property tables, restart EasyBar once so it reinstalls the latest `easybar_api.lua` stub.
+## EasyBar Native workspace
 
-## User modules
+For `~/.config/easybar-native/widgets/.luarc.json`, use the Native paths instead:
 
-The `runtime.path` entries let LuaLS resolve modules from the open manual-widget workspace. Adding the managed `active/shared` export directory to `workspace.library` also exposes installed modules such as `retry`, without treating package entrypoints as part of the manual widget workspace. The directory is created after the first package with exports is installed. See [Reusable Modules](modules.md) for directory
-layout, `require(...)` behavior, and module lifetime.
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime": {
+    "version": "Lua 5.5",
+    "path": ["?.lua", "?/init.lua", "shared/?.lua", "shared/?/init.lua"]
+  },
+  "workspace": {
+    "library": [
+      "~/.local/share/easybar-native/easybar_api.lua",
+      "~/.local/share/easybar-native/packages/active/shared"
+    ]
+  },
+  "diagnostics": {
+    "globals": ["easybar"]
+  }
+}
+```
 
-Keep reusable-module annotations beside the module implementation. For example, the official
-`shared` package's `retry.lua` declares `RetryOptions` and `RetryOperation` locally, so LuaLS can validate retry
-callbacks when the module is required without polluting the global EasyBar API.
+The `runtime.path` entries resolve modules from the open manual-widget workspace. Adding the selected
+frontend's managed `active/shared` directory exposes installed exports such as `retry` without
+turning package entrypoints into manual widgets.
+
+If your editor sees the `easybar` global but not newly added nested types or properties, start or
+restart the selected frontend so it reinstalls the latest generated stub.
+
+Keep reusable-module annotations beside the module implementation. Package-specific LuaLS types can
+then be discovered through normal module resolution without polluting the global EasyBar API.

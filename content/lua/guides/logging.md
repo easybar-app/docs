@@ -78,7 +78,7 @@ command output in a bounded file-backed log only when the widget explicitly need
 
 ## Host filtering
 
-The configured host level controls normal console output and retained `easybar.out` records:
+The configured host level controls normal console output and the selected frontend's retained host log (`easybar.out` or `easybar-native.out`):
 
 - `logging.level = "info"` emits info, warnings, and errors
 - `logging.level = "debug"` also emits debug logs
@@ -88,9 +88,11 @@ A live CLI subscription can request a more verbose level without changing that p
 
 ```bash
 easybar logs --widget brew-inbox --runtime lua --level trace --follow
+# or
+easybar-native logs --widget brew-inbox --runtime lua --level trace --follow
 ```
 
-With `logging.level = "info"`, matching trace records are delivered only to the connected CLI and are not appended to `easybar.out`.
+With `logging.level = "info"`, matching trace records are delivered only to the connected CLI and are not appended to the selected frontend's retained host log.
 
 ## Recommended usage
 

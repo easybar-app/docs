@@ -18,8 +18,8 @@ After loading widgets:
 - Lua sends required events
 - Swift enables only those
 
-The subscription list can change at runtime. Native widgets contribute to the same merged demand set.
-Camera and microphone observation starts only while a Lua widget or native consumer subscribes to a
+The subscription list can change at runtime. Host-owned Swift consumers contribute to the same merged demand set.
+Camera and microphone observation starts only while a Lua widget or host-owned consumer subscribes to a
 capture event, and stops again when the final subscriber disappears. The fixed privacy spacer does
 not subscribe to capture events.
 

@@ -1,57 +1,37 @@
 # Shared Layer
 
-The `EasyBarShared` target contains code used across multiple executables.
-
-## Responsibilities
+`EasyBarShared` contains models and utilities used across several EasyBarKit executables and
+frontends.
 
 Typical responsibilities include:
 
-- shared config models and config loading
-- shared IPC request and response models
-- shared socket path helpers
-- shared environment-key definitions and runtime-directory resolution
-- common logging utilities and log-level definitions
-- value types used by both the app and helper processes
+- shared runtime/config value types;
+- typed IPC requests and responses;
+- socket-path helpers;
+- environment/bootstrap key definitions;
+- logging primitives and log-level models;
+- package/runtime path helpers used by the shared CLI core.
 
-This target exists to keep the transport and configuration contracts consistent across the app, CLI, and agents.
+A shared type describes a contract; it does not imply that every process uses the same physical file
+or directory.
 
-If a type is part of a process boundary, it usually belongs here.
+## Path profiles
 
-## Logging architecture
+The normal EasyBar defaults live below `easybar`, while EasyBar Native supplies bootstrap overrides
+below `easybar-native`. Shared path helpers resolve the active profile instead of hard-coding one
+mutable store into every frontend.
 
-Logging is intentionally shared across the app, agents, and CLI.
+## Logging
 
-The core pieces live in `EasyBarShared`:
+`ProcessLogger` and log filtering are shared implementation. Persistent log roots are frontend-owned:
 
-- `ProcessLogger`
-- the shared log level enum
-- shared runtime logging config resolution
-- startup snapshot logging helpers
-
-The app and helper agents use config-driven logging:
-
-```toml
-[logging]
-enabled = true
-level = "info"
-directory = "~/.local/state/easybar"
+```text
+EasyBar        ~/.local/state/easybar/
+EasyBar Native ~/.local/state/easybar-native/
 ```
 
-Supported levels:
+EasyBar's Calendar and Network agents use the EasyBar logging/config profile because they belong to
+the EasyBar product boundary. Native does not aggregate those services into its own installation.
 
-- `trace`
-- `debug`
-- `info`
-- `warn`
-- `error`
-
-That keeps the normal runtime logging model explicit and consistent across all long-lived processes.
-
-`EASYBAR_LOG_LEVEL` is intentionally kept as a narrow diagnostic override for the minimum log level. It does not enable file logging and does not change the configured log directory.
-
-The CLI remains slightly different on purpose:
-
-- `--debug` enables extra diagnostics from the CLI process itself
-- `easybar logs --follow --level LEVEL` registers temporary live sinks in every selected process logger
-
-A live sink can request a more verbose level than the persistent process configuration. Records are routed per sink: a trace subscriber receives trace messages, while an `info` file sink still omits them. The app, calendar agent, and network agent use the same shared socket-sink adapter. Socket writes use bounded serial queues, so log producers enqueue delivery without waiting for a client to read. Each sink is removed automatically when its socket connection closes.
+`EASYBAR_LOG_LEVEL` remains the narrow diagnostic override for minimum severity. CLI `--debug` affects
+only the CLI process, while live log subscriptions request their own transient filter level.

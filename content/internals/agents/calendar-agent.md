@@ -138,4 +138,4 @@ public typed API that covers both reading and writing the native value.
 
 The calendar agent collects calendar data and performs calendar mutations.
 
-EasyBarKit builds calendar presentation state; the active frontend decides where it is hosted.
+EasyBarKit builds calendar presentation state for the full EasyBar product. EasyBar Native does not register or depend on the Calendar built-in.

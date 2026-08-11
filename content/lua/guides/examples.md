@@ -2,7 +2,7 @@
 
 This page explains complete Lua widget patterns. If you want to install a ready-made integration instead of studying its implementation, browse the [Widget Store](../../widget-store/overview.md).
 
-If you are just starting out, read [First Widget](first-widget.md) before using these as templates. The app repository also keeps small self-contained examples under `examples/`; from a source checkout, `make install-widgets` can install those development examples into your manual widget directory.
+If you are just starting out, read [First Widget](first-widget.md) before using these as templates. The EasyBarKit repository also keeps small self-contained examples under `examples/`. Copy the example you want into the manual widget directory of the frontend you are testing.
 
 ## Toggle widget
 

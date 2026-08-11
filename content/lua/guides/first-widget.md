@@ -6,7 +6,7 @@ This guide walks through the smallest useful Lua widget and explains each piece.
 
 We will create one clock widget that:
 
-- appears on the right side of the bar
+- appears in the right-side ordering region (or the corresponding Native status-item order)
 - shows the current time
 - refreshes once per minute
 
@@ -40,24 +40,22 @@ The arguments are:
 
 ## Important fields
 
-- `position = "right"` places the node on the right side of the bar
+- `position = "right"` places the node in EasyBar's right region and acts as a relative ordering hint in EasyBar Native
 - `order = 10` controls render ordering among other root nodes
 - `label = ...` sets the displayed text
-- `interval = 60` asks EasyBar to call `on_interval` 60 seconds after the widget registers, then every 60 seconds after that
+- `interval = 60` asks EasyBarKit to call `on_interval` 60 seconds after the widget registers, then every 60 seconds after that
 - `on_interval = function() ... end` updates the node in place
 
-The `clock` variable stores the handle returned by EasyBar, which lets the callback call `clock:set(...)` later.
+The `clock` variable stores the handle returned by EasyBarKit, which lets the callback call `clock:set(...)` later.
 
 ## Where this widget goes
 
-EasyBar recursively loads every `.lua` file below the configured widgets directory. The app
-repository keeps its single-file examples flat below `examples/`; only the multi-file inbox demo
-uses a subdirectory. No category or filename is required by the loader. Put reusable helpers
+The selected frontend recursively loads every `.lua` file below its configured widgets directory.
+EasyBarKit keeps its single-file examples flat below `examples/`; only the multi-file inbox demo uses
+a subdirectory. No category or filename is required by the loader. Put reusable helpers
 below `shared/` so they load only through `require(...)` instead of being discovered as widgets.
 
-That directory is configured with `[app].widgets_dir` in `config.toml`.
-
-See [App Settings](../../configuration/app.md).
+That directory is configured with `[app].widgets_dir` in the selected frontend config. See [EasyBar App Settings](../../products/easybar/configuration/app.md) or [EasyBar Native Configuration](../../products/easybar-native/configuration.md).
 
 ## Expanding the widget
 

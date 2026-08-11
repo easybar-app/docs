@@ -83,10 +83,12 @@ Examples:
 
 ### Manual refresh
 
-Triggered via:
+Triggered through the selected frontend CLI:
 
 ```bash
 easybar refresh
+# or
+easybar-native refresh
 ```
 
 This:
@@ -98,10 +100,12 @@ This:
 
 ### Lua runtime restart
 
-Triggered via:
+Triggered through the selected frontend CLI:
 
 ```bash
 easybar runtime restart
+# or
+easybar-native runtime restart
 ```
 
 This:
@@ -113,6 +117,8 @@ This:
 
 ```bash
 easybar config reload
+# or
+easybar-native config reload
 ```
 
 This:

@@ -1,32 +1,31 @@
 # Package Store Internals
 
-This page documents the implementation boundary behind the public [Widget Store](../widget-store/overview.md).
-It is for contributors changing package installation, activation, dependency handling, or Lua startup.
-
-User-facing install and update commands belong in [Install And Manage](../widget-store/manage.md).
-Package authoring belongs in [Create & Contribute](../widget-store/create-and-contribute.md).
+This page documents the shared package-manager implementation behind both frontend package stores.
+User workflows belong in [Install And Manage](../widget-store/manage.md); package authoring belongs in
+[Create & Contribute](../widget-store/create-and-contribute.md).
 
 ## Package contract
 
-The store accepts package manifest version 2 and expresses its runtime requirement with
-`minimum_easybar_kit_version`. The parser accepts only the current manifest contract. The clean split begins with EasyBarKit `0.54.0`; official manifest-v2 package releases target that baseline or newer.
+The store accepts manifest version 2 and expresses runtime compatibility with
+`minimum_easybar_kit_version`. The manifest targets EasyBarKit rather than a frontend executable.
 
-The registry may retain metadata for older immutable release archives as historical records, but a
-current install candidate must satisfy the EasyBarKit manifest contract before it can be committed or
-activated.
+## Frontend-owned roots
 
-## Store layout
-
-All managed packages use one data directory:
+The package layout is identical, but the root is selected by the frontend profile:
 
 ```text
-~/.local/share/easybar/packages/
+EasyBar        ~/.local/share/easybar/packages/
+EasyBar Native ~/.local/share/easybar-native/packages/
+```
+
+Each root contains:
+
+```text
+<package-root>/
 ├── installed.json
 ├── store/
 │   └── <name>/
 │       ├── <active-version>/
-│       │   ├── package.toml
-│       │   └── ...exact validated package files...
 │       ├── <previous-version>/
 │       └── <older-previous-version>/
 └── active/
@@ -35,99 +34,38 @@ All managed packages use one data directory:
         └── <module>.lua -> .../store/<package>/<version>/<export-file>.lua
 ```
 
-A committed version directory is the validated package itself. There is no second source copy and no
-runtime projection.
+Installing with `easybar` and installing with `easybar-native` therefore create independent database,
+store, and activation state.
 
 ## Activation boundary
 
-Widget packages activate exactly one manifest-declared entrypoint:
+Widget packages activate exactly one manifest-declared entrypoint. Library and widget exports
+activate exactly their declared files below `active/shared/`. Lua never recursively scans committed
+version directories.
 
-```text
-active/<widget-name> -> store/<widget-name>/<version>/<entrypoint>
-```
+## Transactions
 
-Library exports and widget exports activate exactly their declared files below `active/shared/`.
-The Lua runtime never recursively scans a committed package directory.
+A version is prepared in a package-local staging directory, validated, atomically committed to its
+semantic-version path, then activated. Same-version forced replacement uses a temporary backup so a
+failed commit can restore the previous version and activation links.
 
-This is the central boundary between the package manager and Lua runtime:
+Dependency compatibility is resolved before activation. One frontend store selects one active
+version per package name; incompatible constraints fail rather than creating ambiguous module
+exports.
 
-- the package manager decides which version and files are active;
-- Lua loads top-level widget activation links and resolves modules from `active/shared/`;
-- the package store itself is not a widget discovery root.
+## Retention and uninstall
 
-The runtime resolves a managed entrypoint link to its real store path before execution. That keeps
-file-relative `easybar.asset(...)` resolution anchored to the package instead of the `active/`
-directory. See [Widget Loading](lua-runtime/widget-loading.md) for the Lua-side flow.
+After successful activation, at most three committed semantic versions are retained per package: the
+active version and two most recent previous versions. Uninstall removes that package's activation
+links, committed versions, and database entry from the selected frontend store. It refuses removal
+while another installed package depends on it.
 
-## Install transaction
+Manual files under the selected frontend's `widgets_dir` are outside this system.
 
-Before committing a version, EasyBar prepares the validated package as:
-
-```text
-store/<name>/<version>.staging-<id>/
-```
-
-After preparation succeeds, the staging directory is renamed to the committed semantic-version path.
-Activation links are then replaced with links to the committed entrypoint and exports, and
-`installed.json` is written atomically.
-
-A new version does not modify previous committed versions while it is being prepared.
-
-## Same-version replacement
-
-A forced reinstall of the currently committed version temporarily moves the old version to:
-
-```text
-store/<name>/<version>.backup-<id>/
-```
-
-The staged replacement is committed at `<version>`, activation links are switched, and the package
-database is written. The backup is removed only after the complete replacement succeeds.
-
-If a committed filesystem change or package database write fails, EasyBar restores the package-local
-paths and activation state from the transaction.
-
-## Dependency transaction boundary
-
-An install may materialize dependencies before the requested package. Each package uses its own
-replacement transaction, while the higher-level install coordinates the resulting package database
-write. If final installation cannot commit, package changes participating in that operation are
-rolled back rather than leaving an installed database that disagrees with activation state.
-
-Dependency compatibility is resolved before activation. The active graph uses one selected version
-per package name; incompatible requirements must fail instead of creating ambiguous module exports.
-
-## Version retention
-
-After a successful install or update, EasyBar retains at most three committed semantic versions per
-package:
-
-- the active version;
-- the two most recently successfully activated previous versions.
-
-Older committed versions are pruned only after the new version and package database have committed.
-`.staging-<id>` and `.backup-<id>` paths are temporary transaction artifacts, not retained releases.
-
-## Uninstall
-
-Uninstall is package-wide. It removes the package's activation links, committed versions, and
-installed database entry as one managed operation.
-
-A package cannot be uninstalled while another installed package depends on it. Dependencies that
-become unused are intentionally left installed so removal remains explicit.
-
-Manual files under `[app].widgets_dir` are outside this system and are never removed by package
-operations.
-
-## Contributor invariant
-
-Keep the ownership split simple:
+## Invariant
 
 - registry metadata selects release candidates;
-- package validation defines the files a release may expose;
-- the package store commits immutable version directories;
+- package validation defines exposed files;
+- the selected frontend store commits immutable version directories;
 - `active/` selects entrypoints and exports;
 - Lua executes only those selected entrypoints and modules.
-
-Do not make Lua infer package versions or recursively inspect `store/`. Do not make the package
-manager rediscover widget entrypoints from filenames when `package.toml` already declares them.

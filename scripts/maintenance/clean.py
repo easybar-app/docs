@@ -19,7 +19,7 @@ def main() -> int:
         root / ".sources",
         root / ".build",
         root / ".site",
-        root / "content/configuration/reference.md",
+        root / "content/products/easybar/configuration/reference.md",
         root / "content/lua/reference",
         root / "content/widget-store/catalog.md",
         root / "content/widget-store/packages",

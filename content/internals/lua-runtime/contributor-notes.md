@@ -61,7 +61,7 @@ Keep these boundaries intact unless the architecture is intentionally changing:
 Start with the normal host logs:
 
 ```bash
-easybar logs --runtime lua --level trace --follow
+<frontend-cli> logs --runtime lua --level trace --follow
 ```
 
 Useful symptoms include missing `ready` or `subscriptions` messages, entrypoint load errors,
@@ -79,15 +79,15 @@ execs the Lua interpreter.
 
 When debugging loading, compare the two roots separately:
 
-- managed entrypoints under `~/.local/share/easybar/packages/active/`;
-- manual files under the configured `widgets_dir`.
+- managed entrypoints under the selected frontend package root, such as `~/.local/share/easybar/packages/active/` or `~/.local/share/easybar-native/packages/active/`;
+- manual files under that frontend's configured `widgets_dir`.
 
 Do not debug package activation by recursively running files from `store/`; that is intentionally not
 how the runtime loads managed packages.
 
 ## Formatting and generated artifacts
 
-Use the EasyBar Makefile entry points:
+Use the EasyBarKit repository Makefile entry points:
 
 ```bash
 make fmt
@@ -96,8 +96,7 @@ make generate
 make check-generated
 ```
 
-`make generate` refreshes the checked-in theme, event, Lua stub, and generated config artifacts wired
-through the app repository. `make test` does not regenerate them.
+`make generate` refreshes the checked-in theme, event, Lua stub, and generated config artifacts owned by EasyBarKit. `make test` does not regenerate them.
 
 ## Generated documentation
 
@@ -107,7 +106,7 @@ Build the assembled site from the separate docs repository:
 make build
 ```
 
-The documentation build fetches EasyBar and widgets, generates the configuration and Lua reference,
+The documentation build fetches EasyBarKit and widgets, generates the EasyBar configuration and shared Lua reference,
 generates the Widget Store catalog into ignored paths below `content/`, and then builds MkDocs
 directly from that content tree. Generated pages are not committed to the documentation repository.
 

@@ -1,12 +1,12 @@
 # Native Inbox
 
-EasyBar provides one shared native inbox for messages published by Lua widgets. The bar icon shows
-the total unread count, and the popup can group messages from GitHub, GitLab, Homebrew, agents, or
-any other widget source.
+EasyBarKit provides one host-owned Inbox surface per running frontend for messages published by Lua
+widgets. The Inbox icon shows the total unread count, and the popup can group messages from GitHub,
+GitLab, Homebrew, or any other widget source.
 
-Use `make install-widgets` and select `inbox-demo/widget.lua` to populate every severity with test
-data. Install `inbox-brew`, `inbox-github`, or `inbox-gitlab` from the widget registry for a
-publisher with service-specific actions.
+The EasyBarKit `examples/inbox-demo/widget.lua` example can populate every severity with test data
+when developing from source. Install `inbox-brew`, `inbox-github`, or `inbox-gitlab` from the Widget
+Store for a publisher with service-specific actions.
 
 The Homebrew publisher reports outdated formulae and casks. Its source action panel provides
 refresh, update, upgrade-all, and cancellation actions without adding control messages to the
@@ -49,8 +49,8 @@ from the next snapshot are removed. Clear the complete source explicitly with:
 easybar.inbox.clear("gitlab")
 ```
 
-Message content is owned by publishers and remains in memory. EasyBar persists only local read,
-unread, and dismissed state in `inbox-state.json` inside `app.runtime_dir`.
+Message content is owned by publishers and remains in memory. The active frontend persists only local
+read, unread, and dismissed state in `inbox-state.json` inside `app.runtime_dir`.
 
 Set `url` to add a native **Open** action. CLI-published URLs are restricted to HTTP(S); Lua
 publishers should use HTTP(S) URLs as well.
@@ -59,7 +59,7 @@ Each message provides explicit **Read** or **Unread** and, when allowed, **Dismi
 also click a message to mark it read, use its status dot to toggle state, or right-click it for the
 same local actions. **Dismiss all** suppresses every currently displayed message. Local changes
 survive restarts and publisher refreshes while the source and item ID remain stable. Once a
-publisher omits an item, EasyBar removes its saved local state as well.
+publisher omits an item, the active frontend removes its saved local state as well.
 
 Optional per-item `source` metadata makes the origin more prominent without changing the stable
 publisher name used for grouping and action routing. Set `name`, `icon`, and `color` independently;
@@ -72,7 +72,7 @@ items are excluded from both the per-message dismiss action and **Dismiss all**.
 
 ## Handle actions
 
-Actions are routed to the widget that registered the matching source handler. EasyBar does not
+Actions are routed to the widget that registered the matching source handler. The host does not
 execute arbitrary commands stored in inbox messages:
 
 ```lua
@@ -86,7 +86,7 @@ end)
 ```
 
 The event contains `source`, `target_widget_id` (the item id), and `action_id`.
-EasyBar also sends `action_id = "mark_read"` when its native per-item or **Mark all read** control
+The host also sends `action_id = "mark_read"` when its native per-item or **Mark all read** control
 marks an unread item as read. Source widgets can use that event to synchronize remote notification
 state without adding a second read button. Marking an item unread remains local because remote
 services do not consistently expose an equivalent operation.

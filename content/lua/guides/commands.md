@@ -1,6 +1,6 @@
 # Commands
 
-EasyBar exposes bounded process-execution and scheduling helpers for Lua widgets.
+EasyBarKit exposes bounded process-execution and scheduling helpers for Lua widgets.
 
 Use commands carefully. Long-running synchronous commands block the Lua runtime. EasyBar enforces
 host-side limits for command timeout, captured output size, and concurrent asynchronous jobs through

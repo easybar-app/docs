@@ -1,6 +1,6 @@
 # Popups
 
-Popups attach extra content to a bar node.
+Popups attach extra content to a widget node.
 
 The parent widget controls whether the popup is visible. Popup child nodes use a `position` value of `popup.<parent-id>`.
 
@@ -26,8 +26,8 @@ easybar.add(easybar.kind.item, "calendar_popup_label", {
 
 ## Interactive popup items
 
-Popup children subscribe to mouse events like bar items. Attach the subscription to the child
-node so `event.target_widget_id` identifies the control that was clicked.
+Popup children subscribe to mouse events like other interactive nodes. Attach the subscription to the
+child node so `event.target_widget_id` identifies the control that was clicked.
 
 ```lua
 local tools = easybar.add(easybar.kind.item, "tools", {

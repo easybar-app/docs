@@ -1,30 +1,29 @@
 # Internals
 
-This section is for contributors and maintainers working across the EasyBar repositories. Normal
-installation, package management, configuration, and widget authoring should stay in the public
-sections of the site.
+This section is for contributors working across the EasyBar project family. User-facing docs are
+organized by product and tool so architecture pages do not need to double as installation guides.
 
-The implementation is split into `easybar-kit`, `easybar`, `easybar-native`, `widgets`, `registry`,
-and `docs`. Start with [Architecture Overview](architecture/overview.md) for the ownership boundary.
+The implementation is split across:
 
-Use these instead for user-facing tasks:
+```text
+easybar-kit
+easybar
+easybar-native
+widgets
+registry
+docs
+```
 
-- [Getting Started](../getting-started/quick-start.md) for installation and first setup;
-- [Widget Store](../widget-store/overview.md) for package discovery and management;
-- [Configuration](../configuration/overview.md) for `config.toml`;
-- [Lua Widgets](../lua/overview.md) for the public scripting API;
-- [Runtime](../runtime/control.md) for CLI control, logs, metrics, and recovery.
+Start with [Architecture Overview](architecture/overview.md) for the runtime boundary or
+[Repositories](../platform/repositories.md) for ownership at a glance.
 
-## What belongs in internals
+## Public documentation lives elsewhere
 
-Internals explain implementation ownership rather than user workflows:
-
-- Swift targets and process boundaries;
-- helper-agent protocols;
-- control-socket and event flow;
-- package-store transactions and activation;
-- Lua process lifecycle, loading, transport, backpressure, and rendering;
-- generated artifacts and contributor workflows.
+- [Products](../products/index.md) — choose and configure EasyBar or EasyBar Native;
+- [Command Line](../cli/index.md) — `easybar` and `easybar-native`;
+- [Lua Widgets](../lua/overview.md) — shared authoring contract;
+- [Widget Store](../widget-store/overview.md) — package discovery and management;
+- [Platform](../platform/index.md) — EasyBarKit and helper-product positioning.
 
 ## Contributor path
 
@@ -39,22 +38,16 @@ A practical reading order is:
    - [Agent Protocol](agents/protocol.md)
    - [Lua Runtime](lua-runtime/overview.md)
 
-Use [Targets](architecture/targets.md) when you need exact source ownership.
-
 ## Architecture
 
 - [Architecture Overview](architecture/overview.md)
 - [Targets](architecture/targets.md)
 - [Process Model](architecture/process-model.md)
 - [Shared Layer](architecture/shared-layer.md)
-- [CLI](architecture/cli.md)
+- [CLI Core](architecture/cli-core.md)
 - [Control Socket](architecture/control-socket.md)
 - [Event Flow](architecture/event-flow.md)
 - [Boundaries](architecture/boundaries.md)
-
-## Package store
-
-- [Package Store Internals](package-store.md)
 
 ## Agents
 

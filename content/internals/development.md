@@ -1,6 +1,6 @@
 # Development
 
-The application is developed as sibling repositories rather than one monolithic Swift package.
+The project is developed as sibling repositories rather than one monolithic checkout.
 
 ## Recommended checkout
 
@@ -14,44 +14,23 @@ projects/
 └── docs/
 ```
 
-Both frontend Swift packages resolve `../easybar-kit` by default. The widgets tests also use a
-sibling kit checkout unless `EASYBAR_KIT_ROOT` is set.
-
-## Tools
-
-For the complete EasyBarKit and widgets checks on macOS, install the tools used by their Makefiles:
-
-```bash
-brew install lua stylua
-```
-
-Node-based Prettier and Taplo commands are pinned by the Makefiles and can run through `npx`.
-Swift dependencies are resolved by SwiftPM.
+Both frontend Swift packages depend on EasyBarKit. Widget tests also use a compatible Kit checkout.
 
 ## Common verification
 
-Run the complete repository check in every checkout you change:
+Run the repository's complete check after changing it:
 
 ```bash
 make check
 ```
 
-The Makefiles share the same high-level vocabulary where it applies:
-
-- `make build` builds Swift products;
-- `make test` runs repository tests;
-- `make check` combines tests and lint/verification;
-- `make fmt` formats supported files;
-- `make lint` checks formatting;
-- `make clean` removes generated local build output.
-
-EasyBarKit additionally owns generated-source checks and Lua runtime tests. Widgets owns package
-validation and Lua package tests. Registry and docs use Python-based validation/build tests instead
-of Swift tests.
+The Makefiles share high-level targets where they apply: `build`, `test`, `check`, `fmt`, `lint`, and
+`clean`. EasyBarKit owns generated runtime/API checks; widgets owns package validation; docs owns
+MkDocs generation and link/build validation.
 
 ## Run a frontend from source
 
-With `easybar-kit` beside the frontend checkout:
+With `easybar-kit` beside the frontend:
 
 ```bash
 cd easybar
@@ -65,38 +44,70 @@ cd easybar-native
 make run
 ```
 
-Each frontend `run` target first builds EasyBarKit's `EasyBarLuaRuntime` helper and exposes it in the
-frontend build tree so source runs use the same runtime discovery path.
+Each frontend builds or locates the EasyBarKit runtime products it needs without copying the shared
+source into the frontend repository.
 
-## Install local Swift products
+## Local installation boundaries
 
-EasyBarKit installs its CLI/runtime/agent executables into `~/.local/bin` by default:
+The frontends intentionally have different local-install behavior.
 
-```bash
-cd easybar-kit
-make install-local
-```
+### EasyBar
 
-Each frontend also provides `make install-local`. It first installs the shared kit executables and
-then installs that frontend's release executable into the same `LOCAL_BIN_DIR`:
+`easybar` owns the complete custom-bar development installation, including its public `easybar` CLI
+and the Calendar/Network helper-agent setup required by the full product.
 
 ```bash
 cd easybar
 make install-local
+```
 
-cd ../easybar-native
+### EasyBar Native
+
+Native installs only its app and public Native CLI link:
+
+```bash
+cd easybar-native
 make install-local
 ```
 
-Override the executable destination with `LOCAL_BIN_DIR=/path/to/bin`.
+Expected user-facing installation:
 
-The widgets, registry, and documentation repositories intentionally have no `install-local` target:
-they do not produce a local executable product that should be installed into a bin directory.
+```text
+~/Applications/EasyBarNative.app
+~/.local/bin/easybar-native
+```
+
+It must not install, stop, replace, or uninstall EasyBar's helper agents, `easybar` CLI, config, or
+package store.
+
+### EasyBarKit
+
+EasyBarKit can still build and test all reusable executable products directly. Treat it as the shared
+implementation repository, not as a third menu-bar frontend with user-owned config.
+
+## User-data isolation during development
+
+Do not point the two frontends at the same mutable roots by accident:
+
+```text
+EasyBar
+  ~/.config/easybar
+  ~/.local/share/easybar
+  ~/.local/state/easybar
+
+EasyBar Native
+  ~/.config/easybar-native
+  ~/.local/share/easybar-native
+  ~/.local/state/easybar-native
+```
+
+Explicit environment overrides are useful for tests, but production defaults should preserve this
+separation.
 
 ## Generated EasyBarKit artifacts
 
 EasyBarKit keeps generated theme tokens, event tokens, Lua API stubs, and config outputs checked in.
-After changing their canonical inputs, run:
+After changing canonical inputs:
 
 ```bash
 cd easybar-kit
@@ -104,8 +115,8 @@ make generate
 make check-generated
 ```
 
-The documentation repository generates its reference pages from EasyBarKit and widgets during its
-own build; those pages are build artifacts rather than hand-written sources.
+The docs repository generates the public config/Lua references from EasyBarKit during its own build;
+those pages are site build artifacts rather than hand-written sources.
 
 ## Widget development
 
@@ -117,12 +128,10 @@ make check
 make package PACKAGE=my-widget OUTPUT_DIR=dist
 ```
 
-Packages use manifest version 2 and target `minimum_easybar_kit_version`. There is no manifest-v1
-fallback in the current package contract.
+Packages use manifest version 2 and target `minimum_easybar_kit_version`. Package authors should not
+fork a manifest for EasyBar Native; frontend-specific capability assumptions belong in package docs.
 
 ## Documentation development
-
-The docs repository can fetch source revisions itself:
 
 ```bash
 cd docs
@@ -130,7 +139,7 @@ make build
 make serve
 ```
 
-For uncommitted sibling checkouts, avoid fetching and point the build at the local trees:
+For uncommitted sibling Kit/widget changes:
 
 ```bash
 make build \
@@ -139,15 +148,11 @@ make build \
   WIDGETS_ROOT=../widgets
 ```
 
-## Repository ownership
+## Ownership rule
 
-- `easybar-kit` owns reusable runtime, widgets, config, Lua, package management, CLI, and helper
-  agents;
-- `easybar` owns only the custom full-width bar frontend;
-- `easybar-native` owns only the native status-item frontend;
-- `widgets` owns independently versioned Lua packages;
-- `registry` owns published package metadata/checksums;
-- `docs` owns easybar.dev hand-written content and generated-site assembly.
-
-Continue with [Architecture](architecture/overview.md), [Agents](agents/overview.md), or the
-[Lua runtime](lua-runtime/overview.md) for subsystem details.
+- shared runtime, Lua, package, config, rendering, CLI core, and reusable helper products → `easybar-kit`;
+- full-width bar presentation and EasyBar distribution → `easybar`;
+- status-item presentation, Native CLI launcher, and Native distribution → `easybar-native`;
+- independently versioned Lua packages → `widgets`;
+- release metadata/checksums → `registry`;
+- site content and generation wiring → `docs`.

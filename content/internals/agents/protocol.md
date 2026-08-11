@@ -9,9 +9,10 @@ By default, agent sockets are derived from `[app].runtime_dir`:
 - calendar agent: `<runtime_dir>/calendar-agent.sock`
 - network agent: `<runtime_dir>/network-agent.sock`
 
-The default runtime directory is `~/.local/state/easybar/runtime`. `EASYBAR_RUNTIME_DIR` can override it for all EasyBar processes.
+The EasyBar service profile defaults to `~/.local/state/easybar/runtime`. `EASYBAR_RUNTIME_DIR` can
+override that runtime directory for the EasyBar app, CLI, and helper-agent processes.
 
-EasyBarKit agent clients connect to those sockets directly.
+The full EasyBar runtime uses EasyBarKit agent clients to connect to those sockets directly.
 
 Other local clients can also connect when they speak the same protocol.
 
@@ -96,7 +97,7 @@ Calendar requests may include an optional `requestID`. The calendar agent echoes
 every direct response produced by the request, including `subscribed`, `snapshot`, success, and
 `error` messages. Broadcast snapshots caused by EventKit changes are unsolicited and omit it.
 
-EasyBarKit uses the identifier to reject delayed errors or snapshots from an older subscription. The
+EasyBarKit uses the identifier to reject delayed errors or snapshots from an older subscription.
 Responses without the matching request identifier are rejected as uncorrelated.
 
 ## Typical behavior
@@ -158,9 +159,10 @@ Restart is available only while the agent socket is responsive. If the agent has
 
 The CLI exposes this operation as `easybar agent restart calendar`, `easybar agent restart network`, and `easybar agent restart all`. The combined command attempts both agents before reporting a partial failure with a nonzero exit status.
 
-## Frontend command behavior
+## EasyBar command behavior
 
-EasyBarKit keeps long-lived subscriptions open to the agents for normal runtime updates.
+The full EasyBar runtime keeps long-lived subscriptions open to the agents for normal updates.
+EasyBar Native does not participate in this agent lifecycle.
 
 A manual refresh:
 

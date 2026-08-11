@@ -1,43 +1,45 @@
 # Process Model
 
-EasyBarKit supports two frontend applications. Each frontend runs its own runtime instance and
-control socket.
+EasyBarKit supports two frontend applications. Each frontend owns its own runtime instance, control
+socket, config, Lua child, and mutable package state.
 
-## Runtime processes
+## EasyBar processes
 
-A running frontend consists of:
+A normal EasyBar installation can involve:
 
-- one `EasyBar` **or** `EasyBarNative` application process;
-- one Lua runtime child process when Lua widgets are enabled;
-- connections to the independently managed calendar and network agents;
-- one `easybar` CLI process per command invocation.
+- `EasyBar`;
+- one `EasyBarLuaRuntime` child while Lua widgets are active;
+- `EasyBarCalendarAgent` as a separately supervised service;
+- `EasyBarNetworkAgent` as a separately supervised service;
+- one `easybar` CLI process per invocation.
 
-The custom and native frontends use different default config/runtime directories, so they can be
-developed or run independently. They may share the separately installed calendar and network agents.
+The full frontend connects to the helper agents because its Calendar and Wi-Fi built-ins consume
+those services.
 
-## Single-instance guard
+## EasyBar Native processes
 
-Single-instance locking is scoped to the frontend identity and its runtime directory. A second copy
-of the same frontend exits rather than creating duplicate surfaces. The two different frontends are
-not treated as the same application identity.
+A normal EasyBar Native installation involves:
 
-## Helper agents
+- `EasyBarNative`;
+- one `EasyBarLuaRuntime` child while Lua widgets are active;
+- one `easybar-native` launcher plus its short-lived private CLI core process per invocation.
 
-Helper agents are separate processes because they own permission-sensitive APIs:
+EasyBar Native does not require or manage the EasyBar Calendar and Network agents.
 
-- EventKit for calendar access;
-- Wi-Fi and network APIs that depend on Location Services permission.
+## Isolation
 
-The agents collect and normalize data. EasyBarKit consumes that data and renders it through whichever
-frontend is active.
+Default ownership is frontend-specific:
 
-The agents communicate over Unix sockets and are independently supervised when installed as
-services. Frontends do not embed or own their service lifecycle.
+```text
+EasyBar        ~/.config/easybar              ~/.local/share/easybar              ~/.local/state/easybar
+EasyBar Native ~/.config/easybar-native       ~/.local/share/easybar-native       ~/.local/state/easybar-native
+```
 
-## Lua runtime process
+Single-instance locking is scoped to the frontend identity and runtime directory. Running EasyBar
+and EasyBar Native at the same time does not make them the same application instance.
 
-Lua widgets do not execute in-process inside either frontend.
+## Lua runtime
 
-EasyBarKit starts a separate Lua runtime process and communicates with it over a dedicated Unix
-socket. This provides crash isolation, full runtime reset on restart, and a clear JSON transport
-boundary.
+Lua widgets do not execute in either frontend process. EasyBarKit starts a separate Lua runtime and
+communicates with it over that frontend's dedicated Unix socket. A reload replaces the complete Lua
+process, which gives deterministic state reset and crash isolation.

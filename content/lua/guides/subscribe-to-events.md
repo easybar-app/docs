@@ -1,6 +1,6 @@
 # Subscribe To Events
 
-EasyBar widgets become interesting when they react to runtime events.
+EasyBarKit widgets become interesting when they react to runtime events.
 
 This guide shows how to subscribe to events and how to think about the payload you receive.
 
@@ -22,9 +22,10 @@ end)
 
 This attaches one handler to one event token.
 
-`easybar.events.forced` is delivered when EasyBar starts the Lua runtime and whenever a refresh is
-requested from the controller menu or with `easybar refresh`. Use it when a widget should fetch or
-recompute its state immediately instead of waiting for its next interval.
+`easybar.events.forced` is delivered when the selected frontend starts its Lua runtime and whenever a
+refresh is requested from the host UI or frontend CLI (`easybar refresh` or `easybar-native refresh`).
+Use it when a widget should fetch or recompute its state immediately instead of waiting for its next
+interval.
 
 ## Mouse interaction
 

@@ -1,19 +1,25 @@
 # Lua Widgets
 
-EasyBar Lua widgets are node-based.
+EasyBarKit Lua widgets are the shared public extension model used by both EasyBar frontends. A widget
+creates nodes, keeps their handles, and updates them with methods such as `node:set(...)` and
+`node:subscribe(...)`; it does not return widget trees directly.
 
-You create nodes, keep their handles, and update them with methods such as `node:set(...)` and `node:subscribe(...)`. You do not return widget trees directly.
+Use Lua when you want:
 
-Lua widgets are the right tool when you want:
+- custom text, icons, or composed layouts;
+- shell-command integration or local scripting;
+- event-driven behavior, timers, clicks, popups, sliders, or context menus;
+- a reusable integration that can be packaged independently of either frontend.
 
-- custom text, icons, or layout that built-ins do not provide
-- shell-command integration or lightweight local scripting
-- event-driven behavior tied to app changes, mouse input, timers, or helper-agent updates
-- small personal workflows specific to your setup
+The frontend decides where the top-level root is hosted:
 
-If you have not decided whether to configure a built-in, install an existing package, or write Lua, read [Choose Built-ins, Widget Store, Or Lua](../getting-started/choosing-widgets.md). Ready-made integrations belong in the [Widget Store](../widget-store/overview.md); this section is about authoring Lua behavior.
+- **EasyBar** places it inside the custom full-width bar;
+- **EasyBar Native** hosts it as a native macOS status item.
 
-Lua widgets are trusted local scripts. EasyBar gives each widget file its own API scope, but it does not sandbox arbitrary widget code.
+Package manifests target EasyBarKit rather than one frontend executable. A widget remains portable
+unless it intentionally depends on a frontend-specific capability. In particular, the full EasyBar
+product owns the Calendar and Network helper-agent sources; EasyBar Native does not provide those
+agents merely because the event tokens exist in the shared API.
 
 ## Minimal widget
 
@@ -35,36 +41,42 @@ clock = easybar.add(easybar.kind.item, "clock", {
 
 ## Mental model
 
-Lua widgets follow this model:
+1. create nodes with `easybar.add(...)`;
+2. keep returned handles;
+3. update nodes with `node:set(...)`;
+4. subscribe with `node:subscribe(...)`;
+5. let EasyBarKit render the current node state through the active frontend.
 
-1. create nodes with `easybar.add(...)`
-2. store returned handles
-3. update nodes with `node:set(...)`
-4. subscribe to events with `node:subscribe(...)`
-5. let EasyBar render the current node state
+## Frontend-owned directories
 
-The Lua runtime is for custom widgets and user-specific behavior. Built-in platform-integrated widgets should usually stay native when possible.
+The Lua API is shared, but manual widget and package roots are not:
 
-## User-facing guides
+|                  | EasyBar                                  | EasyBar Native                                  |
+| ---------------- | ---------------------------------------- | ----------------------------------------------- |
+| Manual widgets   | `~/.config/easybar/widgets`              | `~/.config/easybar-native/widgets`              |
+| Managed packages | `~/.local/share/easybar/packages`        | `~/.local/share/easybar-native/packages`        |
+| Editor stub      | `~/.local/share/easybar/easybar_api.lua` | `~/.local/share/easybar-native/easybar_api.lua` |
 
-- [First Widget](guides/first-widget.md) for a step-by-step starting point.
-- [Conventions & Best Practices](guides/best-practices.md) for terminology and authoring guidance.
-- [Reusable Modules](guides/modules.md) for packaged widgets, private modules, and generic helpers below `shared/`.
-- [Subscribe To Events](guides/subscribe-to-events.md) for event-driven updates.
-- [Commands](guides/commands.md) for shell-command integration.
-- [Widget Settings](guides/storage.md) for reading and persisting widget-owned configuration.
-- [Grouping](guides/grouping.md) and [Popups](guides/popups.md) for richer layouts.
-- [Editor Support](guides/editor-support.md) for LuaLS setup.
-- [Examples](guides/examples.md) for complete patterns.
-- [Widget Store](../widget-store/overview.md) when you want a ready-made integration instead of writing one.
+Install or edit the copy owned by the frontend you want to run.
+
+## Guides
+
+- [First Widget](guides/first-widget.md)
+- [Conventions & Best Practices](guides/best-practices.md)
+- [Reusable Modules](guides/modules.md)
+- [Subscribe To Events](guides/subscribe-to-events.md)
+- [Commands](guides/commands.md)
+- [Widget Settings](guides/storage.md)
+- [Grouping](guides/grouping.md) and [Popups](guides/popups.md)
+- [Editor Support](guides/editor-support.md)
+- [Examples](guides/examples.md)
+- [Widget Store](../widget-store/overview.md)
 
 ## Exact API reference
 
-The generated API reference is useful when you need exact function names, event names, and property fields:
+The generated reference comes from EasyBarKit and therefore describes the shared Lua contract:
 
 - [Functions](reference/functions.md)
 - [Node kinds](reference/node-kinds.md)
 - [Events](reference/events.md)
 - [Properties](reference/properties.md)
-
-Use the guides for concepts and patterns. Use the reference pages for exact API details.

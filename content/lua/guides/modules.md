@@ -1,13 +1,15 @@
 # Reusable Modules
 
-EasyBar has two sources of widget code. Manual `.lua` files below `widgets_dir` are discovered recursively except reusable modules below `shared/`. Installed packages expose only their manifest-declared widget entrypoints and exports; package directories are not recursive module roots.
+EasyBarKit has two sources of widget code. Manual `.lua` files below the selected frontend's `widgets_dir` are discovered recursively except reusable modules below `shared/`. Installed packages expose only their manifest-declared widget entrypoints and exports; package directories are not recursive module roots.
 
-Manual module paths and the managed `active/shared` export namespace are added to Lua's standard module search path, so widget code can use normal `require(...)` calls without changing `package.path`.
+Manual module paths and the selected frontend's managed `active/shared` export namespace are added to Lua's standard module search path, so widget code can use normal `require(...)` calls without changing `package.path`.
+
+Default manual roots are `~/.config/easybar/widgets` for EasyBar and `~/.config/easybar-native/widgets` for EasyBar Native. The layout below is relative to whichever `widgets_dir` is active.
 
 ## Recommended layout
 
 ```text
-~/.config/easybar/widgets/
+<widgets_dir>/
 ├── simple/
 │   └── clock.lua
 ├── github/
@@ -47,7 +49,7 @@ Do not install multiple presentation variants for the same service unless duplic
 A module normally returns one table containing its public functions:
 
 ```lua
--- ~/.config/easybar/widgets/shared/text.lua
+-- <widgets_dir>/shared/text.lua
 local M = {}
 
 function M.trim(value)

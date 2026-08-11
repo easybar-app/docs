@@ -1,60 +1,62 @@
 # Architectural Boundaries
 
-The repository split is an ownership boundary, not three copies of the same application.
+The repository split is an ownership boundary, not several copies of the same application.
 
-## Keep presentation in the frontend
+## Frontends own presentation and defaults
 
-Frontend code decides where shared widget surfaces live:
+- `easybar` owns custom full-width panel/window geometry and EasyBar-specific packaging;
+- `easybar-native` owns `NSStatusItem` creation, sizing, ordering, Native-specific bootstrap paths,
+  its public CLI launcher, and Native packaging.
 
-- `easybar` owns the custom full-width panel and bar geometry;
-- `easybar-native` owns `NSStatusItem` creation, sizing, ordering, and lifecycle.
+A frontend should not fork Lua parsing, package validation, node rendering, or IPC behavior just to
+change where a surface appears.
 
-Do not copy config parsing, Lua supervision, built-in widget logic, popup behavior, or package
-management into a frontend. Those belong in EasyBarKit.
+## EasyBarKit owns shared behavior
 
-## Keep shared UI/runtime behavior in EasyBarKit
+Put shared config, Lua, package, rendering, interaction, Inbox, event, and transport behavior in
+EasyBarKit. Frontends supply policy and identity instead of copying the implementation.
 
-EasyBarKit decides how shared widget state becomes SwiftUI widget content and how interactions are
-routed. Examples:
+The current public widget rule is:
 
-- good: the network agent returns RSSI, EasyBarKit maps it to Wi-Fi bars;
-- good: the calendar agent returns normalized event data, EasyBarKit builds calendar presentation
-  state;
-- good: a frontend places the resulting widget surface in a panel or `NSStatusItem`;
-- avoid: each frontend implements its own Wi-Fi, calendar, Lua, or package logic.
+> Lua is the portable extension model. Swift/AppKit is an internal host implementation.
 
-## Keep permission ownership in agents
+EasyBar may still expose product-owned native built-ins. EasyBar Native intentionally does not turn
+that complete built-in set into a second public plugin model.
 
-If a feature depends on permission-sensitive system APIs, keep collection or mutation in the
-relevant agent when practical. Agents return typed data; they do not choose frontend layout.
+## Mutable state belongs to a frontend
 
-## Keep cross-process protocols typed
+Sharing EasyBarKit must not imply sharing:
 
-If two processes exchange data, define request and response models explicitly in shared code. Avoid
-parallel ad-hoc protocols in each frontend.
+- config files;
+- runtime/control sockets;
+- manual widget directories;
+- package databases or activation links;
+- log roots;
+- CLI names.
 
-## Keep the CLI thin
+That state is selected by the frontend profile.
 
-The `easybar` CLI is built from EasyBarKit and communicates with a selected running frontend or
-helper agent. It should not duplicate runtime behavior.
+## Agents belong to the EasyBar product boundary
 
-## Keep Lua transport simple
+Calendar and Network agents remain reusable EasyBarKit products and typed protocols, but EasyBar
+Native does not depend on them. The full EasyBar product owns their installation and user-facing
+management because its native built-ins consume them.
 
-The Lua boundary remains inspectable:
+Independent projects may reuse an agent core or protocol without changing the Native installation
+contract.
 
-- JSON in;
-- JSON out;
-- stderr/log records for diagnostics.
+## CLI boundary
 
-Package manifests target the EasyBarKit API contract. They do not declare compatibility with one
-frontend executable.
+`EasyBarCtl` is a shared implementation core. `easybar` and `easybar-native` provide different
+user-facing profiles over it. Do not duplicate the package manager or IPC parser in the Native repo.
 
 ## How to choose an owner
 
-- shared config, runtime, widget, menu, popup, package, event, or Lua behavior → `EasyBarKit`;
-- process-boundary values or protocols used by several targets → `EasyBarShared`;
-- custom-bar-only window/layout behavior → `easybar`;
-- status-item-only behavior → `easybar-native`;
-- calendar collection/mutation → `EasyBarCalendarCore` / calendar agent;
-- network collection → `EasyBarNetworkAgentCore` / network agent;
-- independently versioned Lua integration → `widgets`.
+- shared runtime, Lua, rendering, package, config, event, or IPC behavior → `easybar-kit`;
+- cross-process value/protocol used by several targets → `EasyBarShared`;
+- full-width custom-bar presentation → `easybar`;
+- status-item presentation or Native bootstrap/launcher behavior → `easybar-native`;
+- EasyBar Calendar/Network collection → corresponding agent/core target;
+- independently versioned Lua integration → `widgets`;
+- package release metadata/checksums → `registry`;
+- public/contributor documentation → `docs`.

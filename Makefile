@@ -25,7 +25,7 @@ PRETTIER_MD_SOURCES := README.md "content/**/*.md"
 PRETTIER_YAML_SOURCES := ".github/**/*.{yml,yaml}" mkdocs.yml
 PRETTIER_JSON_SOURCES := ".github/**/*.json"
 GENERATED_MD_SOURCES := \
-	content/configuration/reference.md \
+	content/products/easybar/configuration/reference.md \
 	"content/lua/reference/**/*.md" \
 	content/widget-store/catalog.md \
 	"content/widget-store/packages/**/*.md"
@@ -61,7 +61,7 @@ else
 endif
 
 generate: fetch ## Generate reference and Widget Store pages directly in content/.
-	@scripts/generate/kit_docs.sh "$(PYTHON)" "$(EASYBAR_KIT_ROOT)" \
+	@scripts/generate/easybar_kit_docs.sh "$(PYTHON)" "$(EASYBAR_KIT_ROOT)" \
 		"$(abspath content)"
 	@$(PYTHON) scripts/generate/widget_docs.py \
 		--widgets-root "$(WIDGETS_ROOT)" \

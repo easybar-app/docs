@@ -1,8 +1,16 @@
 # Install And Manage Packages
 
-EasyBar can install packages from the official registry, another registry, a local directory, or a
-direct archive. Package operations do not require the EasyBar app to be running, but reload EasyBar
-after an install, update, or uninstall when you want the active Lua runtime to pick up the change.
+Both EasyBar frontends can install packages from the official registry, another registry, a local
+directory, or a direct archive. Package operations do not require the selected frontend to be
+running; reload that frontend when you want its Lua runtime to pick up a change.
+
+The examples below use `easybar`, which operates on EasyBar's store. Replace it with
+`easybar-native` to perform the same package operation against EasyBar Native's isolated store.
+
+```text
+easybar        -> ~/.local/share/easybar/packages
+easybar-native -> ~/.local/share/easybar-native/packages
+```
 
 For the concepts behind packages, libraries, and registries, start with [Widget Store](overview.md).
 
@@ -33,8 +41,8 @@ easybar widgets install PACKAGE_NAME
 easybar config reload
 ```
 
-Registry releases include a versioned archive URL and SHA-256. EasyBar verifies the digest before
-extracting the archive and resolves required package dependencies before activation.
+Registry releases include a versioned archive URL and SHA-256. The shared package manager verifies
+the digest before extracting the archive and resolves required dependencies before activation.
 
 Installing an already installed package is an error. Use `widgets update` for a normal registry
 upgrade. Use `--force` only when you intentionally want to replace the installed package from a
@@ -66,7 +74,7 @@ easybar widgets installed --libraries-only
 easybar widgets installed --json
 ```
 
-The command is offline and reports the package database under EasyBar's managed data directory.
+The command is offline and reports the package database owned by the selected frontend.
 
 ## Check for updates
 
@@ -101,9 +109,9 @@ registry entry:
 easybar widgets install ./my-widget --no-registry
 ```
 
-With `--no-registry`, every dependency must already be installed. Without that option, EasyBar uses
-installed compatible dependencies first and asks the selected registry for missing or incompatible
-ones.
+With `--no-registry`, every dependency must already be installed. Without that option, the package
+manager uses installed compatible dependencies first and asks the selected registry for missing or
+incompatible ones.
 
 For package layout and manifest fields, see [Create & Contribute](create-and-contribute.md).
 
@@ -123,8 +131,7 @@ easybar widgets install \
   --sha256 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 ```
 
-The archive must place `package.toml` at its root. EasyBar rejects symbolic links, absolute archive
-paths, and parent-directory traversal.
+The archive must place `package.toml` at its root. The package manager rejects symbolic links, absolute archive paths, and parent-directory traversal.
 
 ## Dependencies
 
@@ -151,18 +158,18 @@ easybar widgets uninstall PACKAGE_NAME
 easybar config reload
 ```
 
-EasyBar refuses to remove a package while another installed package depends on it. Uninstall removes
-the package's managed versions and activation links; it never removes files from your configured
-manual `widgets_dir`.
+The package manager refuses to remove a package while another installed package depends on it.
+Uninstall removes the package's managed versions and activation links; it never removes files from
+your configured manual `widgets_dir`.
 
 ## Managed data
 
-Package state lives below:
+Package state is frontend-owned:
 
 ```text
-~/.local/share/easybar/packages/
+EasyBar        ~/.local/share/easybar/packages/
+EasyBar Native ~/.local/share/easybar-native/packages/
 ```
 
-That directory is owned by the package manager. Do not edit active links or stored package versions
-by hand during normal use. For the exact store layout, atomic replacement behavior, rollback, and
-version retention rules, see [Package Store Internals](../internals/package-store.md).
+Do not edit active links or stored versions by hand. For the exact layout, atomic replacement,
+rollback, and retention rules, see [Package Store Internals](../internals/package-store.md).
