@@ -47,7 +47,7 @@ Every package declares the minimum EasyBarKit version it requires:
 
 ```toml
 manifest_version = 2
-minimum_easybar_kit_version = "0.54.0"
+minimum_easybar_kit_version = "0.1.0"
 ```
 
 The package manager compares that value with its EasyBarKit build version before activation. A
@@ -65,7 +65,7 @@ version = "0.1.0"
 kind = "widget"
 description = "Describe what the widget shows or controls."
 license = "Apache-2.0"
-minimum_easybar_kit_version = "0.54.0"
+minimum_easybar_kit_version = "0.1.0"
 entrypoint = "widget.lua"
 readme = "README.md"
 categories = ["utilities"]
@@ -99,7 +99,7 @@ version = "1.0.0"
 kind = "library"
 description = "Reusable helpers for EasyBar widgets."
 license = "Apache-2.0"
-minimum_easybar_kit_version = "0.54.0"
+minimum_easybar_kit_version = "0.1.0"
 readme = "README.md"
 categories = ["library"]
 
