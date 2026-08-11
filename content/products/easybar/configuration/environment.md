@@ -38,15 +38,15 @@ EasyBarKit supports a small set of process-level path overrides. The full EasyBa
 uses the EasyBar defaults shown here; EasyBar Native uses the same keys to establish its own isolated
 defaults.
 
-| Variable                          | EasyBar purpose                                |
-| --------------------------------- | ---------------------------------------------- |
-| `EASYBAR_CONFIG_PATH`             | Select the runtime config file.                |
-| `EASYBAR_RUNTIME_DIR`             | Override `[app].runtime_dir`.                  |
-| `EASYBAR_WIDGETS_DIR`             | Set the fallback manual widget directory.      |
-| `EASYBAR_WIDGET_PACKAGES_DIR`     | Select the managed package root.               |
-| `EASYBAR_LOGGING_DIR`             | Set the fallback logging directory.            |
-| `EASYBAR_WIDGET_EDITOR_STUB_PATH` | Set the fallback Lua editor-stub path.         |
-| `EASYBAR_LOG_LEVEL`               | Temporarily override `[logging].level`.        |
+| Variable                          | EasyBar purpose                           |
+| --------------------------------- | ----------------------------------------- |
+| `EASYBAR_CONFIG_PATH`             | Select the runtime config file.           |
+| `EASYBAR_RUNTIME_DIR`             | Override `[app].runtime_dir`.             |
+| `EASYBAR_WIDGETS_DIR`             | Set the fallback manual widget directory. |
+| `EASYBAR_WIDGET_PACKAGES_DIR`     | Select the managed package root.          |
+| `EASYBAR_LOGGING_DIR`             | Set the fallback logging directory.       |
+| `EASYBAR_WIDGET_EDITOR_STUB_PATH` | Set the fallback Lua editor-stub path.    |
+| `EASYBAR_LOG_LEVEL`               | Temporarily override `[logging].level`.   |
 
 The precedence depends on the key:
 
