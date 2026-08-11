@@ -1,71 +1,33 @@
-# `easybar-native` CLI
+# EasyBar Native CLI
 
-`easybar-native` controls EasyBar Native and manages its isolated Lua package store. It uses the same
-EasyBarKit CLI core as `easybar`, but the launcher supplies Native-specific paths and does not expose
-EasyBar helper-agent commands.
+`easybar-native` controls EasyBar Native and its isolated Lua widget environment. Commands that
+contact the app use the Native runtime socket; package commands work directly with the Native package
+store.
 
-## Default ownership
+## Command groups
 
-```text
-config    ~/.config/easybar-native/config.toml
-runtime   ~/.local/state/easybar-native/runtime
-logs      ~/.local/state/easybar-native
-packages  ~/.local/share/easybar-native/packages
-widgets   ~/.config/easybar-native/widgets
-```
+| Command group                           | Purpose                                                             |
+| --------------------------------------- | ------------------------------------------------------------------- |
+| `refresh`, `config`, `runtime`, `event` | Control EasyBar Native, its configuration, Lua runtime, and events. |
+| `widgets`                               | Search, install, update, and remove Native widget packages.         |
+| `inbox`                                 | Publish and manage EasyBar Native Inbox messages.                   |
+| `logs`                                  | Read retained logs or follow live Native app and Lua records.       |
+| `metrics`                               | Inspect a Native runtime snapshot or watch live metrics.            |
 
-## Common commands
+## Documentation
 
-```bash
-easybar-native refresh
-easybar-native config reload
-easybar-native config validate
-easybar-native runtime restart
-easybar-native metrics
-easybar-native logs
-easybar-native inbox list
-easybar-native widgets search
-easybar-native widgets install PACKAGE
-easybar-native widgets installed
-easybar-native widgets outdated
-easybar-native widgets update --all
-easybar-native widgets uninstall PACKAGE
-```
+- [App, configuration, runtime, and events](easybar-native/control.md)
+- [Widget packages](easybar-native/widgets.md)
+- [Inbox](easybar-native/inbox.md)
+- [Logs](easybar-native/logs.md)
+- [Metrics](easybar-native/metrics.md)
 
-Run command-specific help normally:
+## Help and version
 
 ```bash
 easybar-native --help
-easybar-native widgets --help
-easybar-native widgets install --help
+easybar-native COMMAND --help
+easybar-native --version
 ```
 
-## No helper-agent command group
-
-EasyBar Native does not install or manage the EasyBar Calendar or Network agents, so commands such as
-these belong only to `easybar`:
-
-```text
-easybar agent restart calendar
-easybar agent restart network
-easybar agent version all
-```
-
-Use the [EasyBar CLI](easybar.md) when you are diagnosing those services.
-
-## Package operations are Native-local
-
-```bash
-easybar-native widgets install tailscale
-```
-
-writes below `~/.local/share/easybar-native/packages`. It does not activate the package for EasyBar.
-See [Lua Widgets & Packages](../products/easybar-native/widgets.md) and [Install And Manage Packages](../widget-store/manage.md).
-
-## Config and runtime operations
-
-`easybar-native config reload`, `refresh`, `runtime restart`, Inbox commands, and metrics use the
-Native control socket below `~/.local/state/easybar-native/runtime` unless explicitly overridden.
-
-The public command name is a small launcher bundled with `EasyBarNative.app`; the shared EasyBarKit
-CLI core remains an implementation detail.
+The CLI is bundled with EasyBar Native and installed as the `easybar-native` command.

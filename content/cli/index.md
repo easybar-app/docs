@@ -1,37 +1,25 @@
 # Command-line tools
 
-EasyBar has two public CLI names because the two frontends own separate runtime and package state.
-The commands intentionally look similar, but the selected executable determines which frontend you
-control.
+Choose the CLI for the product you installed. Each command controls only that product's app,
+configuration, runtime, logs, Inbox, and package store.
 
-| Command          | Controls       | Package store                            | Helper-agent commands |
-| ---------------- | -------------- | ---------------------------------------- | --------------------- |
-| `easybar`        | EasyBar        | `~/.local/share/easybar/packages`        | Yes                   |
-| `easybar-native` | EasyBar Native | `~/.local/share/easybar-native/packages` | No                    |
+## EasyBar
 
-## Same command, different owner
+Use `easybar` for the full-width EasyBar, its native and Lua widgets, and its calendar and network
+helper agents.
 
 ```bash
-easybar widgets install tailscale
-easybar-native widgets install tailscale
+easybar --help
 ```
 
-These are two independent installations of the same package release. The first affects EasyBar; the
-second affects EasyBar Native.
+[Open the EasyBar CLI documentation](easybar.md).
 
-Likewise:
+## EasyBar Native
+
+Use `easybar-native` for EasyBar Native, its Lua widgets, and its isolated package and runtime state.
 
 ```bash
-easybar config reload
-easybar-native config reload
+easybar-native --help
 ```
 
-target different control sockets and config files.
-
-## Shared command model
-
-Both commands reuse the EasyBarKit CLI implementation for frontend control, package management,
-metrics, Inbox operations, and diagnostics. Native supplies a frontend profile that changes its
-paths, display name, and available command groups instead of forking the parser and package manager.
-
-Continue with [`easybar`](easybar.md) or [`easybar-native`](easybar-native.md).
+[Open the EasyBar Native CLI documentation](easybar-native.md).

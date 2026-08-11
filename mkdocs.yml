@@ -71,11 +71,20 @@ nav:
   - Command Line:
       - Overview: cli/index.md
       - easybar:
-          - Reference: cli/easybar.md
+          - Overview: cli/easybar.md
+          - App & Runtime: cli/easybar/control.md
+          - Widget Packages: cli/easybar/widgets.md
           - Logs: cli/easybar/logs.md
           - Metrics: cli/easybar/metrics.md
           - Inbox: cli/easybar/inbox.md
-      - easybar-native: cli/easybar-native.md
+          - Helper Agents: cli/easybar/agents.md
+      - easybar-native:
+          - Overview: cli/easybar-native.md
+          - App & Runtime: cli/easybar-native/control.md
+          - Widget Packages: cli/easybar-native/widgets.md
+          - Logs: cli/easybar-native/logs.md
+          - Metrics: cli/easybar-native/metrics.md
+          - Inbox: cli/easybar-native/inbox.md
 
   - Lua & Packages:
       - Widget Store:
