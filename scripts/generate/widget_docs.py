@@ -174,6 +174,12 @@ def code_values(values: tuple[str, ...] | list[str]) -> str:
     return ", ".join(f"`{markdown_escape(value)}`" for value in values)
 
 
+def package_requires_command(package: Package, command: str) -> bool:
+    """Return whether a package explicitly requires an external command."""
+    commands = package.requirements.get("commands")
+    return isinstance(commands, list) and command in commands
+
+
 def render_index(packages: list[Package]) -> str:
     lines = [
         GENERATED_HEADER.rstrip(),
@@ -184,7 +190,7 @@ def render_index(packages: list[Package]) -> str:
         "[widgets repository](https://github.com/easybar-app/widgets). Search this site to find a",
         "package by name, integration, command, setting, or behavior.",
         "",
-        "Install a widget into the frontend you want to use:",
+        "Install a compatible widget into the frontend you want to use:",
         "",
         "```sh",
         "easybar widgets install PACKAGE",
@@ -192,7 +198,9 @@ def render_index(packages: list[Package]) -> str:
         "```",
         "",
         "The two commands use independent package stores. Package manifests target EasyBarKit,",
-        "while installation state belongs to the selected frontend.",
+        "while installation state belongs to the selected frontend. Check the package page before",
+        "installing: it lists external requirements and omits the Native command for packages that",
+        "explicitly require the `easybar` executable.",
         "",
         "Building your own widget? Start with the",
         "[EasyBar widget template](https://github.com/easybar-app/widget-template).",
@@ -202,6 +210,11 @@ def render_index(packages: list[Package]) -> str:
     ]
 
     for package in packages:
+        frontend_label = (
+            " · `EasyBar only`"
+            if package_requires_command(package, "easybar")
+            else ""
+        )
         labels = " · ".join(
             [f"`{package.kind}`", f"`v{package.version}`", *[f"`{c}`" for c in package.categories]]
         )
@@ -211,7 +224,7 @@ def render_index(packages: list[Package]) -> str:
                 "",
                 f"**[`{package.name}`](packages/{package.name}.md)**",
                 "",
-                labels,
+                f"{labels}{frontend_label}",
                 "",
                 package.description,
                 "",
@@ -269,14 +282,29 @@ def render_package(package: Package, package_names: set[str]) -> str:
                 f"easybar widgets install {package.name}",
                 "```",
                 "",
-                "Install for EasyBar Native:",
-                "",
-                "```sh",
-                f"easybar-native widgets install {package.name}",
-                "```",
-                "",
             ]
         )
+        if package_requires_command(package, "easybar"):
+            lines.extend(
+                [
+                    '!!! warning "EasyBar-only command requirement"',
+                    "",
+                    "    This package explicitly requires the `easybar` executable. It is not",
+                    "    documented as compatible with EasyBar Native in its current release.",
+                    "",
+                ]
+            )
+        else:
+            lines.extend(
+                [
+                    "Install for EasyBar Native:",
+                    "",
+                    "```sh",
+                    f"easybar-native widgets install {package.name}",
+                    "```",
+                    "",
+                ]
+            )
     else:
         lines.extend(
             [

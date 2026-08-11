@@ -62,6 +62,7 @@ nav:
               - Agent Diagnostics: products/easybar/runtime/agent-diagnostics.md
       - EasyBar Native:
           - Overview: products/easybar-native/index.md
+          - Quick Start: products/easybar-native/quick-start.md
           - Installation: products/easybar-native/installation.md
           - Configuration & Paths: products/easybar-native/configuration.md
           - Lua Widgets & Packages: products/easybar-native/widgets.md

@@ -151,12 +151,31 @@ resulting metadata.
 The package README should explain:
 
 - what the package does;
+- whether it works in EasyBar, EasyBar Native, or both;
 - required external tools and authentication;
 - permissions;
 - widget settings;
 - important operational behavior.
 
 Do not include credentials or machine-specific secrets.
+
+## Document frontend compatibility
+
+Prefer the shared Lua API so a widget works in both frontends. A package README should explicitly
+identify any dependency on:
+
+- the `easybar` or `easybar-native` executable;
+- EasyBar's Calendar or Network helper agents;
+- a regular EasyBar native built-in, native group, or full-width layout behavior;
+- a frontend-specific path that is not resolved from the runtime environment.
+
+Inbox is available in both frontends, so using the shared native Inbox API does not by itself make a
+package EasyBar-only. EasyBar Native still exposes no other regular built-in widget surface.
+
+Do not hard-code `~/.config/easybar`, `~/.local/share/easybar`, or
+`~/.local/state/easybar` in a portable package. Use EasyBarKit APIs and the frontend-provided
+environment instead. When a package intentionally invokes one frontend's CLI, declare that command
+under `[requirements]` and document the restriction.
 
 ## Tests
 

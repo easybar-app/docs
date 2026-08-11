@@ -58,8 +58,29 @@ Dependencies are packages too. Missing or incompatible dependencies are resolved
 ## Compatibility
 
 Manifest version 2 declares `minimum_easybar_kit_version`, not an EasyBar or EasyBar Native version.
-That makes the package contract portable across frontends. A package that depends on an
-EasyBar-only capability should document that requirement explicitly.
+That makes the package format portable across frontends, but it does not make every package's
+behavior frontend-neutral.
+
+Before installing, check the generated package page for:
+
+- **required commands**, such as `brew`, `gh`, `glab`, or `easybar`;
+- authentication and macOS permission requirements in the package documentation;
+- use of EasyBar-only Calendar or Network agent events;
+- assumptions about full-width layout, native built-ins, or groups.
+
+| Package behavior                                                 | EasyBar | EasyBar Native |
+| ---------------------------------------------------------------- | ------- | -------------- |
+| Uses only shared Lua nodes, commands, timers, storage, or popups | Yes     | Yes            |
+| Publishes through the shared native Inbox API                    | Yes     | Yes            |
+| Requires the `easybar` executable                                | Yes     | No             |
+| Requires EasyBar Calendar or Network agents                      | Yes     | No             |
+| Requires a regular EasyBar native built-in or group              | Yes     | No             |
+
+!!! note "Installability and compatibility are different"
+
+    The shared package manager can validate and install a structurally valid package in either
+    frontend. Runtime requirements still determine whether the package can operate there. Package
+    pages omit the Native install command when their manifest explicitly requires `easybar`.
 
 ## Where to go next
 
