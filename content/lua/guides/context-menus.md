@@ -30,6 +30,8 @@ github:subscribe(easybar.events.context_menu.clicked, function(event)
 end)
 ```
 
+[![Lua widget with a native nested context menu](../../assets/custom_context.png){ .screenshot-compact .screenshot-context }](../../assets/custom_context.png)
+
 Selectable entries require a non-empty `id` and `title`. `enabled` defaults to `true`; disabled
 entries remain visible but cannot emit an action. `checked` defaults to `false` and controls the
 native checkmark. A separator uses `{ separator = true }`. A submenu heading requires a `title`

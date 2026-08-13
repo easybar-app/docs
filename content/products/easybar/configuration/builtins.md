@@ -101,6 +101,8 @@ The generated [Configuration Reference](reference.md) lists every key and defaul
 
 Interactive built-ins expose their common settings and native actions directly from the bar:
 
+[![CPU widget with history graph](../../../assets/cpu.png){ .screenshot-compact .screenshot-cpu }](../../../assets/cpu.png)
+
 | Built-in       | Context-menu controls                                                                                                                                                        |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Battery        | Display mode, color mode, and refresh.                                                                                                                                       |
@@ -122,6 +124,8 @@ Open **Native Widgets** from the menu bar icon or by right-clicking an empty are
 enable or disable any top-level built-in widget. Checked items are enabled. Each selection
 immediately updates the corresponding `builtins.<widget>.enabled` value in `config.toml` and reloads
 the bar, while preserving comments, whitespace, and unrelated settings.
+
+[![Native Widgets menu with enabled built-ins](../../../assets/native_widgets.png){ .screenshot-compact .screenshot-native-widgets }](../../../assets/native_widgets.png)
 
 Every visible native widget also has a right-click context menu with **Reload Widget** and
 **Disable Widget**. Disabling is written to the active config file immediately; use **Native

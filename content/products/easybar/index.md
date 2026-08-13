@@ -12,6 +12,32 @@ Use EasyBar when you want:
 - the Calendar and Network helper agents for permission-sensitive data;
 - Lua widgets and Widget Store packages beside the native built-ins.
 
+## See EasyBar in action
+
+<div class="easybar-showcase" markdown>
+
+<figure markdown>
+[![Calendar month popup](../../assets/month.png){ .screenshot-compact .screenshot-month }](../../assets/month.png)
+<figcaption>Calendar month view with event indicators</figcaption>
+</figure>
+
+<figure markdown>
+[![Upcoming calendar events](../../assets/upcoming.png){ .screenshot-compact .screenshot-upcoming }](../../assets/upcoming.png)
+<figcaption>A compact agenda for upcoming events</figcaption>
+</figure>
+
+<figure markdown>
+[![EasyBar native inbox](../../assets/inbox.png){ .screenshot-compact .screenshot-inbox }](../../assets/inbox.png)
+<figcaption>One actionable inbox for multiple sources</figcaption>
+</figure>
+
+<figure markdown>
+[![EasyBar Wi-Fi details](../../assets/wifi.png){ .screenshot-compact .screenshot-wifi }](../../assets/wifi.png)
+<figcaption>Native network details at a glance</figcaption>
+</figure>
+
+</div>
+
 ## Default paths
 
 ```text

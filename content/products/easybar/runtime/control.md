@@ -8,6 +8,8 @@ EasyBar shows a persistent controller icon in the macOS menu bar by default. It 
 
 The controller and an empty-area right-click on the bar share the common runtime, native-widget, theme, and file actions. The controller additionally owns application lifecycle, helper-agent, and quit actions.
 
+[![EasyBar menu-bar controller](../../../assets/topbar_app.png){ .screenshot-compact .screenshot-topbar }](../../../assets/topbar_app.png)
+
 Disable the controller icon with:
 
 ```toml
