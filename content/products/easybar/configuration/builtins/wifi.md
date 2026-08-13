@@ -2,6 +2,8 @@
 
 The native Wi-Fi widget always renders signal bars as its anchor. Its content mode controls whether additional network values appear inline or in a popup.
 
+[![EasyBar Wi-Fi details popup](../../../../assets/wifi.png){ .screenshot-compact .screenshot-wifi }](../../../../assets/wifi.png)
+
 ```toml
 [builtins.wifi]
 enabled = true

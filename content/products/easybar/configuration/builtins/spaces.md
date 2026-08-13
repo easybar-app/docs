@@ -7,6 +7,20 @@ The native spaces widget renders AeroSpace workspaces and their visible applicat
 - `[builtins.spaces.text]` controls labels.
 - `[builtins.spaces.icons]` controls application icons.
 
+<div class="easybar-showcase" markdown>
+
+<figure markdown>
+[![EasyBar Spaces widget with workspace labels](../../../../assets/spaces.png){ .screenshot-compact .screenshot-spaces }](../../../../assets/spaces.png)
+<figcaption>Workspace labels with the focused space highlighted</figcaption>
+</figure>
+
+<figure markdown>
+[![EasyBar Spaces widget with front-app icons](../../../../assets/spaces_front_app.png){ .screenshot-compact .screenshot-spaces-front-app }](../../../../assets/spaces_front_app.png)
+<figcaption>Workspace labels combined with visible application icons</figcaption>
+</figure>
+
+</div>
+
 ## Collapsed inactive spaces
 
 The content settings interact as follows:

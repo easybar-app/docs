@@ -2,6 +2,20 @@
 
 The calendar built-in combines a configurable time/date anchor with month, upcoming-event, appointment, and composer popups. Calendar data and permission handling belong to the separately installed calendar agent.
 
+<div class="easybar-showcase" markdown>
+
+<figure markdown>
+[![Calendar month popup](../../../../assets/month.png){ .screenshot-compact .screenshot-month }](../../../../assets/month.png)
+<figcaption>Month view with event indicators and the day's appointments</figcaption>
+</figure>
+
+<figure markdown>
+[![Upcoming calendar events](../../../../assets/upcoming.png){ .screenshot-compact .screenshot-upcoming }](../../../../assets/upcoming.png)
+<figcaption>Upcoming events grouped into a compact agenda</figcaption>
+</figure>
+
+</div>
+
 ## Anchor
 
 The anchor uses an ordered list of `time` and `date` fields. A row places them beside each other, a column stacks them, and a one-element list creates a single-field anchor.

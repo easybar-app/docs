@@ -4,6 +4,8 @@ The native inbox collects structured messages published by Lua widgets or the `e
 into one bar item. It displays the total unread count and can group messages by source, date,
 category, severity, or not at all.
 
+[![EasyBar native inbox with grouped notifications](../../../../assets/inbox.png){ .screenshot-compact .screenshot-inbox }](../../../../assets/inbox.png)
+
 ```toml
 [builtins.inbox]
 enabled = true
