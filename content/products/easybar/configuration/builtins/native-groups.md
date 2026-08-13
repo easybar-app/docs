@@ -44,4 +44,3 @@ Common examples:
 - volume + battery
 - system status widgets
 - compact right-side status clusters
-

@@ -53,4 +53,3 @@ History is limited to the active files and numbered archives retained by EasyBar
 - [Logging configuration](../../products/easybar/configuration/logging.md)
 - [CLI Reference](index.md)
 - [Troubleshooting](../../products/easybar/runtime/troubleshooting.md)
-

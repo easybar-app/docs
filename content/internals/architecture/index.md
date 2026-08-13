@@ -66,4 +66,3 @@ prevents one frontend's package update or reload from silently changing the othe
 - [Control Socket](control-socket.md)
 - [Event Flow](event-flow.md)
 - [Boundaries](boundaries.md)
-

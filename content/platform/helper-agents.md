@@ -25,4 +25,3 @@ service back to Native's installation contract.
 
 For EasyBar user configuration, see [Agents](../products/easybar/configuration/agents.md). For
 protocol details, see [Agent Internals](../internals/agents/index.md).
-

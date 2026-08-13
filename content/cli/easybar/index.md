@@ -33,4 +33,3 @@ easybar --version
 ```
 
 The CLI is installed with EasyBar. Its version should match the installed app after an upgrade.
-

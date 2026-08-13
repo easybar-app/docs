@@ -135,4 +135,3 @@ Public log levels, file-backed widget logs, and filtering belong in
 - [Lua Runtime Events](events.md)
 - [Contributor Notes](contributor-notes.md)
 - [Package Store Internals](../package-store.md)
-

@@ -31,4 +31,3 @@ easybar-native --version
 ```
 
 The CLI is bundled with EasyBar Native and installed as the `easybar-native` command.
-

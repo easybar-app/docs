@@ -190,4 +190,3 @@ stylua ~/.config/easybar/widgets
 ```
 
 For EasyBar Native, use `~/.config/easybar-native/widgets` instead. Check formatting without changing files with `stylua --check <widgets_dir>`.
-

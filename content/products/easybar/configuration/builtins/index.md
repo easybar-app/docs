@@ -89,8 +89,8 @@ For the native `spaces` widget, `[builtins.spaces]` owns the outer placement and
 
 The generated [Configuration Reference](../reference.md) lists every key and default. These guides explain behavior and interactions for the more complex built-ins:
 
-| Built-in       | Guide                                        |
-| -------------- | -------------------------------------------- |
+| Built-in       | Guide                               |
+| -------------- | ----------------------------------- |
 | Spaces         | [Spaces](spaces.md)                 |
 | Inbox          | [Inbox](inbox.md)                   |
 | Privacy Spacer | [Privacy Spacer](privacy-spacer.md) |
@@ -144,4 +144,3 @@ Switch to Lua when you need:
 - shell-command integration or app-specific logic
 
 See [Lua Widgets](../../../../lua/index.md).
-

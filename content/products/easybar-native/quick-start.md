@@ -76,4 +76,3 @@ volume, CPU, or group sections into status items. Use Lua packages for custom Na
 - [Widget Store Catalog](../../widget-store/catalog.md)
 - [`easybar-native` CLI](../../cli/easybar-native/index.md)
 - [Troubleshooting](troubleshooting.md)
-

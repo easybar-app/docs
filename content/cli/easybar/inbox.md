@@ -117,4 +117,3 @@ The command accepts either `--source` or `--all`, never both.
 - [Native Inbox for Lua](../../lua/guides/inbox.md)
 - [Inbox configuration](../../products/easybar/configuration/builtins/inbox.md)
 - [CLI Reference](index.md)
-

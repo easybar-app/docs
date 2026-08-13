@@ -60,4 +60,3 @@ CLI          easybar
 6. [Troubleshooting](runtime/troubleshooting.md)
 
 For the native status-area alternative, see [EasyBar Native](../easybar-native/index.md).
-

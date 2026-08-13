@@ -58,4 +58,3 @@ background behind several system status items.
 If you need EasyBar's native calendar, Wi-Fi, battery, Spaces, or other built-ins in one designed bar,
 use the [EasyBar frontend](../easybar/index.md). Native keeps those surfaces outside its product
 boundary.
-

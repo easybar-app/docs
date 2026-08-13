@@ -61,10 +61,9 @@ and do not otherwise depend on an EasyBar-only capability.
 
 ## Start here
 
-| Goal                                            | Guide                                                       |
-| ----------------------------------------------- | ----------------------------------------------------------- |
-| Build a complete custom bar                     | [EasyBar Quick Start](easybar/quick-start.md)               |
-| Add Lua widgets to the normal macOS status area | [EasyBar Native Quick Start](easybar-native/quick-start.md) |
+| Goal                                            | Guide                                                                                     |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Build a complete custom bar                     | [EasyBar Quick Start](easybar/quick-start.md)                                             |
+| Add Lua widgets to the normal macOS status area | [EasyBar Native Quick Start](easybar-native/quick-start.md)                               |
 | Use the product command-line tools              | [`easybar`](../cli/easybar/index.md) / [`easybar-native`](../cli/easybar-native/index.md) |
-| Browse shared packages                          | [Widget Store](../widget-store/index.md)                 |
-
+| Browse shared packages                          | [Widget Store](../widget-store/index.md)                                                  |

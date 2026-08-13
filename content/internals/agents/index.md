@@ -43,4 +43,3 @@ make that software a dependency of EasyBar Native.
 - [Calendar Agent](calendar-agent.md)
 - [Network Agent](network-agent.md)
 - [EasyBar Agent Configuration](../../products/easybar/configuration/agents.md)
-

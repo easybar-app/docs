@@ -40,4 +40,3 @@ than being reimplemented in command handlers.
 
 See [`easybar`](../../cli/easybar/index.md) and [`easybar-native`](../../cli/easybar-native/index.md) for the
 user-facing command contracts.
-

@@ -80,4 +80,3 @@ The generated reference comes from EasyBarKit and therefore describes the shared
 - [Node kinds](reference/node-kinds.md)
 - [Events](reference/events.md)
 - [Properties](reference/properties.md)
-

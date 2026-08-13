@@ -63,4 +63,3 @@ A practical reading order is:
 - [Widget Loading](lua-runtime/widget-loading.md)
 - [Events](lua-runtime/events.md)
 - [Contributor Notes](lua-runtime/contributor-notes.md)
-

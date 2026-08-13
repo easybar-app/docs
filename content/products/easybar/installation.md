@@ -149,4 +149,3 @@ Common user data remains under:
 See [Configuration](configuration/index.md) and [Logging](configuration/logging.md) before deleting these directories.
 
 For the separate status-item frontend, see [EasyBar Native Installation](../easybar-native/installation.md).
-

@@ -117,4 +117,3 @@ directly from that content tree. Generated pages are not committed to the docume
 3. Run `make generate` and `make check-generated` in EasyBar.
 4. Update the relevant public Lua guide in `easybar-app/docs`.
 5. Run `make build` in the documentation repository.
-

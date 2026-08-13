@@ -79,4 +79,3 @@ Package manifests target `minimum_easybar_kit_version`, not a specific frontend 
 is generally portable between EasyBar and EasyBar Native when it only uses the shared Lua contract.
 A package that assumes an EasyBar-only built-in or agent-backed capability should document that
 frontend requirement explicitly.
-

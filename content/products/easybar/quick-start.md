@@ -122,4 +122,3 @@ Then follow [First Widget](../../lua/guides/first-widget.md).
 - [Widget Store Catalog](../../widget-store/catalog.md) for ready-made packages.
 - [Lua Reference](../../lua/reference/index.md) for exact Lua API shapes.
 - [CLI Reference](../../cli/easybar/index.md) for control and diagnostic commands.
-

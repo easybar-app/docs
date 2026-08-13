@@ -173,4 +173,3 @@ EasyBar Native ~/.local/share/easybar-native/packages/
 
 Do not edit active links or stored versions by hand. For the exact layout, atomic replacement,
 rollback, and retention rules, see [Package Store Internals](../internals/package-store.md).
-

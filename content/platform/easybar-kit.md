@@ -31,4 +31,3 @@ two frontends. Frontend-specific requirements should be exceptional and document
 
 For implementation details, see [Architecture](../internals/architecture/index.md) and
 [Targets](../internals/architecture/targets.md).
-

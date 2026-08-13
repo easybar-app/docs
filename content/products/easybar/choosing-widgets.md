@@ -81,4 +81,3 @@ Use this order:
 
 A strong setup can use all three: native widgets for platform integrations, store packages for
 reusable service integrations, and manual Lua for the last mile of personal behavior.
-
