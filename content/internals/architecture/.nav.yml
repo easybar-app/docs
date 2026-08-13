@@ -1,0 +1,10 @@
+title: Architecture
+nav:
+  - index.md
+  - targets.md
+  - process-model.md
+  - shared-layer.md
+  - cli-core.md
+  - control-socket.md
+  - event-flow.md
+  - boundaries.md

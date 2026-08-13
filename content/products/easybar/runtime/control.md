@@ -1,6 +1,6 @@
 # Runtime Control
 
-Refresh, config reload, Lua restart, and agent restart solve different problems. This page is the behavioral guide; [CLI Reference](../../../cli/easybar.md) lists every command and option.
+Refresh, config reload, Lua restart, and agent restart solve different problems. This page is the behavioral guide; [CLI Reference](../../../cli/easybar/index.md) lists every command and option.
 
 ## Menu bar controller
 
@@ -42,7 +42,8 @@ These commands route through EasyBar's normal event system so subscribed Lua wid
 
 ## Related pages
 
-- [CLI Reference](../../../cli/easybar.md)
+- [CLI Reference](../../../cli/easybar/index.md)
 - [Troubleshooting](troubleshooting.md)
 - [Agent Diagnostics](agent-diagnostics.md)
 - [Control Socket](../../../internals/architecture/control-socket.md)
+

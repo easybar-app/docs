@@ -14,10 +14,12 @@ theme:
   logo: assets/icons/apple-touch-icon.png
   favicon: assets/icons/favicon-64x64.png
   features:
+    - navigation.instant
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.sections
     - navigation.indexes
+    - navigation.path
     - navigation.footer
     - navigation.tracking
     - navigation.top
@@ -29,124 +31,9 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
-nav:
-  - Home: index.md
-
-  - Products:
-      - Overview: products/index.md
-      - EasyBar:
-          - Overview: products/easybar/index.md
-          - Quick Start: products/easybar/quick-start.md
-          - Installation: products/easybar/installation.md
-          - Choose Built-ins, Store, Or Lua: products/easybar/choosing-widgets.md
-          - AeroSpace Integration: products/easybar/aerospace.md
-          - Configuration:
-              - Overview: products/easybar/configuration/overview.md
-              - App Settings: products/easybar/configuration/app.md
-              - Environment: products/easybar/configuration/environment.md
-              - Themes: products/easybar/configuration/themes.md
-              - Built-ins:
-                  - Overview: products/easybar/configuration/builtins.md
-                  - Spaces: products/easybar/configuration/builtins/spaces.md
-                  - Calendar: products/easybar/configuration/builtins/calendar.md
-                  - Wi-Fi: products/easybar/configuration/builtins/wifi.md
-                  - Inbox: products/easybar/configuration/builtins/inbox.md
-                  - Privacy Spacer: products/easybar/configuration/builtins/privacy-spacer.md
-                  - Native Groups: products/easybar/configuration/native-groups.md
-              - Agents: products/easybar/configuration/agents.md
-              - Logging: products/easybar/configuration/logging.md
-              - Reference: products/easybar/configuration/reference.md
-          - Runtime:
-              - Control: products/easybar/runtime/control.md
-              - Troubleshooting: products/easybar/runtime/troubleshooting.md
-              - Agent Diagnostics: products/easybar/runtime/agent-diagnostics.md
-      - EasyBar Native:
-          - Overview: products/easybar-native/index.md
-          - Quick Start: products/easybar-native/quick-start.md
-          - Installation: products/easybar-native/installation.md
-          - Configuration & Paths: products/easybar-native/configuration.md
-          - Lua Widgets & Packages: products/easybar-native/widgets.md
-          - Troubleshooting: products/easybar-native/troubleshooting.md
-
-  - Command Line:
-      - Overview: cli/index.md
-      - easybar:
-          - Overview: cli/easybar.md
-          - App & Runtime: cli/easybar/control.md
-          - Widget Packages: cli/easybar/widgets.md
-          - Logs: cli/easybar/logs.md
-          - Metrics: cli/easybar/metrics.md
-          - Inbox: cli/easybar/inbox.md
-          - Helper Agents: cli/easybar/agents.md
-      - easybar-native:
-          - Overview: cli/easybar-native.md
-          - App & Runtime: cli/easybar-native/control.md
-          - Widget Packages: cli/easybar-native/widgets.md
-          - Logs: cli/easybar-native/logs.md
-          - Metrics: cli/easybar-native/metrics.md
-          - Inbox: cli/easybar-native/inbox.md
-
-  - Lua & Packages:
-      - Widget Store:
-          - Overview: widget-store/overview.md
-          - Catalog: widget-store/catalog.md
-          - Install And Manage: widget-store/manage.md
-          - Create & Contribute: widget-store/create-and-contribute.md
-      - Lua Widgets:
-          - Overview: lua/overview.md
-          - Quick Reference: lua/quick-reference.md
-          - Guides:
-              - First Widget: lua/guides/first-widget.md
-              - Conventions & Best Practices: lua/guides/best-practices.md
-              - Reusable Modules: lua/guides/modules.md
-              - Subscribe To Events: lua/guides/subscribe-to-events.md
-              - Commands: lua/guides/commands.md
-              - Intervals: lua/guides/intervals.md
-              - Widget Settings: lua/guides/storage.md
-              - Grouping: lua/guides/grouping.md
-              - Popups: lua/guides/popups.md
-              - Native Context Menus: lua/guides/context-menus.md
-              - Native Inbox: lua/guides/inbox.md
-              - Logging: lua/guides/logging.md
-              - Editor Support: lua/guides/editor-support.md
-              - Examples: lua/guides/examples.md
-          - Reference:
-              - Overview: lua/reference/index.md
-              - Functions: lua/reference/functions.md
-              - Node Kinds: lua/reference/node-kinds.md
-              - Events: lua/reference/events.md
-              - Properties: lua/reference/properties.md
-
-  - Platform:
-      - Overview: platform/index.md
-      - EasyBarKit: platform/easybar-kit.md
-      - Helper Agents: platform/helper-agents.md
-      - Repositories: platform/repositories.md
-
-  - Internals:
-      - Overview: internals/overview.md
-      - Development: internals/development.md
-      - Package Store: internals/package-store.md
-      - Architecture:
-          - Overview: internals/architecture/overview.md
-          - Targets: internals/architecture/targets.md
-          - Process Model: internals/architecture/process-model.md
-          - Shared Layer: internals/architecture/shared-layer.md
-          - CLI Core: internals/architecture/cli-core.md
-          - Control Socket: internals/architecture/control-socket.md
-          - Event Flow: internals/architecture/event-flow.md
-          - Boundaries: internals/architecture/boundaries.md
-      - Agents:
-          - Overview: internals/agents/overview.md
-          - Protocol: internals/agents/protocol.md
-          - Calendar Agent: internals/agents/calendar-agent.md
-          - Network Agent: internals/agents/network-agent.md
-      - Lua Runtime:
-          - Overview: internals/lua-runtime/overview.md
-          - Lifecycle: internals/lua-runtime/lifecycle.md
-          - Widget Loading: internals/lua-runtime/widget-loading.md
-          - Events: internals/lua-runtime/events.md
-          - Contributor Notes: internals/lua-runtime/contributor-notes.md
+plugins:
+  - search
+  - awesome-nav
 
 markdown_extensions:
   - admonition
@@ -166,3 +53,4 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+

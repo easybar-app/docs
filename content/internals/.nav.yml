@@ -1,0 +1,8 @@
+title: Internals
+nav:
+  - index.md
+  - development.md
+  - package-store.md
+  - architecture
+  - agents
+  - lua-runtime

@@ -1,7 +1,7 @@
 # Lua Runtime Overview
 
 This section documents how EasyBarKit runs Lua widgets for either frontend. It is for contributors changing the
-runtime implementation, not for normal widget authoring. Use [Lua Widgets](../../lua/overview.md) for
+runtime implementation, not for normal widget authoring. Use [Lua Widgets](../../lua/index.md) for
 the public API and guides.
 
 ## Process boundary
@@ -135,3 +135,4 @@ Public log levels, file-backed widget logs, and filtering belong in
 - [Lua Runtime Events](events.md)
 - [Contributor Notes](contributor-notes.md)
 - [Package Store Internals](../package-store.md)
+

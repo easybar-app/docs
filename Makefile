@@ -22,7 +22,7 @@ CLICLICK ?= cliclick
 SCREENSHOT_CONTEXT_MENU_POINT ?= 1344,16
 ICON_SIZES := 16x16 32x32 48x48 64x64
 PRETTIER_MD_SOURCES := README.md "content/**/*.md"
-PRETTIER_YAML_SOURCES := ".github/**/*.{yml,yaml}" mkdocs.yml
+PRETTIER_YAML_SOURCES := ".github/**/*.{yml,yaml}" content/.nav.yml "content/**/.nav.yml" mkdocs.yml
 PRETTIER_JSON_SOURCES := ".github/**/*.json"
 GENERATED_MD_SOURCES := \
 	content/products/easybar/configuration/reference.md \
@@ -132,3 +132,4 @@ $(DEPENDENCIES_STAMP): requirements.txt | $(PYTHON)
 	@$(PYTHON) -m pip install --upgrade pip
 	@$(PYTHON) -m pip install -r requirements.txt
 	@touch "$(DEPENDENCIES_STAMP)"
+

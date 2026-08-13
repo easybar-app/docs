@@ -29,5 +29,6 @@ editor-stub defaults.
 Lua packages target `minimum_easybar_kit_version`. They do not need separate package formats for the
 two frontends. Frontend-specific requirements should be exceptional and documented by the package.
 
-For implementation details, see [Architecture](../internals/architecture/overview.md) and
+For implementation details, see [Architecture](../internals/architecture/index.md) and
 [Targets](../internals/architecture/targets.md).
+

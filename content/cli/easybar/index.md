@@ -17,12 +17,12 @@ store.
 
 ## Documentation
 
-- [App, configuration, runtime, and events](easybar/control.md)
-- [Widget packages](easybar/widgets.md)
-- [Inbox](easybar/inbox.md)
-- [Logs](easybar/logs.md)
-- [Metrics](easybar/metrics.md)
-- [Helper agents](easybar/agents.md)
+- [App, configuration, runtime, and events](control.md)
+- [Widget packages](widgets.md)
+- [Inbox](inbox.md)
+- [Logs](logs.md)
+- [Metrics](metrics.md)
+- [Helper agents](agents.md)
 
 ## Help and version
 
@@ -33,3 +33,4 @@ easybar --version
 ```
 
 The CLI is installed with EasyBar. Its version should match the installed app after an upgrade.
+

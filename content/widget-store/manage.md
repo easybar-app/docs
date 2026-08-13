@@ -12,7 +12,7 @@ easybar        -> ~/.local/share/easybar/packages
 easybar-native -> ~/.local/share/easybar-native/packages
 ```
 
-For the concepts behind packages, libraries, and registries, start with [Widget Store](overview.md).
+For the concepts behind packages, libraries, and registries, start with [Widget Store](index.md).
 
 ## Search the store
 
@@ -173,3 +173,4 @@ EasyBar Native ~/.local/share/easybar-native/packages/
 
 Do not edit active links or stored versions by hand. For the exact layout, atomic replacement,
 rollback, and retention rules, see [Package Store Internals](../internals/package-store.md).
+

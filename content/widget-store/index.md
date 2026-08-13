@@ -89,8 +89,9 @@ Before installing, check the generated package page for:
 | Browse official packages               | [Catalog](catalog.md)                                    |
 | Install, update, or remove packages    | [Install And Manage](manage.md)                          |
 | Create or contribute a package         | [Create & Contribute](create-and-contribute.md)          |
-| Write a manual Lua widget              | [Lua Widgets](../lua/overview.md)                        |
+| Write a manual Lua widget              | [Lua Widgets](../lua/index.md)                        |
 | Understand activation and transactions | [Package Store Internals](../internals/package-store.md) |
 
 Installed widget code is trusted local code. Package validation protects structure and release
 integrity; it is not a sandbox.
+

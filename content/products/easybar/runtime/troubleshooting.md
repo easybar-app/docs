@@ -202,5 +202,6 @@ Do not include access tokens, private URLs, calendar content, or other secrets f
 
 - [Runtime Control](control.md)
 - [Agent Diagnostics](agent-diagnostics.md)
-- [CLI Reference](../../../cli/easybar.md)
+- [CLI Reference](../../../cli/easybar/index.md)
 - [macOS Quarantine](../installation.md#macos-quarantine)
+

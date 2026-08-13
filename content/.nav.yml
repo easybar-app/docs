@@ -1,0 +1,9 @@
+nav:
+  - Home: index.md
+  - Products: products
+  - Command Line: cli
+  - Lua & Packages:
+      - Widget Store: widget-store
+      - Lua Widgets: lua
+  - Platform: platform
+  - Internals: internals

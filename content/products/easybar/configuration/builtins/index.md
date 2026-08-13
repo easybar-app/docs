@@ -4,7 +4,7 @@ EasyBar supports native built-in widgets in `config.toml`.
 
 Built-ins are configured under `[builtins.*]`.
 
-If you are deciding whether to use a built-in or write a Lua widget, start with [Choose Built-ins, Widget Store, Or Lua](../choosing-widgets.md).
+If you are deciding whether to use a built-in or write a Lua widget, start with [Choose Built-ins, Widget Store, Or Lua](../../choosing-widgets.md).
 
 Example:
 
@@ -50,7 +50,7 @@ background_color = "#090909"
 
 Here the time widget uses the explicit colors instead of the theme defaults.
 
-See [Themes](themes.md).
+See [Themes](../themes.md).
 
 ## Groups
 
@@ -87,21 +87,21 @@ For the native `spaces` widget, `[builtins.spaces]` owns the outer placement and
 
 ## Detailed guides
 
-The generated [Configuration Reference](reference.md) lists every key and default. These guides explain behavior and interactions for the more complex built-ins:
+The generated [Configuration Reference](../reference.md) lists every key and default. These guides explain behavior and interactions for the more complex built-ins:
 
 | Built-in       | Guide                                        |
 | -------------- | -------------------------------------------- |
-| Spaces         | [Spaces](builtins/spaces.md)                 |
-| Inbox          | [Inbox](builtins/inbox.md)                   |
-| Privacy Spacer | [Privacy Spacer](builtins/privacy-spacer.md) |
-| Wi-Fi          | [Wi-Fi](builtins/wifi.md)                    |
-| Calendar       | [Calendar](builtins/calendar.md)             |
+| Spaces         | [Spaces](spaces.md)                 |
+| Inbox          | [Inbox](inbox.md)                   |
+| Privacy Spacer | [Privacy Spacer](privacy-spacer.md) |
+| Wi-Fi          | [Wi-Fi](wifi.md)                    |
+| Calendar       | [Calendar](calendar.md)             |
 
 ## Widget-specific context menus
 
 Interactive built-ins expose their common settings and native actions directly from the bar:
 
-[![CPU widget with history graph](../../../assets/cpu.png){ .screenshot-compact .screenshot-cpu }](../../../assets/cpu.png)
+[![CPU widget with history graph](../../../../assets/cpu.png){ .screenshot-compact .screenshot-cpu }](../../../../assets/cpu.png)
 
 | Built-in       | Context-menu controls                                                                                                                                                        |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -125,7 +125,7 @@ enable or disable any top-level built-in widget. Checked items are enabled. Each
 immediately updates the corresponding `builtins.<widget>.enabled` value in `config.toml` and reloads
 the bar, while preserving comments, whitespace, and unrelated settings.
 
-[![Native Widgets menu with enabled built-ins](../../../assets/native_widgets.png){ .screenshot-compact .screenshot-native-widgets }](../../../assets/native_widgets.png)
+[![Native Widgets menu with enabled built-ins](../../../../assets/native_widgets.png){ .screenshot-compact .screenshot-native-widgets }](../../../../assets/native_widgets.png)
 
 Every visible native widget also has a right-click context menu with **Reload Widget** and
 **Disable Widget**. Disabling is written to the active config file immediately; use **Native
@@ -143,4 +143,5 @@ Switch to Lua when you need:
 - popup content driven by your own data
 - shell-command integration or app-specific logic
 
-See [Lua Widgets](../../../lua/overview.md).
+See [Lua Widgets](../../../../lua/index.md).
+

@@ -1,0 +1,16 @@
+title: Guides
+nav:
+  - first-widget.md
+  - best-practices.md
+  - modules.md
+  - subscribe-to-events.md
+  - commands.md
+  - intervals.md
+  - storage.md
+  - grouping.md
+  - popups.md
+  - context-menus.md
+  - inbox.md
+  - logging.md
+  - editor-support.md
+  - examples.md

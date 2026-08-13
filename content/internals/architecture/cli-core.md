@@ -38,5 +38,6 @@ than being reimplemented in command handlers.
 
 ## Public commands
 
-See [`easybar`](../../cli/easybar.md) and [`easybar-native`](../../cli/easybar-native.md) for the
+See [`easybar`](../../cli/easybar/index.md) and [`easybar-native`](../../cli/easybar-native/index.md) for the
 user-facing command contracts.
+

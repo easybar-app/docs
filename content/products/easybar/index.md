@@ -54,9 +54,10 @@ CLI          easybar
 
 1. [Quick Start](quick-start.md)
 2. [Installation](installation.md)
-3. [Configuration](configuration/overview.md)
+3. [Configuration](configuration/index.md)
 4. [Choose Built-ins, Store, Or Lua](choosing-widgets.md)
-5. [CLI Reference](../../cli/easybar.md)
+5. [CLI Reference](../../cli/easybar/index.md)
 6. [Troubleshooting](runtime/troubleshooting.md)
 
 For the native status-area alternative, see [EasyBar Native](../easybar-native/index.md).
+

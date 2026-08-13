@@ -24,4 +24,5 @@ integration should be documented with the consuming standalone project rather th
 service back to Native's installation contract.
 
 For EasyBar user configuration, see [Agents](../products/easybar/configuration/agents.md). For
-protocol details, see [Agent Internals](../internals/agents/overview.md).
+protocol details, see [Agent Internals](../internals/agents/index.md).
+

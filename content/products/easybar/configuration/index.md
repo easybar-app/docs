@@ -99,10 +99,11 @@ Custom theme files live below the configured `themes_dir`; see [Themes](themes.m
 | Configure app paths and runtime behavior | [App Settings](app.md)                                    |
 | Configure command environment            | [Environment](environment.md)                             |
 | Choose or customize colors               | [Themes](themes.md)                                       |
-| Configure native widgets                 | [Built-ins](builtins.md)                                  |
-| Group native widgets                     | [Native Groups](native-groups.md)                         |
+| Configure native widgets                 | [Built-ins](builtins/index.md)                                  |
+| Group native widgets                     | [Native Groups](builtins/native-groups.md)                         |
 | Configure Lua-owned settings             | [Widget Settings for Lua](../../../lua/guides/storage.md) |
 | Configure helper agents                  | [Agents](agents.md)                                       |
 | Configure logging                        | [Logging](logging.md)                                     |
 | Check every exact key and default        | [Configuration Reference](reference.md)                   |
 | Control the running app                  | [Runtime Control](../runtime/control.md)                  |
+

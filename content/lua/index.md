@@ -70,7 +70,7 @@ Install or edit the copy owned by the frontend you want to run.
 - [Grouping](guides/grouping.md) and [Popups](guides/popups.md)
 - [Editor Support](guides/editor-support.md)
 - [Examples](guides/examples.md)
-- [Widget Store](../widget-store/overview.md)
+- [Widget Store](../widget-store/index.md)
 
 ## Exact API reference
 
@@ -80,3 +80,4 @@ The generated reference comes from EasyBarKit and therefore describes the shared
 - [Node kinds](reference/node-kinds.md)
 - [Events](reference/events.md)
 - [Properties](reference/properties.md)
+

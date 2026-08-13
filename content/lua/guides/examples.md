@@ -1,6 +1,6 @@
 # Examples
 
-This page explains complete Lua widget patterns. If you want to install a ready-made integration instead of studying its implementation, browse the [Widget Store](../../widget-store/overview.md).
+This page explains complete Lua widget patterns. If you want to install a ready-made integration instead of studying its implementation, browse the [Widget Store](../../widget-store/index.md).
 
 If you are just starting out, read [First Widget](first-widget.md) before using these as templates. The EasyBarKit repository also keeps small self-contained examples under `examples/`. Copy the example you want into the manual widget directory of the frontend you are testing.
 
@@ -182,9 +182,10 @@ remain trusted local code.
 
 ## Related pages
 
-- [Widget Store](../../widget-store/overview.md)
+- [Widget Store](../../widget-store/index.md)
 - [Subscribe To Events](subscribe-to-events.md)
 - [Grouping](grouping.md)
 - [Popups](popups.md)
 - [Native Context Menus](context-menus.md)
 - [Lua Quick Reference](../quick-reference.md)
+

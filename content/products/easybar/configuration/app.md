@@ -39,7 +39,7 @@ widgets_dir = "~/.config/easybar/widgets"
 
 EasyBar recursively loads every regular file below this directory with a `.lua` extension, except files below `shared/`. Extension matching is case-insensitive. Discovery does not depend on a category name or a filename such as `widget.lua`. Put reusable modules below `shared/` so they load only through `require(...)`.
 
-Packages installed from the [Widget Store](../../../widget-store/overview.md) are managed separately from this directory. Changing `widgets_dir` affects only manual widgets; it does not move or reconfigure installed packages.
+Packages installed from the [Widget Store](../../../widget-store/index.md) are managed separately from this directory. Changing `widgets_dir` affects only manual widgets; it does not move or reconfigure installed packages.
 
 If you are creating your first custom widget, continue with [First Widget](../../../lua/guides/first-widget.md). For shared helper code, see [Reusable Modules](../../../lua/guides/modules.md).
 
@@ -156,3 +156,4 @@ max_async_jobs = 8
 - `timeout_seconds`: default hard timeout for one command before EasyBar terminates it. Widgets can override this per `easybar.exec(...)` or `easybar.exec_async(...)` call.
 - `max_output_bytes`: default maximum combined stdout and stderr captured for one command. Widgets can override this per call.
 - `max_async_jobs`: maximum concurrent `easybar.exec_async(...)` jobs before new jobs are rejected.
+

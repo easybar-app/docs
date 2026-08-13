@@ -1,7 +1,7 @@
 # Contributor Notes
 
 Use this page when changing the Lua runtime or public Lua API. Public authoring behavior belongs in
-[Lua Widgets](../../lua/overview.md); package-manager behavior belongs in
+[Lua Widgets](../../lua/index.md); package-manager behavior belongs in
 [Package Store Internals](../package-store.md).
 
 ## Where to change what
@@ -117,3 +117,4 @@ directly from that content tree. Generated pages are not committed to the docume
 3. Run `make generate` and `make check-generated` in EasyBar.
 4. Update the relevant public Lua guide in `easybar-app/docs`.
 5. Run `make build` in the documentation repository.
+

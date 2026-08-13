@@ -1,0 +1,10 @@
+title: Configuration
+nav:
+  - index.md
+  - app.md
+  - environment.md
+  - themes.md
+  - builtins
+  - agents.md
+  - logging.md
+  - reference.md

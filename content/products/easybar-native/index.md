@@ -52,9 +52,10 @@ background behind several system status items.
 - [Installation](installation.md)
 - [Configuration & Paths](configuration.md)
 - [Lua Widgets & Packages](widgets.md)
-- [`easybar-native` CLI](../../cli/easybar-native.md)
+- [`easybar-native` CLI](../../cli/easybar-native/index.md)
 - [Troubleshooting](troubleshooting.md)
 
 If you need EasyBar's native calendar, Wi-Fi, battery, Spaces, or other built-ins in one designed bar,
 use the [EasyBar frontend](../easybar/index.md). Native keeps those surfaces outside its product
 boundary.
+

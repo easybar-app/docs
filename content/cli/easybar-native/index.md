@@ -16,11 +16,11 @@ store.
 
 ## Documentation
 
-- [App, configuration, runtime, and events](easybar-native/control.md)
-- [Widget packages](easybar-native/widgets.md)
-- [Inbox](easybar-native/inbox.md)
-- [Logs](easybar-native/logs.md)
-- [Metrics](easybar-native/metrics.md)
+- [App, configuration, runtime, and events](control.md)
+- [Widget packages](widgets.md)
+- [Inbox](inbox.md)
+- [Logs](logs.md)
+- [Metrics](metrics.md)
 
 ## Help and version
 
@@ -31,3 +31,4 @@ easybar-native --version
 ```
 
 The CLI is bundled with EasyBar Native and installed as the `easybar-native` command.
+

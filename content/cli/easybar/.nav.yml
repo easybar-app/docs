@@ -1,0 +1,9 @@
+title: easybar
+nav:
+  - index.md
+  - control.md
+  - widgets.md
+  - logs.md
+  - metrics.md
+  - inbox.md
+  - agents.md

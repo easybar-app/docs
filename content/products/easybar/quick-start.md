@@ -60,7 +60,7 @@ cp config.minimal.toml ~/.config/easybar/config.toml
 easybar config reload
 ```
 
-See [Configuration](configuration/overview.md) for the starter files and config path.
+See [Configuration](configuration/index.md) for the starter files and config path.
 
 ## 5. Customize built-ins first
 
@@ -86,8 +86,8 @@ Reload after editing:
 easybar config reload
 ```
 
-Use [Built-ins](configuration/builtins.md) for widget behavior and
-[Native Groups](configuration/native-groups.md) when several built-ins should share one visual
+Use [Built-ins](configuration/builtins/index.md) for widget behavior and
+[Native Groups](configuration/builtins/native-groups.md) when several built-ins should share one visual
 container.
 
 ## 6. Install a ready-made widget when one exists
@@ -100,7 +100,7 @@ easybar widgets install PACKAGE_NAME
 easybar config reload
 ```
 
-Browse the [Widget Store](../../widget-store/overview.md) to see official packages, installation
+Browse the [Widget Store](../../widget-store/index.md) to see official packages, installation
 sources, updates, dependencies, and package creation.
 
 ## 7. Write Lua for custom behavior
@@ -121,4 +121,5 @@ Then follow [First Widget](../../lua/guides/first-widget.md).
 - [Configuration Reference](configuration/reference.md) for exact config keys and defaults.
 - [Widget Store Catalog](../../widget-store/catalog.md) for ready-made packages.
 - [Lua Reference](../../lua/reference/index.md) for exact Lua API shapes.
-- [CLI Reference](../../cli/easybar.md) for control and diagnostic commands.
+- [CLI Reference](../../cli/easybar/index.md) for control and diagnostic commands.
+

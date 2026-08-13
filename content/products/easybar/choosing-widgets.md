@@ -3,7 +3,7 @@
 EasyBar gives you three practical ways to add functionality:
 
 - native built-ins configured in `config.toml`;
-- installable packages from the [Widget Store](../../widget-store/overview.md);
+- installable packages from the [Widget Store](../../widget-store/index.md);
 - custom Lua widgets you write yourself.
 
 Start with the least custom option that solves the problem. That usually means a built-in first, a
@@ -36,8 +36,8 @@ enabled = true
 enabled = true
 ```
 
-Use [Built-ins](configuration/builtins.md) for supported widgets and
-[Native Groups](configuration/native-groups.md) for shared visual containers.
+Use [Built-ins](configuration/builtins/index.md) for supported widgets and
+[Native Groups](configuration/builtins/native-groups.md) for shared visual containers.
 
 ## Use the Widget Store when
 
@@ -81,3 +81,4 @@ Use this order:
 
 A strong setup can use all three: native widgets for platform integrations, store packages for
 reusable service integrations, and manual Lua for the last mile of personal behavior.
+

@@ -93,7 +93,7 @@ See [Helper Agents](../../platform/helper-agents.md).
 
 ## Runtime
 
-The runtime is the EasyBarKit machinery that loads widget files, creates nodes, dispatches events, and applies updates between Lua and the selected frontend. Use `easybar` for EasyBar runtime control or `easybar-native` for EasyBar Native; see [Command-line tools](../../cli/index.md).
+The runtime is the EasyBarKit machinery that loads widget files, creates nodes, dispatches events, and applies updates between Lua and the selected frontend. Use [`easybar`](../../cli/easybar/index.md) for EasyBar runtime control or [`easybar-native`](../../cli/easybar-native/index.md) for EasyBar Native.
 
 ## Mental model
 
@@ -190,3 +190,4 @@ stylua ~/.config/easybar/widgets
 ```
 
 For EasyBar Native, use `~/.config/easybar-native/widgets` instead. Check formatting without changing files with `stylua --check <widgets_dir>`.
+
