@@ -47,6 +47,20 @@ easybar widgets install PACKAGE_NAME
 easybar config reload
 ```
 
+Install an exact published registry version by appending `@VERSION`:
+
+```bash
+easybar widgets install PACKAGE_NAME@VERSION
+```
+
+The version selector applies only to registry package names. It does not pin the package: a later
+`widgets update` can still move it to a newer published release. To roll an installed package back
+to an older registry version, combine the selector with `--force`:
+
+```bash
+easybar widgets install PACKAGE_NAME@OLDER_VERSION --force
+```
+
 Registry releases include a versioned archive URL and SHA-256. The shared package manager verifies
 the digest before extracting the archive and resolves required dependencies before activation.
 
