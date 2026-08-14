@@ -735,14 +735,16 @@ For EasyBar concepts and usage examples, use the hand-written configuration guid
 
 ## `builtins.calendar.filters`
 
-| Key                            | Default | Example | Description                                                                               |
-| ------------------------------ | ------- | ------- | ----------------------------------------------------------------------------------------- |
-| `included_calendar_names`      | `[]`    | —       | Optional allowlist of visible Calendar.app names. Empty means all calendars are eligible. |
-| `excluded_calendar_names`      | `[]`    | —       | Optional denylist of visible Calendar.app names applied after the allowlist.              |
-| `included_calendar_ids`        | `[]`    | —       | Optional advanced allowlist of exact calendar identifiers.                                |
-| `excluded_calendar_ids`        | `[]`    | —       | Optional advanced denylist of exact calendar identifiers.                                 |
-| `included_calendar_source_ids` | `[]`    | —       | Optional advanced allowlist of exact calendar source identifiers.                         |
-| `excluded_calendar_source_ids` | `[]`    | —       | Optional advanced denylist of exact calendar source identifiers.                          |
+| Key                              | Default | Example | Description                                                                               |
+| -------------------------------- | ------- | ------- | ----------------------------------------------------------------------------------------- |
+| `included_calendar_names`        | `[]`    | —       | Optional allowlist of visible Calendar.app names. Empty means all calendars are eligible. |
+| `excluded_calendar_names`        | `[]`    | —       | Optional denylist of visible Calendar.app names applied after the allowlist.              |
+| `included_calendar_source_names` | `[]`    | —       | Optional allowlist of human-readable calendar source names.                               |
+| `excluded_calendar_source_names` | `[]`    | —       | Optional denylist of human-readable calendar source names applied after the allowlist.    |
+| `included_calendar_ids`          | `[]`    | —       | Optional advanced allowlist of exact calendar identifiers.                                |
+| `excluded_calendar_ids`          | `[]`    | —       | Optional advanced denylist of exact calendar identifiers.                                 |
+| `included_calendar_source_ids`   | `[]`    | —       | Optional advanced allowlist of exact calendar source identifiers.                         |
+| `excluded_calendar_source_ids`   | `[]`    | —       | Optional advanced denylist of exact calendar source identifiers.                          |
 
 ## `builtins.calendar.month.popup.style`
 

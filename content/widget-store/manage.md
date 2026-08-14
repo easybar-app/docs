@@ -32,6 +32,12 @@ easybar widgets search QUERY --registry https://example.com/easybar/index.json
 The generated [Catalog](catalog.md) is the website view of the official package source. The CLI
 searches the selected live registry.
 
+Remote registry operations revalidate the registry index before using it. EasyBarKit keeps a local
+validated copy and uses standard HTTP validators such as `ETag` and `Last-Modified`, so an unchanged
+registry can be reused without downloading the complete index again. When the registry changes,
+commands such as `search`, `install`, `outdated`, and `update` use the new index immediately. Local
+registry files are read directly.
+
 ## Install an official package
 
 Install the latest compatible immutable release by package name:
