@@ -23,6 +23,7 @@ Each root contains:
 ```text
 <package-root>/
 ├── installed.json
+├── pins.json
 ├── store/
 │   └── <name>/
 │       ├── <active-version>/
@@ -35,7 +36,20 @@ Each root contains:
 ```
 
 Installing with `easybar` and installing with `easybar-native` therefore create independent database,
-store, and activation state.
+store, activation, and pin state.
+
+## Pin policy
+
+`pins.json` is a small versioned policy file containing package names whose installed versions must
+not be changed by normal update operations. Keeping this policy separate from `installed.json` lets
+pinning change without changing the installed-package database format.
+
+`widgets outdated` still evaluates pinned packages so newer releases remain visible. Named updates
+reject a pinned root package; bulk updates omit pinned roots. The update resolver also receives the
+current pin set so an incompatible pinned dependency cannot be replaced indirectly while updating
+another package. Explicit forced installation remains available and does not clear the pin.
+
+Uninstall removes the package name from `pins.json` as part of the uninstall transaction.
 
 ## Registry loading and revalidation
 
@@ -84,6 +98,7 @@ Manual files under the selected frontend's `widgets_dir` are outside this system
 ## Invariant
 
 - registry metadata selects release candidates;
+- `pins.json` constrains normal update selection and dependency replacement;
 - package validation defines exposed files;
 - the selected frontend store commits immutable version directories;
 - `active/` selects entrypoints and exports;

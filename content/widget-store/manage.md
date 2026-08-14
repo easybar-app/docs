@@ -94,7 +94,32 @@ easybar widgets installed --libraries-only
 easybar widgets installed --json
 ```
 
-The command is offline and reports the package database owned by the selected frontend.
+The command is offline and reports the package database owned by the selected frontend. Pinned
+packages are marked in the human-readable table and include `"pinned": true` in JSON output.
+
+## Pin a package version
+
+Pin an installed package when you want normal update commands to leave its current version in place:
+
+```bash
+easybar widgets pin PACKAGE_NAME
+```
+
+A pin is frontend-local update policy. `widgets outdated` still reports a newer release when one is
+available, but marks the package as pinned. A named `widgets update PACKAGE_NAME` is rejected until
+the package is unpinned, while `widgets update --all` skips pinned packages and reports the skipped
+names. Pinned dependencies are also protected from being replaced as a side effect of updating
+another package.
+
+Remove the policy when you want normal updates again:
+
+```bash
+easybar widgets unpin PACKAGE_NAME
+```
+
+Pinning is independent from exact-version installation. You can deliberately replace a pinned
+package with `widgets install PACKAGE_NAME@VERSION --force`; the package remains pinned at the newly
+installed version. Uninstalling a package removes its pin.
 
 ## Check for updates
 
