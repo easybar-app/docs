@@ -34,9 +34,40 @@ searches the selected live registry.
 
 Remote registry operations revalidate the registry index before using it. EasyBarKit keeps a local
 validated copy and uses standard HTTP validators such as `ETag` and `Last-Modified`, so an unchanged
-registry can be reused without downloading the complete index again. When the registry changes,
-commands such as `search`, `install`, `outdated`, and `update` use the new index immediately. Local
-registry files are read directly.
+registry can be reused without downloading the complete index again. When the server reports a
+changed representation, commands such as `search`, `install`, `outdated`, and `update` validate and
+store the new index. Local registry files are read directly.
+
+## Force a remote registry refresh
+
+Use `--refresh` when you need the selected remote registry fetched without the validators from
+EasyBarKit's existing registry cache. This is useful immediately after a package or release is
+published when a normal request still sees the previously validated registry representation:
+
+```bash
+easybar widgets search QUERY --refresh
+easybar widgets install PACKAGE_NAME --refresh
+easybar widgets outdated --refresh
+easybar widgets update PACKAGE_NAME --refresh
+easybar widgets update --all --refresh
+```
+
+The option does not disable registry validation or create a separate cache. EasyBarKit performs an
+unconditional remote fetch for that command, validates the returned `index.json`, and replaces the
+normal cached response and its HTTP validators. Later commands return to normal conditional
+revalidation.
+
+`--refresh` also works with a custom remote `--registry` source:
+
+```bash
+easybar widgets search QUERY \
+  --registry https://example.com/easybar/index.json \
+  --refresh
+```
+
+Local registry files are always read directly, so `--refresh` does not change their behavior. For
+`widgets install`, `--refresh` cannot be combined with `--no-registry` because there is no registry
+to refresh in that mode.
 
 ## Install an official package
 

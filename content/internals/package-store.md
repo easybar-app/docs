@@ -66,6 +66,12 @@ new registry and atomically replaces the cached state. If cached content or meta
 the validators are discarded and the registry is fetched unconditionally. Local registry files do
 not use this HTTP cache and are read directly.
 
+Registry-backed CLI commands expose this unconditional path as `--refresh`. For a remote registry,
+the loader omits `If-None-Match` and `If-Modified-Since` for that request, still validates the
+returned index, and atomically replaces the same persistent cache and validator metadata. The next
+normal command resumes conditional revalidation from that fresh state. `--refresh` has no special
+effect on a local registry file because local sources are always read directly.
+
 The registry repository does not publish its own ETag file or field. HTTP validators belong to the
 server that delivers `index.json`; the registry continues to own only package metadata and immutable
 release checksums.
