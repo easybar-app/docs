@@ -22,6 +22,8 @@ MARKDOWN_LINK = re.compile(r"(!?)\[([^\]]*)\]\(([^)]+)\)")
 
 @dataclass(frozen=True)
 class Package:
+    """Metadata and documentation for one widget package."""
+
     name: str
     version: str
     kind: str
@@ -39,10 +41,12 @@ class Package:
 
     @property
     def source_url(self) -> str:
+        """Return the package directory URL in its repository."""
         return f"{self.repository_url}/tree/main/{self.repository_path}"
 
 
 def required_string(manifest: dict[str, object], key: str, source: Path) -> str:
+    """Read a required non-empty string from a manifest."""
     value = manifest.get(key)
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{source}: {key} must be a non-empty string")
@@ -50,6 +54,7 @@ def required_string(manifest: dict[str, object], key: str, source: Path) -> str:
 
 
 def string_mapping(value: object, source: Path, key: str) -> dict[str, str]:
+    """Validate an optional string-to-string manifest table."""
     if value is None:
         return {}
     if not isinstance(value, dict):
@@ -64,6 +69,7 @@ def string_mapping(value: object, source: Path, key: str) -> dict[str, str]:
 
 
 def string_sequence(value: object, source: Path, key: str) -> tuple[str, ...]:
+    """Validate an optional array of strings from a manifest."""
     if value is None:
         return ()
     if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
@@ -72,6 +78,7 @@ def string_sequence(value: object, source: Path, key: str) -> tuple[str, ...]:
 
 
 def split_readme(readme: str, fallback_title: str) -> tuple[str, str]:
+    """Separate a README title from its Markdown body."""
     lines = readme.replace("\r\n", "\n").replace("\r", "\n").splitlines()
     title = fallback_title
 
@@ -85,6 +92,7 @@ def split_readme(readme: str, fallback_title: str) -> tuple[str, str]:
 
 
 def is_relative_url(url: str) -> bool:
+    """Return whether a URL should resolve relative to a package."""
     stripped = url.strip()
     parsed = urlparse(stripped)
     return bool(stripped) and not parsed.scheme and not parsed.netloc and not stripped.startswith(
@@ -93,7 +101,10 @@ def is_relative_url(url: str) -> bool:
 
 
 def rewrite_readme_links(body: str, package: Package) -> str:
+    """Rewrite relative README links to repository URLs."""
+
     def replace(match: re.Match[str]) -> str:
+        """Resolve one relative Markdown link or image."""
         image_marker, label, destination = match.groups()
         destination_parts = destination.strip().split(maxsplit=1)
         url = destination_parts[0]
@@ -115,6 +126,7 @@ def rewrite_readme_links(body: str, package: Package) -> str:
 
 
 def load_package(package_dir: Path) -> Package:
+    """Load and validate a package manifest and README."""
     manifest_path = package_dir / "package.toml"
     with manifest_path.open("rb") as manifest_file:
         manifest = tomllib.load(manifest_file)
@@ -167,10 +179,12 @@ def load_package(package_dir: Path) -> Package:
 
 
 def markdown_escape(value: str) -> str:
+    """Escape text for use in a Markdown table cell."""
     return value.replace("|", "\\|")
 
 
 def code_values(values: tuple[str, ...] | list[str]) -> str:
+    """Format values as comma-separated inline code."""
     return ", ".join(f"`{markdown_escape(value)}`" for value in values)
 
 
@@ -181,6 +195,7 @@ def package_requires_command(package: Package, command: str) -> bool:
 
 
 def render_index(packages: list[Package]) -> str:
+    """Render the Widget Store catalog page."""
     lines = [
         GENERATED_HEADER.rstrip(),
         "",
@@ -251,6 +266,7 @@ def render_index(packages: list[Package]) -> str:
 
 
 def dependency_links(package: Package, package_names: set[str]) -> str:
+    """Format package dependencies with local catalog links."""
     values = []
     for dependency, constraint in sorted(package.dependencies.items()):
         label = (
@@ -263,6 +279,7 @@ def dependency_links(package: Package, package_names: set[str]) -> str:
 
 
 def render_package(package: Package, package_names: set[str]) -> str:
+    """Render one package detail page."""
     categories = code_values(list(package.categories)) or "None"
     lines = [
         GENERATED_HEADER.rstrip(),
@@ -360,6 +377,7 @@ def render_package(package: Package, package_names: set[str]) -> str:
 
 
 def generate(widgets_root: Path, output: Path) -> list[Path]:
+    """Generate the catalog and package pages, returning written paths."""
     packages_root = widgets_root / "packages"
     if not packages_root.is_dir():
         raise ValueError(f"widgets packages directory does not exist: {packages_root}")
@@ -403,6 +421,7 @@ def generate(widgets_root: Path, output: Path) -> list[Path]:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the command-line argument parser."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--widgets-root",
@@ -420,6 +439,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    """Generate Widget Store documentation from command-line arguments."""
     args = build_parser().parse_args()
     written = generate(args.widgets_root.resolve(), args.output.resolve())
     print(f"Generated {len(written)} Widget Store catalog pages in {args.output}")

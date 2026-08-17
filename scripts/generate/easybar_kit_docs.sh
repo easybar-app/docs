@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Generate Lua and configuration reference pages from EasyBarKit.
 set -euo pipefail
 
 if [[ $# -ne 3 ]]; then

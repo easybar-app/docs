@@ -1,10 +1,13 @@
 #!/bin/sh
+# Generate PNG favicons from an SVG source.
 set -eu
 
+# Print the expected command arguments.
 usage() {
   echo "Usage: $0 SVG_CONVERT SVG ICON_DIR SIZE [SIZE ...]" >&2
 }
 
+# Exit when a required executable is unavailable.
 require_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
     echo "Missing $1. Install librsvg or set SVG_CONVERT=/path/to/rsvg-convert." >&2
@@ -12,6 +15,7 @@ require_command() {
   fi
 }
 
+# Exit when a required input file is unavailable.
 require_file() {
   if [ ! -f "$1" ]; then
     echo "Missing $2: $1" >&2
@@ -33,6 +37,7 @@ require_command "$svg_convert"
 require_file "$svg" "icon SVG"
 mkdir -p "$icon_dir"
 
+# Render one favicon at the requested size and filename.
 create_icon() {
   size=$1
   outfile=$2

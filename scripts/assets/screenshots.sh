@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Crop and normalize documentation screenshots from a manifest.
 set -euo pipefail
 
 if [[ $# -lt 4 || $# -gt 5 ]]; then

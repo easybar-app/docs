@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Fetch a pinned repository revision into the local source cache.
 set -euo pipefail
 
 if [[ $# -ne 3 ]]; then

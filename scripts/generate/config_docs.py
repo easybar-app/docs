@@ -10,15 +10,18 @@ from typing import Any
 
 
 def markdown_escape(value: str) -> str:
+    """Escape text for use in a Markdown table cell."""
     return value.replace("|", r"\|")
 
 
 def code(value: str) -> str:
+    """Wrap a value as escaped inline Markdown code."""
     escaped = value.replace("`", r"\`")
     return f"`{escaped}`"
 
 
 def load_catalog(path: Path) -> dict[str, Any]:
+    """Load and validate a configuration schema catalog."""
     catalog = json.loads(path.read_text(encoding="utf-8"))
     if catalog.get("schemaVersion") != 1:
         raise SystemExit(f"Unsupported configuration schema version in {path}")
@@ -26,6 +29,7 @@ def load_catalog(path: Path) -> dict[str, Any]:
 
 
 def render(catalog: dict[str, Any]) -> str:
+    """Render a configuration catalog as Markdown."""
     lines = [
         "<!--",
         "This file is generated from EasyBarKit's config.schema.json.",
@@ -74,6 +78,7 @@ def render(catalog: dict[str, Any]) -> str:
 
 
 def main() -> int:
+    """Parse arguments and write the configuration reference."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--schema", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)

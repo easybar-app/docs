@@ -7,6 +7,7 @@ import shutil
 
 
 def remove(path: Path) -> None:
+    """Remove a generated file, symlink, or directory if present."""
     if path.is_dir() and not path.is_symlink():
         shutil.rmtree(path)
     elif path.exists() or path.is_symlink():
@@ -14,6 +15,7 @@ def remove(path: Path) -> None:
 
 
 def main() -> int:
+    """Remove all generated documentation targets from the repository."""
     root = Path.cwd().resolve()
     targets = (
         root / ".sources",
