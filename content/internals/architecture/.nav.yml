@@ -8,3 +8,4 @@ nav:
   - control-socket.md
   - event-flow.md
   - boundaries.md
+  - decisions

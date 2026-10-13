@@ -1,0 +1,6 @@
+title: Architecture Decisions
+nav:
+  - index.md
+  - 001-shared-implementation-isolated-state.md
+  - 002-versioned-process-contracts.md
+  - 003-verified-release-metadata.md
