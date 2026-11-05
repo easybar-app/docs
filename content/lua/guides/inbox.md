@@ -58,8 +58,9 @@ publishers should use HTTP(S) URLs as well.
 Each message provides explicit **Read** or **Unread** and, when allowed, **Dismiss** actions. You can
 also click a message to mark it read, use its status dot to toggle state, or right-click it for the
 same local actions. **Dismiss all** suppresses every currently displayed message. Local changes
-survive restarts and publisher refreshes while the source and item ID remain stable. Once a
-publisher omits an item, the active frontend removes its saved local state as well.
+survive restarts and publisher refreshes while the source and item ID remain stable. When a publisher removes a previously displayed item from its snapshot, the frontend forgets
+that item’s saved state. An empty startup snapshot or an incremental publication can arrive
+before other messages are restored without resetting their state.
 
 Optional per-item `source` metadata makes the origin more prominent without changing the stable
 publisher name used for grouping and action routing. Set `name`, `icon`, and `color` independently;
@@ -88,7 +89,9 @@ end)
 The event contains `source`, `target_widget_id` (the item id), and `action_id`.
 The host also sends `action_id = "mark_read"` when its native per-item or **Mark all read** control
 marks an unread item as read. Source widgets can use that event to synchronize remote notification
-state without adding a second read button. Marking an item unread remains local because remote
+state without adding a second read button. Native **Dismiss** and **Dismiss all** send
+`action_id = "dismiss"` for each dismissed item. The GitHub widget uses this event to mark
+the thread done on GitHub. Marking an item unread remains local because remote
 services do not consistently expose an equivalent operation.
 
 ## Add source actions to the header menu
